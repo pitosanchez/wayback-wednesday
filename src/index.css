@@ -21,13 +21,24 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--rich-black);
+  margin: 0;
 }
 
 .app {
+  width: 100vw;
   min-height: 100vh;
-  position: relative;
-  width: 100%;
-  background-color: var(--rich-black);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--rich-black);
+  color: var(--platinum);
+  box-sizing: border-box;
   padding-bottom: 2rem;
 }
 
@@ -76,7 +87,7 @@ main {
 .hero {
   height: 100vh;
   min-height: 400px;
-  width: 100%;
+  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,7 +116,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  transform: translateX(-3rem);
+  transform: none;
 }
 
 .letter {
@@ -140,31 +151,26 @@ main {
 @media (max-width: 1200px) {
   .hero-text {
     font-size: 12rem;
-    transform: translateX(-1.8rem);
   }
 }
 @media (max-width: 992px) {
   .hero-text {
     font-size: 8rem;
-    transform: translateX(-1rem);
   }
 }
 @media (max-width: 768px) {
   .hero-text {
     font-size: 5rem;
-    transform: translateX(0);
   }
 }
 @media (max-width: 600px) {
   .hero-text {
     font-size: 3rem;
-    transform: translateX(0);
   }
 }
 @media (max-width: 400px) {
   .hero-text {
     font-size: 1.7rem;
-    transform: translateX(0);
   }
 }
 
