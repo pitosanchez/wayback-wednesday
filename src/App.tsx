@@ -5,7 +5,7 @@ import Music from "./pages/Music";
 import Culture from "./pages/Culture";
 import Shop from "./pages/Shop";
 import Collections from "./pages/Collections";
-import waybackLogo from "./assets/images/WAYBACK.png";
+import waybackLogo from "./assets/images/wayback.png";
 
 function App() {
   const navItems = [
