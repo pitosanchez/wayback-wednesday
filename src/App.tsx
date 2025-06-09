@@ -5,6 +5,7 @@ import Music from "./pages/Music";
 import Culture from "./pages/Culture";
 import Shop from "./pages/Shop";
 import Collections from "./pages/Collections";
+import waybackLogo from "./assets/images/WAYBACK.png";
 
 function App() {
   const navItems = [
@@ -20,7 +21,7 @@ function App() {
     <Router>
       <div className="app">
         <Link to="/" className="logo">
-          <div className="logo-text">WAYBACK</div>
+          <img src={waybackLogo} alt="The Wayback Logo" className="logo-img" />
         </Link>
 
         <nav className="navigation">
@@ -41,15 +42,7 @@ function App() {
               path="/"
               element={
                 <section className="hero">
-                  <h1 className="hero-text">
-                    <span className="letter">W</span>
-                    <span className="letter">A</span>
-                    <span className="letter">Y</span>
-                    <span className="letter">B</span>
-                    <span className="letter">A</span>
-                    <span className="letter">C</span>
-                    <span className="letter">K</span>
-                  </h1>
+                  <h1 className="hero-text">WAYBACK</h1>
                 </section>
               }
             />
@@ -62,9 +55,7 @@ function App() {
           </Routes>
         </main>
 
-        <footer>
-          <p>© 2024 WAYBACK. All rights reserved.</p>
-        </footer>
+        <footer></footer>
       </div>
     </Router>
   );

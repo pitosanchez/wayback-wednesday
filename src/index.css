@@ -77,22 +77,21 @@ main {
 }
 
 .hero-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: static;
+  margin: 0;
   font-family: "Helvetica Ultra Compressed", "Helvetica Neue", Helvetica, Arial,
     sans-serif;
   font-size: 16rem;
   font-weight: 900;
   color: #fff;
   text-align: center;
-  letter-spacing: -0.1em;
+  letter-spacing: -0.05em;
   line-height: 1;
   text-transform: uppercase;
   user-select: none;
   width: 100%;
-  text-shadow: 8px 8px 0 #0099ff, 0 0 2px #0099ff;
+  text-shadow: 2px 2px 0 #0099ff, 4px 4px 0 #0099ff, 6px 6px 0 #0099ff,
+    8px 8px 0 #0099ff, 10px 10px 0 #0099ff;
 }
 
 .letter {
@@ -125,122 +124,28 @@ main {
 
 /* Responsive text sizes */
 @media (max-width: 1200px) {
-  .letter:nth-child(1) {
+  .hero-text {
     font-size: 12rem;
   }
-  .letter:nth-child(2) {
-    font-size: 13rem;
-  }
-  .letter:nth-child(3) {
-    font-size: 14rem;
-  }
-  .letter:nth-child(4) {
-    font-size: 15rem;
-  }
-  .letter:nth-child(5) {
-    font-size: 16rem;
-  }
-  .letter:nth-child(6) {
-    font-size: 17rem;
-  }
-  .letter:nth-child(7) {
-    font-size: 18rem;
-  }
 }
-
 @media (max-width: 992px) {
-  .letter:nth-child(1) {
+  .hero-text {
     font-size: 9rem;
   }
-  .letter:nth-child(2) {
-    font-size: 10rem;
-  }
-  .letter:nth-child(3) {
-    font-size: 11rem;
-  }
-  .letter:nth-child(4) {
-    font-size: 12rem;
-  }
-  .letter:nth-child(5) {
-    font-size: 13rem;
-  }
-  .letter:nth-child(6) {
-    font-size: 14rem;
-  }
-  .letter:nth-child(7) {
-    font-size: 15rem;
-  }
 }
-
 @media (max-width: 768px) {
-  .letter:nth-child(1) {
+  .hero-text {
     font-size: 6rem;
   }
-  .letter:nth-child(2) {
-    font-size: 7rem;
-  }
-  .letter:nth-child(3) {
-    font-size: 8rem;
-  }
-  .letter:nth-child(4) {
-    font-size: 9rem;
-  }
-  .letter:nth-child(5) {
-    font-size: 10rem;
-  }
-  .letter:nth-child(6) {
-    font-size: 11rem;
-  }
-  .letter:nth-child(7) {
-    font-size: 12rem;
-  }
 }
-
 @media (max-width: 576px) {
-  .letter:nth-child(1) {
+  .hero-text {
     font-size: 4rem;
-  }
-  .letter:nth-child(2) {
-    font-size: 5rem;
-  }
-  .letter:nth-child(3) {
-    font-size: 6rem;
-  }
-  .letter:nth-child(4) {
-    font-size: 7rem;
-  }
-  .letter:nth-child(5) {
-    font-size: 8rem;
-  }
-  .letter:nth-child(6) {
-    font-size: 9rem;
-  }
-  .letter:nth-child(7) {
-    font-size: 10rem;
   }
 }
-
 @media (max-width: 360px) {
-  .letter:nth-child(1) {
-    font-size: 3rem;
-  }
-  .letter:nth-child(2) {
-    font-size: 4rem;
-  }
-  .letter:nth-child(3) {
-    font-size: 5rem;
-  }
-  .letter:nth-child(4) {
-    font-size: 6rem;
-  }
-  .letter:nth-child(5) {
-    font-size: 7rem;
-  }
-  .letter:nth-child(6) {
-    font-size: 8rem;
-  }
-  .letter:nth-child(7) {
-    font-size: 9rem;
+  .hero-text {
+    font-size: 2.5rem;
   }
 }
 
@@ -772,6 +677,28 @@ main {
 
 .logo:hover .logo-text {
   color: var(--sandy-brown);
+}
+
+.logo-img {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  width: 160px;
+  height: auto;
+  z-index: 100;
+  transition: filter 0.3s;
+}
+
+.logo-img:hover {
+  filter: brightness(1.2) drop-shadow(0 2px 8px #0099ff);
+}
+
+@media (max-width: 600px) {
+  .logo-img {
+    width: 100px;
+    top: 1rem;
+    left: 1rem;
+  }
 }
 
 /* History Page Styles */
