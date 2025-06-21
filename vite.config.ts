@@ -9,4 +9,7 @@ const base =
 export default defineConfig({
   base: base,
   plugins: [react()],
+  optimizeDeps: {
+    exclude: ["@gsap/react"],
+  },
 });

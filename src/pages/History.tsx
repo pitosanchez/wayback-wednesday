@@ -71,11 +71,11 @@ const History = () => {
 
   return (
     <div className="page-container">
-      <div className="history-grid">
-        <div className="history-header">
-          <h1>History</h1>
-          <div className="accent-line"></div>
-          <p className="history-intro">
+      <div className="space-y-16">
+        <div className="page-header text-center max-w-4xl mx-auto">
+          <h1 className="text-6xl font-bold text-rich-black mb-6">History</h1>
+          <div className="accent-line mx-auto"></div>
+          <p className="text-xl text-rich-black/80 leading-relaxed mt-8">
             East Harlem, a neighborhood where the streets tell stories of
             cultural fusion and musical innovation. Here, the roots of hip hop
             run deep, intertwining with the rich tapestry of Puerto Rican,
@@ -89,44 +89,63 @@ const History = () => {
 
         <div className="timeline">
           {timelineEvents.map((event, index) => (
-            <div key={index} className="timeline-event">
+            <div key={index} className="timeline-event fade-in-up">
               <div className="event-content">
                 <span className="year">{event.year}</span>
-                <h2>{event.title}</h2>
-                <p>{event.description}</p>
-                <div className="additional-info">
-                  <p>{event.additionalInfo}</p>
+                <h2 className="text-3xl font-bold text-rich-black mb-4">
+                  {event.title}
+                </h2>
+                <p className="text-rich-black/80 leading-relaxed mb-6">
+                  {event.description}
+                </p>
+                <div className="pt-4 border-t border-gray-200">
+                  <p className="text-sm text-rich-black/60 italic">
+                    {event.additionalInfo}
+                  </p>
                 </div>
               </div>
-              <div
-                className="event-image"
-                style={{ backgroundImage: `url(${event.image})` }}
-              >
+              <div className="image-container">
+                <img
+                  src={event.image}
+                  alt={event.title}
+                  className="w-full h-full object-cover rounded-lg"
+                />
                 <div className="image-overlay"></div>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="history-quote">
-          <blockquote>
+        <div className="bg-denim-blue/10 p-12 rounded-2xl text-center relative">
+          <div className="absolute top-4 left-8 text-8xl text-denim-blue/20 font-serif">
+            "
+          </div>
+          <blockquote className="text-2xl text-rich-black leading-relaxed mb-6 italic relative z-10">
             "East Harlem wasn't just a place where hip hop happened—it was where
             hip hop was born, nurtured, and evolved into a global movement. The
             streets of El Barrio were our stage, our studio, and our sanctuary.
             Every corner, every wall, every sound system told a story of
             resilience and creativity."
           </blockquote>
-          <cite>— DJ Kool Herc, Pioneer of Hip Hop</cite>
+          <cite className="text-xl text-denim-blue font-semibold">
+            — DJ Kool Herc, Pioneer of Hip Hop
+          </cite>
         </div>
 
-        <div className="cultural-impact">
-          <h2>Cultural Impact</h2>
-          <div className="impact-grid">
+        <div className="text-center">
+          <h2 className="text-4xl font-bold text-rich-black mb-12 uppercase tracking-wider">
+            Cultural Impact
+          </h2>
+          <div className="grid-auto">
             {culturalElements.map((element, index) => (
-              <div key={index} className="impact-card">
-                <div className="impact-icon">{element.icon}</div>
-                <h3>{element.title}</h3>
-                <p>{element.description}</p>
+              <div key={index} className="card card-hover text-center">
+                <div className="text-5xl mb-6">{element.icon}</div>
+                <h3 className="text-2xl font-bold text-rich-black mb-4 uppercase tracking-wide">
+                  {element.title}
+                </h3>
+                <p className="text-rich-black/70 leading-relaxed">
+                  {element.description}
+                </p>
               </div>
             ))}
           </div>
