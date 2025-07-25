@@ -39,6 +39,7 @@ class AuthService {
       emailVerified: firebaseUser.emailVerified,
       createdAt: (userData?.createdAt as { toDate: () => Date })?.toDate() || new Date(),
       lastLoginAt: new Date(),
+      role: (userData?.role as "user" | "admin" | "super_admin") || "user",
       preferences: userData?.preferences as UserPreferences | undefined,
       profile: userData?.profile as UserProfile | undefined,
     };
