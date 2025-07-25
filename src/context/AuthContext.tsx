@@ -43,6 +43,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         if (firebaseUser) {
           // For demo purposes, create a simplified user object
+          // In a real app, you would fetch the user role from Firestore
+          const isAdminEmail = firebaseUser.email === "admin@waybackwednesday.com" || 
+                              firebaseUser.email === "admin@example.com" ||
+                              firebaseUser.email?.endsWith("@admin.wayback.com");
+          
           const user: User = {
             uid: firebaseUser.uid,
             email: firebaseUser.email!,
@@ -51,6 +56,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             emailVerified: firebaseUser.emailVerified,
             createdAt: new Date(),
             lastLoginAt: new Date(),
+            role: isAdminEmail ? "admin" : "user",
           };
 
           setAuthState({

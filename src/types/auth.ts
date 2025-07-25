@@ -6,6 +6,7 @@ export interface User {
   emailVerified: boolean;
   createdAt: Date;
   lastLoginAt: Date;
+  role: "user" | "admin" | "super_admin";
   preferences?: UserPreferences;
   profile?: UserProfile;
 }

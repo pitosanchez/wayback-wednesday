@@ -8,7 +8,7 @@ import Collections from "./pages/Collections";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import AuthDemo from "./pages/AuthDemo";
-import waybackLogo from "./assets/images/wayback.png";
+import gboLogo from "./assets/images/svgbo.svg";
 import { CartProvider } from "./context/CartContext";
 import { AuthProvider } from "./context/AuthContext";
 import CartIcon from "./components/Cart/CartIcon";
@@ -44,8 +44,8 @@ function App() {
           <div className="app">
             <Link to="/" className="logo">
               <img
-                src={waybackLogo}
-                alt="The Wayback Logo"
+                src={gboLogo}
+                alt="GBO Logo"
                 className="logo-img"
               />
             </Link>

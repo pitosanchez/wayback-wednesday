@@ -58,10 +58,8 @@ const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
     );
   }
 
-  // In a real app, you would check user roles/permissions here
-  // For demo purposes, we'll assume any logged-in user can access admin
-  // You could extend the User type to include roles and check them here
-  const isAdmin = true; // user.role === 'admin' || user.role === 'super_admin';
+  // Check if user has admin role
+  const isAdmin = user.role === 'admin' || user.role === 'super_admin';
 
   if (!isAdmin) {
     return (
