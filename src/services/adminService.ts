@@ -9,6 +9,7 @@ import type {
   ProductAnalytics,
   CustomerAnalytics,
 } from "../types/admin";
+import { logger } from "../utils/logger";
 
 class AdminService {
   private adminUsers: AdminUser[] = [];
@@ -225,7 +226,9 @@ class AdminService {
   ): Promise<void> {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 500));
-    console.log(`Order ${orderId} status updated to ${status}`, {
+    logger.info(`Order ${orderId} status updated to ${status}`, {
+      orderId,
+      status,
       trackingNumber,
     });
   }
@@ -319,7 +322,7 @@ class AdminService {
   ): Promise<void> {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 500));
-    console.log(`Product ${productId} updated`, updates);
+    logger.info(`Product ${productId} updated`, { productId, updates });
   }
 
   // User management
@@ -419,7 +422,10 @@ class AdminService {
   async acknowledgeAlert(alertId: string, adminId: string): Promise<void> {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 300));
-    console.log(`Alert ${alertId} acknowledged by ${adminId}`);
+    logger.info(`Alert ${alertId} acknowledged by ${adminId}`, {
+      alertId,
+      adminId,
+    });
   }
 
   // Analytics

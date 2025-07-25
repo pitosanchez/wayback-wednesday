@@ -24,23 +24,17 @@ import Orders from "./pages/Orders";
 import Admin from "./pages/Admin";
 import AdminDemo from "./pages/AdminDemo";
 import ProductFeaturesDemo from "./pages/ProductFeaturesDemo";
+import AnalyticsDashboard from "./pages/AnalyticsDashboard";
+import DemoHub from "./pages/DemoHub";
+import { MAIN_NAV_ITEMS, USER_NAV_ITEMS } from "./utils/constants";
 
 function App() {
+  const isDevelopment = import.meta.env.DEV;
+
   const navItems = [
-    { name: "About", path: "/about" },
-    { name: "History", path: "/history" },
-    { name: "Music", path: "/music" },
-    { name: "Culture", path: "/culture" },
-    { name: "Shop", path: "/shop" },
-    { name: "Collections", path: "/collections" },
-    { name: "Cart Demo", path: "/cart-demo" },
-    { name: "Dashboard", path: "/dashboard" },
-    { name: "Stripe Demo", path: "/stripe-demo" },
-    { name: "Variants Demo", path: "/variants-demo" },
-    { name: "Inventory Demo", path: "/inventory-demo" },
-    { name: "Auth Demo", path: "/auth-demo" },
-    { name: "Admin Demo", path: "/admin-demo" },
-    { name: "Product Features", path: "/product-features-demo" },
+    ...MAIN_NAV_ITEMS,
+    ...(isDevelopment ? [{ name: "Demos", path: "/demos" }] : []),
+    ...USER_NAV_ITEMS,
   ];
 
   return (
@@ -76,6 +70,7 @@ function App() {
 
             <main>
               <Routes>
+                {/* Main Routes */}
                 <Route
                   path="/"
                   element={
@@ -90,6 +85,9 @@ function App() {
                 <Route path="/culture" element={<Culture />} />
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/collections" element={<Collections />} />
+                <Route path="/login" element={<Login />} />
+
+                {/* Protected Routes */}
                 <Route
                   path="/checkout"
                   element={
@@ -122,15 +120,8 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-                <Route path="/login" element={<Login />} />
-                <Route path="/auth-demo" element={<AuthDemo />} />
-                <Route path="/cart-demo" element={<CartDemo />} />
-                <Route path="/stripe-demo" element={<StripeDemo />} />
-                <Route
-                  path="/variants-demo"
-                  element={<ProductVariantsDemo />}
-                />
-                <Route path="/inventory-demo" element={<InventoryDemo />} />
+
+                {/* Admin Routes */}
                 <Route
                   path="/admin"
                   element={
@@ -140,17 +131,40 @@ function App() {
                   }
                 />
                 <Route
-                  path="/admin-demo"
+                  path="/analytics"
                   element={
                     <AdminRoute>
-                      <AdminDemo />
+                      <AnalyticsDashboard />
                     </AdminRoute>
                   }
                 />
-                <Route
-                  path="/product-features-demo"
-                  element={<ProductFeaturesDemo />}
-                />
+
+                {/* Demo Routes - Only in Development */}
+                {isDevelopment && (
+                  <>
+                    <Route path="/demos" element={<DemoHub />} />
+                    <Route path="/auth-demo" element={<AuthDemo />} />
+                    <Route path="/cart-demo" element={<CartDemo />} />
+                    <Route path="/stripe-demo" element={<StripeDemo />} />
+                    <Route
+                      path="/variants-demo"
+                      element={<ProductVariantsDemo />}
+                    />
+                    <Route path="/inventory-demo" element={<InventoryDemo />} />
+                    <Route
+                      path="/admin-demo"
+                      element={
+                        <AdminRoute>
+                          <AdminDemo />
+                        </AdminRoute>
+                      }
+                    />
+                    <Route
+                      path="/product-features-demo"
+                      element={<ProductFeaturesDemo />}
+                    />
+                  </>
+                )}
               </Routes>
             </main>
 

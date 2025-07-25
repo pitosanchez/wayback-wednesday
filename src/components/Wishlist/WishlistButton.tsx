@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../../context/AuthContext";
 import wishlistService from "../../services/wishlistService";
 
@@ -21,13 +21,7 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (authState.user) {
-      checkWishlistStatus();
-    }
-  }, [authState.user, productId, size, color]);
-
-  const checkWishlistStatus = async () => {
+  const checkWishlistStatus = useCallback(async () => {
     if (!authState.user) return;
 
     try {
@@ -41,7 +35,13 @@ const WishlistButton: React.FC<WishlistButtonProps> = ({
     } catch (error) {
       console.error("Failed to check wishlist status:", error);
     }
-  };
+  }, [authState.user, productId, size, color]);
+
+  useEffect(() => {
+    if (authState.user) {
+      checkWishlistStatus();
+    }
+  }, [authState.user, checkWishlistStatus]);
 
   const handleToggleWishlist = async () => {
     if (!authState.user) {

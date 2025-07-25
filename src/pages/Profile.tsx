@@ -12,14 +12,15 @@ const Profile: React.FC = () => {
   } | null>(null);
 
   const user = authState.user;
-  if (!user) return null;
-
+  
   const [profileData, setProfileData] = useState<Partial<UserProfile>>({
-    firstName: user.profile?.firstName || "",
-    lastName: user.profile?.lastName || "",
-    phone: user.profile?.phone || "",
-    marketingOptIn: user.profile?.marketingOptIn || false,
+    firstName: user?.profile?.firstName || "",
+    lastName: user?.profile?.lastName || "",
+    phone: user?.profile?.phone || "",
+    marketingOptIn: user?.profile?.marketingOptIn || false,
   });
+
+  if (!user) return null;
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>

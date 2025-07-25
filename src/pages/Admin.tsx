@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { adminService } from "../services/adminService";
 import type { AdminStats, Order, InventoryAlert } from "../types/admin";
+import { logger } from "../utils/logger";
 
 const Admin: React.FC = () => {
   const [stats, setStats] = useState<AdminStats | null>(null);
@@ -23,7 +24,7 @@ const Admin: React.FC = () => {
           alertsData.filter((alert) => alert.severity === "high").slice(0, 3)
         );
       } catch (error) {
-        console.error("Failed to load admin data:", error);
+        logger.error("Failed to load admin data", error);
       } finally {
         setLoading(false);
       }

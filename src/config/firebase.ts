@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, connectAuthEmulator } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
+import { logger } from "../utils/logger";
 
 // Firebase configuration
 // In production, these would come from environment variables
@@ -45,9 +46,9 @@ if (isDevelopment) {
     });
     connectFirestoreEmulator(db, "localhost", 8080);
     connectStorageEmulator(storage, "localhost", 9199);
-  } catch (error) {
+  } catch {
     // Emulators already connected or not available
-    console.log("Firebase emulators not available, using production services");
+    logger.info("Firebase emulators not available, using production services");
   }
 }
 

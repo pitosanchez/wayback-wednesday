@@ -11,18 +11,6 @@ export interface PaymentIntent {
   status: string;
 }
 
-export interface CheckoutSession {
-  id: string;
-  url: string;
-  payment_status: string;
-}
-
-export interface PaymentFormData {
-  amount: number;
-  currency: string;
-  description?: string;
-  metadata?: Record<string, string>;
-}
 
 export interface BillingDetails {
   name: string;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { adminService } from "../services/adminService";
 import type {
   Order,
@@ -7,11 +7,10 @@ import type {
   InventoryAlert,
   SalesAnalytics,
 } from "../types/admin";
+import type { AdminTabId } from "../types/navigation";
 
 const AdminDemo: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<
-    "orders" | "products" | "users" | "analytics"
-  >("orders");
+  const [activeTab, setActiveTab] = useState<AdminTabId>("orders");
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<ProductManagement[]>([]);
   const [users, setUsers] = useState<UserSummary[]>([]);
@@ -19,39 +18,43 @@ const AdminDemo: React.FC = () => {
   const [alerts, setAlerts] = useState<InventoryAlert[]>([]);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    loadTabData();
-  }, [activeTab]);
-
-  const loadTabData = async () => {
+  const loadTabData = useCallback(async () => {
     setLoading(true);
     try {
       switch (activeTab) {
-        case "orders":
+        case "orders": {
           const ordersData = await adminService.getOrders(1, 10);
           setOrders(ordersData.orders);
           break;
-        case "products":
+        }
+        case "products": {
           const productsData = await adminService.getProducts();
           setProducts(productsData.products);
           const alertsData = await adminService.getInventoryAlerts();
           setAlerts(alertsData);
           break;
-        case "users":
+        }
+        case "users": {
           const usersData = await adminService.getUsers(1, 10);
           setUsers(usersData.users);
           break;
-        case "analytics":
+        }
+        case "analytics": {
           const analyticsData = await adminService.getSalesAnalytics("month");
           setAnalytics(analyticsData);
           break;
+        }
       }
     } catch (error) {
       console.error(`Failed to load ${activeTab} data:`, error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeTab]);
+
+  useEffect(() => {
+    loadTabData();
+  }, [loadTabData]);
 
   const updateOrderStatus = async (
     orderId: string,
@@ -69,7 +72,7 @@ const AdminDemo: React.FC = () => {
     }
   };
 
-  const tabs = [
+  const tabs: Array<{ id: AdminTabId; label: string; icon: string }> = [
     { id: "orders", label: "Orders", icon: "📦" },
     { id: "products", label: "Products", icon: "🛍️" },
     { id: "users", label: "Users", icon: "👥" },
@@ -95,7 +98,7 @@ const AdminDemo: React.FC = () => {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id)}
                 className={`py-2 px-1 border-b-2 font-medium text-sm ${
                   activeTab === tab.id
                     ? "border-denim-blue text-denim-blue"

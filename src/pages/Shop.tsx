@@ -1,14 +1,13 @@
-// Import black tee image
 import blackTeeImage from "../assets/images/blackTee.webp?url";
 import ProductCard from "../components/Product/ProductCard";
 import type { Product } from "../types/product";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import inventoryService from "../services/inventoryService";
 
 const Shop = () => {
   const [activeFilter, setActiveFilter] = useState("All");
 
-  const products: Product[] = [
+  const products: Product[] = useMemo(() => [
     {
       id: "wb-clemente-tee",
       name: "WB Clemente Black Tee",
@@ -283,7 +282,7 @@ const Shop = () => {
         { id: "vinyl-deluxe", price: 180, stock: 15, sku: "WB-VINYL-DLX" },
       ],
     },
-  ];
+  ], []);
 
   const filteredProducts =
     activeFilter === "All"
@@ -293,7 +292,7 @@ const Shop = () => {
   // Initialize inventory system with products
   useEffect(() => {
     inventoryService.initializeInventory(products);
-  }, []);
+  }, [products]);
 
   const categories = ["All", "Apparel", "Accessories", "Music"];
 

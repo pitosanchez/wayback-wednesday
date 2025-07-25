@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import type { OrderHistory } from "../types/auth";
+import { STATUS_COLORS } from "../utils/constants";
+
+type OrderStatusFilter =
+  | "all"
+  | "pending"
+  | "processing"
+  | "shipped"
+  | "delivered"
+  | "cancelled";
 
 const Orders: React.FC = () => {
   const { authState } = useAuth();
   const [orders, setOrders] = useState<OrderHistory[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<
-    "all" | "pending" | "processing" | "shipped" | "delivered" | "cancelled"
-  >("all");
+  const [filter, setFilter] = useState<OrderStatusFilter>("all");
 
   const user = authState.user;
-  if (!user) return null;
 
   // Mock order data for demo purposes
   useEffect(() => {
+    if (!user) return;
     const mockOrders: OrderHistory[] = [
       {
         id: "ORD-2024-001",
@@ -136,27 +143,19 @@ const Orders: React.FC = () => {
       setOrders(mockOrders);
       setLoading(false);
     }, 1000);
-  }, [user.uid]);
+  }, [user]);
+
+  if (!user) return null;
 
   const filteredOrders = orders.filter(
     (order) => filter === "all" || order.status === filter
   );
 
   const getStatusColor = (status: string) => {
-    switch (status) {
-      case "pending":
-        return "text-yellow-600 bg-yellow-50 border-yellow-200";
-      case "processing":
-        return "text-blue-600 bg-blue-50 border-blue-200";
-      case "shipped":
-        return "text-purple-600 bg-purple-50 border-purple-200";
-      case "delivered":
-        return "text-green-600 bg-green-50 border-green-200";
-      case "cancelled":
-        return "text-red-600 bg-red-50 border-red-200";
-      default:
-        return "text-gray-600 bg-gray-50 border-gray-200";
-    }
+    return (
+      STATUS_COLORS[status as keyof typeof STATUS_COLORS] ||
+      STATUS_COLORS.default
+    );
   };
 
   const getStatusIcon = (status: string) => {
@@ -237,17 +236,19 @@ const Orders: React.FC = () => {
         {/* Filter Tabs */}
         <div className="bg-white rounded-lg shadow-sm mb-8 p-1">
           <div className="flex flex-wrap gap-1">
-            {[
-              { key: "all", label: "All Orders" },
-              { key: "pending", label: "Pending" },
-              { key: "processing", label: "Processing" },
-              { key: "shipped", label: "Shipped" },
-              { key: "delivered", label: "Delivered" },
-              { key: "cancelled", label: "Cancelled" },
-            ].map(({ key, label }) => (
+            {(
+              [
+                { key: "all", label: "All Orders" },
+                { key: "pending", label: "Pending" },
+                { key: "processing", label: "Processing" },
+                { key: "shipped", label: "Shipped" },
+                { key: "delivered", label: "Delivered" },
+                { key: "cancelled", label: "Cancelled" },
+              ] as const
+            ).map(({ key, label }) => (
               <button
                 key={key}
-                onClick={() => setFilter(key as any)}
+                onClick={() => setFilter(key)}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                   filter === key
                     ? "bg-blue-600 text-white"

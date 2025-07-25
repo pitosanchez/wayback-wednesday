@@ -29,7 +29,7 @@ class AuthService {
   async convertFirebaseUser(firebaseUser: FirebaseUser): Promise<User> {
     // Get additional user data from Firestore
     const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
-    const userData = userDoc.data();
+    const userData = userDoc.data() as Record<string, unknown> | undefined;
 
     return {
       uid: firebaseUser.uid,
@@ -37,10 +37,10 @@ class AuthService {
       displayName: firebaseUser.displayName || undefined,
       photoURL: firebaseUser.photoURL || undefined,
       emailVerified: firebaseUser.emailVerified,
-      createdAt: userData?.createdAt?.toDate() || new Date(),
+      createdAt: (userData?.createdAt as { toDate: () => Date })?.toDate() || new Date(),
       lastLoginAt: new Date(),
-      preferences: userData?.preferences,
-      profile: userData?.profile,
+      preferences: userData?.preferences as UserPreferences | undefined,
+      profile: userData?.profile as UserProfile | undefined,
     };
   }
 
@@ -108,7 +108,7 @@ class AuthService {
       await sendEmailVerification(firebaseUser);
 
       return this.convertFirebaseUser(firebaseUser);
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -128,7 +128,7 @@ class AuthService {
       });
 
       return this.convertFirebaseUser(userCredential.user);
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -137,7 +137,7 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       await signOut(auth);
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -146,7 +146,7 @@ class AuthService {
   async resetPassword(data: ResetPasswordData): Promise<void> {
     try {
       await sendPasswordResetEmail(auth, data.email);
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -172,7 +172,7 @@ class AuthService {
 
       // Update password
       await updatePassword(user, data.newPassword);
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -191,8 +191,8 @@ class AuthService {
         profileData.lastName !== undefined
       ) {
         const currentDoc = await getDoc(doc(db, "users", user.uid));
-        const currentData = currentDoc.data();
-        const currentProfile = currentData?.profile || {};
+        const currentData = currentDoc.data() as Record<string, unknown> | undefined;
+        const currentProfile = (currentData?.profile as UserProfile) || {};
 
         const firstName = profileData.firstName ?? currentProfile.firstName;
         const lastName = profileData.lastName ?? currentProfile.lastName;
@@ -207,7 +207,7 @@ class AuthService {
       await updateDoc(doc(db, "users", user.uid), {
         [`profile`]: profileData,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -225,7 +225,7 @@ class AuthService {
       await updateDoc(doc(db, "users", user.uid), {
         preferences: preferencesData,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -239,7 +239,7 @@ class AuthService {
       }
 
       await sendEmailVerification(user);
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -260,7 +260,7 @@ class AuthService {
 
       // Delete Firebase Auth account
       await deleteUser(user);
-    } catch (error: any) {
+    } catch (error: unknown) {
       throw new Error(this.getErrorMessage(error));
     }
   }
@@ -271,8 +271,21 @@ class AuthService {
   }
 
   // Helper method to convert Firebase errors to user-friendly messages
-  private getErrorMessage(error: any): string {
-    switch (error.code) {
+  private getErrorMessage(error: unknown): string {
+    // Type guard to check if error has the expected Firebase error structure
+    const isFirebaseError = (err: unknown): err is { code: string; message?: string } => {
+      return typeof err === 'object' && err !== null && 'code' in err && typeof (err as Record<string, unknown>).code === 'string';
+    };
+
+    if (!isFirebaseError(error)) {
+      if (error instanceof Error) {
+        return error.message || "An unexpected error occurred. Please try again.";
+      }
+      return "An unexpected error occurred. Please try again.";
+    }
+
+    const firebaseError = error;
+    switch (firebaseError.code) {
       case "auth/user-not-found":
         return "No account found with this email address.";
       case "auth/wrong-password":
@@ -291,7 +304,7 @@ class AuthService {
         return "Please log in again to complete this action.";
       default:
         return (
-          error.message || "An unexpected error occurred. Please try again."
+          firebaseError.message || "An unexpected error occurred. Please try again."
         );
     }
   }

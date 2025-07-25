@@ -56,6 +56,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
     (product.variants.some((v) => v.size) ||
       product.variants.some((v) => v.color));
 
+  // Get the current image - use variant image if available, otherwise use base product image
+  const currentImage = currentVariant?.image || product.image;
+
   // For cart integration, we need a complete variant selection for products with variants
   const canAddToCart = !hasVariants || (selectedVariant.variant && isInStock);
 
@@ -68,7 +71,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       id: currentVariant ? `${product.id}-${currentVariant.id}` : product.id,
       name: product.name,
       price: currentPrice,
-      image: product.image,
+      image: currentImage, // Use the current image (variant or base)
       category: product.category,
       size: selectedVariant.size,
       color: selectedVariant.color,
@@ -80,7 +83,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {/* Product Image */}
       <div className="product-image relative">
         <img
-          src={product.image}
+          src={currentImage} // Use currentImage instead of product.image
           alt={product.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
@@ -95,7 +98,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               <img
                 src={WBClementeImage}
                 alt="WB Clemente Design"
-                className="w-40 h-36 object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
+                className="w-32 h-28 sm:w-36 sm:h-32 md:w-40 md:h-36 object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-300"
                 style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }}
               />
             </div>
@@ -233,7 +236,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                           return (
                             <div
                               key={color}
-                              className="w-4 h-4 rounded-full border border-gray-300"
+                              className="w-3 h-3 sm:w-4 sm:h-4 rounded-full border border-gray-300"
                               style={{
                                 backgroundColor: getColorValue(color),
                                 borderColor:

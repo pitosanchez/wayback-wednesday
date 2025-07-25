@@ -5,6 +5,7 @@ export interface ProductVariant {
   price?: number; // Optional different pricing per variant
   stock: number;
   sku?: string;
+  image?: string; // Optional variant-specific image (e.g., for different colors)
 }
 
 export interface Product {

@@ -7,6 +7,7 @@ import type {
 } from "../types/inventory";
 import type { Product } from "../types/product";
 import type { CartItem } from "../types/cart";
+import { logger } from "../utils/logger";
 
 class InventoryService {
   private inventory: Map<string, InventoryItem> = new Map();
@@ -56,7 +57,9 @@ class InventoryService {
   updateStock(update: InventoryUpdate): boolean {
     const item = this.inventory.get(update.variantId);
     if (!item) {
-      console.error(`Inventory item not found: ${update.variantId}`);
+      logger.error("Inventory item not found", undefined, {
+        variantId: update.variantId,
+      });
       return false;
     }
 
@@ -104,14 +107,16 @@ class InventoryService {
       const item = this.inventory.get(variantId);
 
       if (!item) {
-        console.error(`Inventory item not found: ${variantId}`);
+        logger.error("Inventory item not found", undefined, { variantId });
         return false;
       }
 
       if (item.availableStock < cartItem.quantity) {
-        console.error(
-          `Insufficient stock for ${variantId}: need ${cartItem.quantity}, available ${item.availableStock}`
-        );
+        logger.error("Insufficient stock", undefined, {
+          variantId,
+          quantityNeeded: cartItem.quantity,
+          quantityAvailable: item.availableStock,
+        });
         return false;
       }
 
@@ -181,7 +186,10 @@ class InventoryService {
       const item = this.inventory.get(variantId);
 
       if (!item) {
-        console.error(`Inventory item not found during purchase: ${variantId}`);
+        logger.error("Inventory item not found during purchase", undefined, {
+          variantId,
+          orderId,
+        });
         return false;
       }
 
@@ -325,39 +333,46 @@ class InventoryService {
         // Restore inventory map
         if (data.inventory) {
           Object.entries(data.inventory).forEach(
-            ([key, value]: [string, any]) => {
+            ([key, value]: [string, unknown]) => {
+              const inventoryValue = value as Record<string, unknown>;
               this.inventory.set(key, {
-                ...value,
-                lastUpdated: new Date(value.lastUpdated),
-                restockDate: value.restockDate
-                  ? new Date(value.restockDate)
+                ...inventoryValue,
+                lastUpdated: new Date(inventoryValue.lastUpdated as string),
+                restockDate: inventoryValue.restockDate
+                  ? new Date(inventoryValue.restockDate as string)
                   : undefined,
-              });
+              } as InventoryItem);
             }
           );
         }
 
         // Restore movements
         if (data.stockMovements) {
-          this.stockMovements = data.stockMovements.map((movement: any) => ({
-            ...movement,
-            timestamp: new Date(movement.timestamp),
-          }));
+          this.stockMovements = data.stockMovements.map((movement: unknown) => {
+            const movementData = movement as Record<string, unknown>;
+            return {
+              ...movementData,
+              timestamp: new Date(movementData.timestamp as string),
+            } as StockMovement;
+          });
         }
 
         // Restore alerts
         if (data.alerts) {
-          this.alerts = data.alerts.map((alert: any) => ({
-            ...alert,
-            createdAt: new Date(alert.createdAt),
-            acknowledgedAt: alert.acknowledgedAt
-              ? new Date(alert.acknowledgedAt)
-              : undefined,
-          }));
+          this.alerts = data.alerts.map((alert: unknown) => {
+            const alertData = alert as Record<string, unknown>;
+            return {
+              ...alertData,
+              createdAt: new Date(alertData.createdAt as string),
+              acknowledgedAt: alertData.acknowledgedAt
+                ? new Date(alertData.acknowledgedAt as string)
+                : undefined,
+            } as InventoryAlert;
+          });
         }
       }
     } catch (error) {
-      console.error("Error loading inventory from storage:", error);
+      logger.error("Error loading inventory from storage", error);
     }
   }
 
@@ -371,7 +386,7 @@ class InventoryService {
 
       localStorage.setItem("wayback-inventory", JSON.stringify(data));
     } catch (error) {
-      console.error("Error saving inventory to storage:", error);
+      logger.error("Error saving inventory to storage", error);
     }
   }
 }

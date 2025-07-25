@@ -172,23 +172,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const updateProfile = async (
     profile: Partial<UserProfile>
   ): Promise<void> => {
-    try {
-      await authService.updateProfile(profile);
-      // Profile updates will be reflected on next auth state change
-    } catch (error) {
-      throw error;
-    }
+    await authService.updateProfile(profile);
+    // Profile updates will be reflected on next auth state change
   };
 
   const updatePreferences = async (
     preferences: Partial<UserPreferences>
   ): Promise<void> => {
-    try {
-      await authService.updatePreferences(preferences);
-      // Preferences updates will be reflected on next auth state change
-    } catch (error) {
-      throw error;
-    }
+    await authService.updatePreferences(preferences);
+    // Preferences updates will be reflected on next auth state change
   };
 
   const resendVerification = async (): Promise<void> => {

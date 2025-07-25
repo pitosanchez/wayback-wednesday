@@ -61,6 +61,19 @@
     color: var(--sunshine-yellow);
   }
 
+  /* Special styling for demos link */
+  .nav-link[href="/demos"] {
+    background-color: var(--fire-red);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+  }
+
+  .nav-link[href="/demos"]:hover {
+    background-color: var(--sunshine-yellow);
+    color: var(--rich-black);
+  }
+
   .hero {
     @apply h-screen min-h-96 w-full flex items-center justify-center p-4 relative overflow-hidden;
     background-color: var(--warm-white);
@@ -70,7 +83,7 @@
     @apply text-center font-bold uppercase select-none m-0 w-full break-words 
            flex items-center justify-center h-full transform -skew-x-12;
     font-family: "benton-modern-display-compre", sans-serif;
-    font-size: 18rem;
+    font-size: clamp(2.5rem, 12vw + 1rem, 18rem);
     letter-spacing: -0.08em;
     line-height: 1;
     color: var(--rich-black);
@@ -85,7 +98,7 @@
   }
 
   .logo-img {
-    @apply w-40 h-auto;
+    @apply w-20 sm:w-28 md:w-32 lg:w-40 h-auto transition-all duration-300;
   }
 
   .page-container {
@@ -269,23 +282,8 @@
 }
 
 @layer utilities {
-  /* Responsive Text Sizes */
-  @media (max-width: 1439px) {
-    .hero-text {
-      font-size: 16rem;
-    }
-  }
-
-  @media (max-width: 1199px) {
-    .hero-text {
-      font-size: 12rem;
-    }
-  }
-
+  /* Responsive Adjustments */
   @media (max-width: 991px) {
-    .hero-text {
-      font-size: 8rem;
-    }
 
     .navigation {
       @apply fixed bottom-0 left-0 right-0 top-auto transform-none p-4 rounded-none;
@@ -311,13 +309,6 @@
   }
 
   @media (max-width: 767px) {
-    .hero-text {
-      font-size: 6rem;
-    }
-
-    .logo-img {
-      @apply w-20;
-    }
 
     .page-header h1 {
       @apply text-3xl;
@@ -333,22 +324,8 @@
   }
 
   @media (max-width: 599px) {
-    .hero-text {
-      font-size: 4rem;
-    }
-
     .nav-item {
       @apply text-sm;
-    }
-  }
-
-  @media (max-width: 400px) {
-    .hero-text {
-      font-size: 2.5rem;
-    }
-
-    .logo-img {
-      @apply w-16;
     }
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import SearchBar from "../components/Search/SearchBar";
 import StarRating from "../components/Reviews/StarRating";
 import ReviewCard from "../components/Reviews/ReviewCard";
@@ -10,12 +10,11 @@ import { useAuth } from "../context/AuthContext";
 import type { ProductReview, CreateReviewData } from "../types/reviews";
 import type { SearchResult } from "../types/search";
 import type { WishlistWithProducts } from "../types/wishlist";
+import type { ProductFeatureTab } from "../types/navigation";
 
 const ProductFeaturesDemo: React.FC = () => {
   const { authState } = useAuth();
-  const [activeTab, setActiveTab] = useState<"search" | "reviews" | "wishlist">(
-    "search"
-  );
+  const [activeTab, setActiveTab] = useState<ProductFeatureTab>("search");
   const [searchResults, setSearchResults] = useState<SearchResult | null>(null);
   const [reviews, setReviews] = useState<ProductReview[]>([]);
   const [wishlist, setWishlist] = useState<WishlistWithProducts | null>(null);
@@ -26,25 +25,23 @@ const ProductFeaturesDemo: React.FC = () => {
     comment: "",
   });
 
-  useEffect(() => {
-    loadInitialData();
-  }, [activeTab, authState.user]);
-
-  const loadInitialData = async () => {
+  const loadInitialData = useCallback(async () => {
     try {
       switch (activeTab) {
-        case "search":
+        case "search": {
           // Load initial search results
           const searchResult = await searchService.search({
             sortBy: "relevance",
           });
           setSearchResults(searchResult);
           break;
-        case "reviews":
+        }
+        case "reviews": {
           // Load reviews for demo product
           const reviewsData = await reviewService.getReviews("wb-clemente-tee");
           setReviews(reviewsData.reviews);
           break;
+        }
         case "wishlist":
           if (authState.user) {
             const wishlists = await wishlistService.getUserWishlists(
@@ -61,7 +58,11 @@ const ProductFeaturesDemo: React.FC = () => {
     } catch (error) {
       console.error("Failed to load data:", error);
     }
-  };
+  }, [activeTab, authState.user]);
+
+  useEffect(() => {
+    loadInitialData();
+  }, [loadInitialData]);
 
   const handleSearch = async (query: string) => {
     try {
@@ -116,7 +117,7 @@ const ProductFeaturesDemo: React.FC = () => {
     }
   };
 
-  const tabs = [
+  const tabs: Array<{ id: ProductFeatureTab; label: string; icon: string }> = [
     { id: "search", label: "Search & Discovery", icon: "🔍" },
     { id: "reviews", label: "Reviews & Ratings", icon: "⭐" },
     { id: "wishlist", label: "Wishlist & Favorites", icon: "💖" },
@@ -143,7 +144,7 @@ const ProductFeaturesDemo: React.FC = () => {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id)}
                 className={`py-4 px-6 border-b-2 font-medium text-lg ${
                   activeTab === tab.id
                     ? "border-denim-blue text-denim-blue"
