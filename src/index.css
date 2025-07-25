@@ -75,9 +75,13 @@
   }
 
   .hero {
-    @apply h-screen min-h-96 w-full flex items-center justify-center p-4 relative overflow-hidden;
-    background-color: var(--warm-white);
+    @apply h-screen min-h-96 w-full flex items-center justify-center relative overflow-hidden;
+    background-color: transparent;
+    border: none;
+    margin: 0;
+    padding: 0;
   }
+
 
   .hero-text {
     @apply text-center font-bold uppercase select-none m-0 w-full break-words 

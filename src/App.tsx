@@ -1,4 +1,4 @@
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { HashRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 import About from "./pages/About";
 import History from "./pages/History";
 import Music from "./pages/Music";
@@ -9,6 +9,7 @@ import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import AuthDemo from "./pages/AuthDemo";
 import gboLogo from "./assets/images/svgbo.svg";
+import heroBackground from "./assets/images/svgbo.svg";
 import { CartProvider } from "./context/CartContext";
 import { AuthProvider } from "./context/AuthContext";
 import CartIcon from "./components/Cart/CartIcon";
@@ -28,8 +29,10 @@ import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import DemoHub from "./pages/DemoHub";
 import { MAIN_NAV_ITEMS, USER_NAV_ITEMS } from "./utils/constants";
 
-function App() {
+function AppContent() {
+  const location = useLocation();
   const isDevelopment = import.meta.env.DEV;
+  const isHomePage = location.pathname === '/';
 
   const navItems = [
     ...MAIN_NAV_ITEMS,
@@ -38,19 +41,19 @@ function App() {
   ];
 
   return (
-    <AuthProvider>
-      <CartProvider>
-        <Router>
-          <div className="app">
-            <Link to="/" className="logo">
-              <img
-                src={gboLogo}
-                alt="GBO Logo"
-                className="logo-img"
-              />
-            </Link>
+    <div className="app">
+      {!isHomePage && (
+        <Link to="/" className="logo">
+          <img
+            src={gboLogo}
+            alt="GBO Logo"
+            className="logo-img"
+          />
+        </Link>
+      )}
 
-            <nav className="navigation">
+            {/* Navigation hidden while site is under construction */}
+            {/* <nav className="navigation">
               <ul className="nav-list">
                 {navItems.map((item) => (
                   <li key={item.name} className="nav-item">
@@ -60,13 +63,13 @@ function App() {
                   </li>
                 ))}
               </ul>
-            </nav>
+            </nav> */}
 
-            {/* Cart Icon and User Menu */}
-            <div className="fixed top-8 right-8 z-40 flex items-center space-x-4">
+            {/* Cart Icon and User Menu hidden while site is under construction */}
+            {/* <div className="fixed top-8 right-8 z-40 flex items-center space-x-4">
               <UserMenu />
               <CartIcon />
-            </div>
+            </div> */}
 
             <main>
               <Routes>
@@ -74,8 +77,20 @@ function App() {
                 <Route
                   path="/"
                   element={
-                    <section className="hero">
-                      <h1 className="hero-text">WAYBACK</h1>
+                    <section
+                      className="w-screen h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center relative"
+                      style={{ 
+                        backgroundImage: `url(${heroBackground})`,
+                        backgroundPosition: '10% center',
+                        backgroundSize: '75%'
+                      }}
+                    >
+                      <div className="absolute inset-0 flex items-center" style={{ justifyContent: 'flex-start', paddingLeft: 'calc(10% + 20rem)' }}>
+                        <div className="text-center bg-gradient-to-r from-orange-500 to-red-600 bg-opacity-95 p-8 rounded-xl border-4 border-yellow-400 shadow-2xl max-w-lg">
+                          <h2 className="text-3xl font-bold mb-4 text-yellow-100 drop-shadow-lg">🚧 Site Under Construction 🚧</h2>
+                          <p className="text-lg text-white drop-shadow-md">We're currently building something amazing! This is the only page available at the moment. Stay tuned for updates.</p>
+                        </div>
+                      </div>
                     </section>
                   }
                 />
@@ -168,11 +183,20 @@ function App() {
               </Routes>
             </main>
 
-            <footer></footer>
+        <footer></footer>
 
-            {/* Cart Drawer */}
-            <CartDrawer />
-          </div>
+        {/* Cart Drawer */}
+        <CartDrawer />
+      </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <CartProvider>
+        <Router>
+          <AppContent />
         </Router>
       </CartProvider>
     </AuthProvider>
