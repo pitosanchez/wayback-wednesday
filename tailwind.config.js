@@ -7,42 +7,38 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                // Classic Americana Retro Palette
-                'denim-blue': '#3D5AFE',
+                // Primary brand colors (Red/Black/White/Gray)
                 'fire-red': '#E64027',
-                'sunshine-yellow': '#FFD292',
-                'warm-white': '#F5E3CA',
-                // Keep some original colors for compatibility
                 'rich-black': '#0a0a0a',
+                'warm-white': '#ffffff',
                 'platinum': '#e5e5e5',
+                // Legacy alias mapped into grayscale for compatibility
+                'denim-blue': '#6B7280', // gray-500
             },
             fontFamily: {
                 'helvetica-compressed': ['Helvetica Neue', 'Arial', 'sans-serif'],
                 'benton-modern': ['benton-modern-display-compre', 'sans-serif'],
             },
             backgroundColor: {
-                'denim-blue': '#3D5AFE',
                 'fire-red': '#E64027',
-                'sunshine-yellow': '#FFD292',
-                'warm-white': '#F5E3CA',
+                'warm-white': '#ffffff',
                 'rich-black': '#0a0a0a',
                 'platinum': '#e5e5e5',
+                'denim-blue': '#6B7280',
             },
             textColor: {
-                'denim-blue': '#3D5AFE',
                 'fire-red': '#E64027',
-                'sunshine-yellow': '#FFD292',
-                'warm-white': '#F5E3CA',
+                'warm-white': '#ffffff',
                 'rich-black': '#0a0a0a',
                 'platinum': '#e5e5e5',
+                'denim-blue': '#6B7280',
             },
             borderColor: {
-                'denim-blue': '#3D5AFE',
                 'fire-red': '#E64027',
-                'sunshine-yellow': '#FFD292',
-                'warm-white': '#F5E3CA',
+                'warm-white': '#ffffff',
                 'rich-black': '#0a0a0a',
                 'platinum': '#e5e5e5',
+                'denim-blue': '#6B7280',
             },
         },
     },

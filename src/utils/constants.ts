@@ -7,6 +7,7 @@ export const MAIN_NAV_ITEMS = [
   { name: "Music", path: "/music" },
   { name: "Culture", path: "/culture" },
   { name: "Shop", path: "/shop" },
+  { name: "Wayback Wednesday", path: "/history" },
   { name: "Collections", path: "/collections" },
 ] as const;
 
