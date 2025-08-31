@@ -46,24 +46,26 @@ function AppContent() {
   ];
 
   return (
-    <div className="app">
+    <div className={`app ${isHomePage ? "hero-mode" : ""}`}>
       {!isHomePage && (
         <Link to="/" className="logo">
           <img src={gboLogo} alt="GBO Logo" className="logo-img" />
         </Link>
       )}
 
-      <nav className="navigation">
-        <ul className="nav-list">
-          {navItems.map((item) => (
-            <li key={item.name} className="nav-item">
-              <Link to={item.path} className="nav-link">
-                {item.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {!isHomePage && (
+        <nav className="navigation">
+          <ul className="nav-list">
+            {navItems.map((item) => (
+              <li key={item.name} className="nav-item">
+                <Link to={item.path} className="nav-link">
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
 
       <div className="fixed top-8 right-8 z-40 flex items-center space-x-4">
         <UserMenu />

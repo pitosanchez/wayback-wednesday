@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import gboNoBg from "../../assets/images/gbo-no-bg.png";
+import HeroNav from "../Nav/HeroNav";
+import { MAIN_NAV_ITEMS, USER_NAV_ITEMS } from "../../utils/constants";
 
 const HomeHero: React.FC = () => {
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -40,6 +42,7 @@ const HomeHero: React.FC = () => {
 
   return (
     <section className="hero-black" ref={rootRef as any}>
+      <HeroNav items={[...MAIN_NAV_ITEMS, ...USER_NAV_ITEMS]} />
       {/* Title behind and to the right */}
       <div className="hero-title-right font-alt-gothic">
         <h1 className="hero-title hero-title-line">G-bo</h1>

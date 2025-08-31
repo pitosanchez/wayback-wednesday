@@ -90,6 +90,13 @@
     color: var(--rich-black);
   }
 
+  /* Full-bleed black background for hero page */
+  .hero-mode {
+    @apply max-w-none;
+    background-color: #000;
+    color: #fff;
+  }
+
   .navigation {
     @apply fixed left-8 top-1/2 transform -translate-y-1/2 z-50 rounded-2xl p-4 shadow-xl;
     background-color: var(--rich-black);
