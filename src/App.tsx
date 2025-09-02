@@ -34,6 +34,7 @@ import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import DemoHub from "./pages/DemoHub";
 import { MAIN_NAV_ITEMS, USER_NAV_ITEMS } from "./utils/constants";
 import HomeHero from "./components/Hero/HomeHero";
+import MaintenanceGate from "./components/Maintenance/MaintenanceGate";
 
 function AppContent() {
   const location = useLocation();
@@ -46,7 +47,8 @@ function AppContent() {
   ];
 
   return (
-    <div className={`app ${isHomePage ? "hero-mode" : ""}`}>
+    <MaintenanceGate enabled={import.meta.env.PROD}>
+      <div className={`app ${isHomePage ? "hero-mode" : ""}`}>
       {!isHomePage && (
         <Link to="/" className="logo">
           <img src={gboLogo} alt="GBO Logo" className="logo-img" />
@@ -75,7 +77,14 @@ function AppContent() {
       <main>
         <Routes>
           {/* Main Routes */}
-          <Route path="/" element={<HomeHero />} />
+          <Route
+            path="/"
+            element={
+              <MaintenanceGate enabled={import.meta.env.PROD}>
+                <HomeHero />
+              </MaintenanceGate>
+            }
+          />
           <Route path="/about" element={<About />} />
           <Route path="/history" element={<History />} />
           <Route path="/music" element={<Music />} />
@@ -167,6 +176,7 @@ function AppContent() {
       {/* Cart Drawer */}
       <CartDrawer />
     </div>
+    </MaintenanceGate>
   );
 }
 
