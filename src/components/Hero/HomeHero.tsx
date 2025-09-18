@@ -142,9 +142,8 @@ const HomeHero: React.FC = () => {
         loop
         muted={false}
         style={{
-          imageRendering: "high-quality",
-          imageRendering: "-webkit-optimize-contrast",
           imageRendering: "crisp-edges",
+          WebkitImageRendering: "optimize-contrast",
           filter: "contrast(1.1) saturate(1.1) brightness(1.05)",
         }}
       >
