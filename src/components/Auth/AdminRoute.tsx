@@ -1,99 +1,48 @@
 import React from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAdminAuth } from "../../context/AdminAuthContext";
 
 interface AdminRouteProps {
   children: React.ReactNode;
 }
 
 const AdminRoute: React.FC<AdminRouteProps> = ({ children }) => {
-  const { authState } = useAuth();
-  const { user, loading } = authState;
+  const { isAuthenticated } = useAdminAuth();
 
-  if (loading) {
+  if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-warm-white flex items-center justify-center">
+      <div className="min-h-screen bg-rich-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-denim-blue mx-auto mb-4"></div>
-          <p className="text-gray-600">Checking permissions...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-warm-white flex items-center justify-center">
-        <div className="max-w-md w-full mx-auto text-center">
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <div className="w-16 h-16 bg-fire-red bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg
-                className="w-8 h-8 text-fire-red"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Authentication Required
-            </h2>
-            <p className="text-gray-600 mb-6">
-              You must be logged in to access the admin panel.
-            </p>
-            <button
-              onClick={() => (window.location.href = "/login")}
-              className="w-full bg-denim-blue text-white py-2 px-4 rounded-lg hover:bg-denim-blue/90 transition-colors"
+          <div className="mb-8">
+            <svg
+              className="w-24 h-24 mx-auto text-white/20"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              Go to Login
-            </button>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1}
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
           </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Check if user has admin role
-  const isAdmin = user.role === 'admin' || user.role === 'super_admin';
-
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen bg-warm-white flex items-center justify-center">
-        <div className="max-w-md w-full mx-auto text-center">
-          <div className="bg-white rounded-lg shadow-lg p-8">
-            <div className="w-16 h-16 bg-fire-red bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg
-                className="w-8 h-8 text-fire-red"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"
-                />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              Access Denied
-            </h2>
-            <p className="text-gray-600 mb-6">
-              You don't have permission to access the admin panel. Contact your
-              administrator if you believe this is a mistake.
+          <h1 className="text-4xl font-alt-gothic text-white mb-4">
+            Access Restricted
+          </h1>
+          <p className="text-white/60 text-lg mb-8">
+            This area is restricted to authorized administrators only.
+          </p>
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 max-w-md mx-auto">
+            <p className="text-white/80 text-sm mb-4">
+              Please sign in with administrator credentials to access this area.
             </p>
-            <button
-              onClick={() => (window.location.href = "/dashboard")}
-              className="w-full bg-denim-blue text-white py-2 px-4 rounded-lg hover:bg-denim-blue/90 transition-colors"
+            <a
+              href="/admin-signin"
+              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors text-sm font-medium"
             >
-              Go to Dashboard
-            </button>
+              Admin Sign In
+            </a>
           </div>
         </div>
       </div>

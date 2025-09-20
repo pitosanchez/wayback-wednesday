@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import MetricCard from "../components/Analytics/MetricCard";
 import Chart from "../components/Analytics/Chart";
 import analyticsService from "../services/analyticsService";
-import { useAuth } from "../context/AuthContext";
+// Note: This page is protected by AdminRoute, so no additional auth context needed
 import type {
   SalesMetrics,
   ProductAnalytics,
@@ -13,7 +13,6 @@ import type { AnalyticsTab } from "../types/navigation";
 type TimePeriodOption = "7d" | "30d" | "90d";
 
 const AnalyticsDashboard: React.FC = () => {
-  const { authState } = useAuth();
   const [activeTab, setActiveTab] = useState<AnalyticsTab>("overview");
   const [timePeriod, setTimePeriod] = useState<TimePeriodOption>("30d");
   const [salesMetrics, setSalesMetrics] = useState<SalesMetrics | null>(null);
@@ -78,38 +77,7 @@ const AnalyticsDashboard: React.FC = () => {
     { value: "90d", label: "Last 90 days" },
   ];
 
-  if (!authState.user) {
-    return (
-      <div className="min-h-screen bg-warm-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-denim-blue bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg
-                className="w-8 h-8 text-denim-blue"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Admin Access Required
-            </h3>
-            <p className="text-gray-600 mb-4">
-              Please log in with admin credentials to access the analytics
-              dashboard.
-            </p>
-            <button
-              onClick={() => (window.location.href = "/login")}
-              className="bg-denim-blue text-white px-6 py-2 rounded-lg hover:bg-denim-blue/90 transition-colors"
-            >
-              Sign In
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // This page is protected by AdminRoute, so we don't need to check for user authentication
 
   return (
     <div className="min-h-screen bg-warm-white py-8">

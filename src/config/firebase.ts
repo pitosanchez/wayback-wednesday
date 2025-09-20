@@ -4,26 +4,29 @@ import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { logger } from "../utils/logger";
 
-// Firebase configuration
-// In production, these would come from environment variables
+// Firebase configuration with fallback to demo values
 const firebaseConfig = {
-  apiKey: "demo-api-key",
-  authDomain: "wayback-wednesday-demo.firebaseapp.com",
-  projectId: "wayback-wednesday-demo",
-  storageBucket: "wayback-wednesday-demo.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdefghijklmnop",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "demo-api-key",
+  authDomain:
+    import.meta.env.VITE_FIREBASE_AUTH_DOMAIN ||
+    "wayback-wednesday-demo.firebaseapp.com",
+  projectId:
+    import.meta.env.VITE_FIREBASE_PROJECT_ID || "wayback-wednesday-demo",
+  storageBucket:
+    import.meta.env.VITE_FIREBASE_STORAGE_BUCKET ||
+    "wayback-wednesday-demo.appspot.com",
+  messagingSenderId:
+    import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
+  appId:
+    import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789:web:abcdefghijklmnop",
 };
 
-// For production, use environment variables:
-// const firebaseConfig = {
-//   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-//   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-//   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-//   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-//   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-//   appId: import.meta.env.VITE_FIREBASE_APP_ID
-// };
+// Validate configuration in production
+if (import.meta.env.PROD && firebaseConfig.apiKey === "demo-api-key") {
+  console.warn(
+    "⚠️ Warning: Using demo Firebase configuration in production mode. Please configure environment variables."
+  );
+}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

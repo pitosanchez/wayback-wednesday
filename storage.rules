@@ -1,0 +1,59 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isSignedIn() && 
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    function isValidImageType() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    
+    function isValidSize() {
+      return request.resource.size < 10 * 1024 * 1024; // 10MB max
+    }
+    
+    // User profile images
+    match /users/{userId}/profile/{fileName} {
+      allow read: if true;
+      allow write: if isOwner(userId) && isValidImageType() && isValidSize();
+      allow delete: if isOwner(userId) || isAdmin();
+    }
+    
+    // Product images - public read, admin write
+    match /products/{productId}/{fileName} {
+      allow read: if true;
+      allow write: if isAdmin() && isValidImageType() && isValidSize();
+      allow delete: if isAdmin();
+    }
+    
+    // Order attachments
+    match /orders/{orderId}/{fileName} {
+      allow read: if isSignedIn() && 
+        (firestore.get(/databases/(default)/documents/orders/$(orderId)).data.userId == request.auth.uid || isAdmin());
+      allow write: if false; // Orders are system-generated only
+      allow delete: if isAdmin();
+    }
+    
+    // Public assets
+    match /public/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Temporary uploads (auto-cleaned after 24 hours)
+    match /temp/{userId}/{fileName} {
+      allow read, write: if isOwner(userId) && isValidSize();
+    }
+  }
+}

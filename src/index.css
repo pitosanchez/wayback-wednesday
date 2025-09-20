@@ -281,17 +281,48 @@
 
   /* Product/Shop Styles */
   .product-card {
-    @apply border border-gray-200 rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl hover:scale-105;
-    background-color: rgba(255, 255, 255, 0.9);
+    @apply border border-gray-200/50 rounded-xl overflow-hidden shadow-lg transition-all duration-500;
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.95),
+      rgba(255, 255, 255, 0.85)
+    );
+    backdrop-filter: blur(10px);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  .product-card:hover {
+    @apply shadow-2xl border-gray-300/70;
+    transform: translateY(-8px) rotateX(2deg) rotateY(-2deg) scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
 
   .product-image {
     @apply aspect-square relative overflow-hidden;
     background-color: var(--denim-blue);
+    transform: translateZ(20px);
   }
 
   .product-info {
-    @apply p-4;
+    @apply p-6;
+    background: linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.98),
+      rgba(255, 255, 255, 0.92)
+    );
+    backdrop-filter: blur(20px);
+    transform: translateZ(10px);
+  }
+
+  /* 3D Perspective Utilities */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .transform-gpu {
+    transform: translate3d(0, 0, 0);
   }
 
   .price {

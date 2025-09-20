@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
 import type { Product, SelectedVariant } from "../../types/product";
 import VariantSelector from "./VariantSelector";
 import AddToCartButton from "../Cart/AddToCartButton";
@@ -78,14 +79,57 @@ const ProductCard: React.FC<ProductCardProps> = ({
     };
   };
 
+  const cardRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!cardRef.current) return;
+
+    const card = cardRef.current;
+    const onEnter = () => {
+      gsap.to(card, {
+        duration: 0.4,
+        y: -8,
+        rotateX: 4,
+        rotateY: -3,
+        scale: 1.03,
+        boxShadow:
+          "0 25px 50px -12px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.1)",
+        ease: "power3.out",
+      });
+    };
+    const onLeave = () => {
+      gsap.to(card, {
+        duration: 0.45,
+        y: 0,
+        rotateX: 0,
+        rotateY: 0,
+        scale: 1,
+        boxShadow: "",
+        ease: "power3.inOut",
+      });
+    };
+
+    card.addEventListener("mouseenter", onEnter);
+    card.addEventListener("mouseleave", onLeave);
+    return () => {
+      card.removeEventListener("mouseenter", onEnter);
+      card.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
   return (
-    <div className={`product-card group ${compact ? "compact" : ""}`}>
+    <div
+      ref={cardRef}
+      className={`product-card group ${
+        compact ? "compact" : ""
+      } transform-gpu perspective-1000`}
+    >
       {/* Product Image */}
-      <div className="product-image relative">
+      <div className="product-image relative overflow-hidden rounded-t-lg transform-gpu transition-all duration-500 group-hover:shadow-lg">
         <img
           src={currentImage} // Use currentImage instead of product.image
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-full object-cover group-hover:scale-110 transition-all duration-500 transform-gpu group-hover:rotate-1"
         />
 
         {/* WB Design Overlay */}
@@ -146,7 +190,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       {/* Product Info */}
-      <div className="product-info">
+      <div className="product-info bg-white/95 backdrop-blur-sm rounded-b-lg transform-gpu transition-all duration-500 group-hover:bg-white group-hover:shadow-inner">
         <span
           className="text-sm uppercase tracking-wider font-bold"
           style={{ color: "var(--denim-blue)" }}

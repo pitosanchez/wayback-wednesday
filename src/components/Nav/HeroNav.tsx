@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAdminAuth } from "../../context/AdminAuthContext";
+import AdminSignIn from "../Auth/AdminSignIn";
 
 export interface NavItem {
   name: string;
@@ -12,6 +14,23 @@ interface HeroNavProps {
 
 const HeroNav: React.FC<HeroNavProps> = ({ items }) => {
   const [open, setOpen] = useState(false);
+  const [showAdminSignIn, setShowAdminSignIn] = useState(false);
+  const { isAuthenticated, signOut } = useAdminAuth();
+
+  // Filter items based on authentication status
+  const filteredItems = items.filter((item) => {
+    const isAdminItem =
+      item.name === "Dashboard" ||
+      item.name === "Analytics" ||
+      item.name === "Admin Sign In";
+
+    // Only show admin items to authenticated users
+    if (isAdminItem && !isAuthenticated) {
+      return false;
+    }
+
+    return true;
+  });
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -78,25 +97,70 @@ const HeroNav: React.FC<HeroNavProps> = ({ items }) => {
         </div>
 
         <nav className="p-6">
-          <ul className="space-y-4">
-            {items.map((item) => (
-              <li key={item.name}>
-                <Link
-                  to={item.path}
-                  onClick={() => setOpen(false)}
-                  className="block px-3 py-2 rounded-lg hover:bg-white/10 font-medium"
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
+          <ul className="space-y-6 mt-[10rem]">
+            {filteredItems.map((item) => {
+              const isAdminItem =
+                item.name === "Dashboard" ||
+                item.name === "Analytics" ||
+                item.name === "Admin Sign In";
+
+              return (
+                <li key={item.name}>
+                  <Link
+                    to={item.path}
+                    onClick={() => setOpen(false)}
+                    className="block px-4 py-3 rounded-lg hover:bg-white/20 hover:text-white hover:shadow-lg hover:scale-105 transition-all duration-200 font-medium text-white/80 text-lg"
+                  >
+                    {item.name}
+                    {isAdminItem && (
+                      <span className="ml-2 text-xs text-green-400">
+                        ● Admin
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
+
+          {isAuthenticated && (
+            <div className="mt-8 pt-6 border-t border-white/10">
+              <p className="text-xs text-white/40 mb-3 px-4">Admin Controls</p>
+              <button
+                onClick={() => {
+                  signOut();
+                  setOpen(false);
+                  window.location.href = "/";
+                }}
+                className="block w-full text-left px-4 py-3 rounded-lg hover:bg-red-500/20 hover:text-red-400 transition-all duration-200 font-medium text-white/60 text-sm"
+              >
+                Sign Out
+              </button>
+            </div>
+          )}
+
+          {!isAuthenticated && (
+            <div className="mt-8 pt-6 border-t border-white/10">
+              <Link
+                to="/admin-signin"
+                onClick={() => setOpen(false)}
+                className="block px-4 py-3 rounded-lg hover:bg-white/10 hover:text-white transition-all duration-200 font-medium text-white/40 text-sm text-center"
+              >
+                Admin Access →
+              </Link>
+            </div>
+          )}
         </nav>
 
         <div className="mt-auto p-6 text-xs text-white/60">
           <p>© {new Date().getFullYear()} Wayback Wednesday</p>
         </div>
       </aside>
+
+      {/* Admin Sign In Modal */}
+      {showAdminSignIn && (
+        <AdminSignIn onClose={() => setShowAdminSignIn(false)} />
+      )}
     </>
   );
 };

@@ -3,17 +3,19 @@
 // Navigation items
 export const MAIN_NAV_ITEMS = [
   { name: "About", path: "/about" },
-  { name: "History", path: "/history" },
+  // { name: "History", path: "/history" },
   { name: "Music", path: "/music" },
-  { name: "Culture", path: "/culture" },
+  // { name: "Culture", path: "/culture" },
   { name: "Shop", path: "/shop" },
-  { name: "Wayback Wednesday", path: "/history" },
-  { name: "Collections", path: "/collections" },
+  { name: "Events", path: "/events" },
+  { name: "Wayback Whensday", path: "/history" },
+  // { name: "Collections", path: "/collections" },
 ] as const;
 
 export const USER_NAV_ITEMS = [
   { name: "Dashboard", path: "/dashboard" },
   { name: "Analytics", path: "/analytics" },
+  { name: "Admin Sign In", path: "/admin-signin" },
 ] as const;
 
 // Color mappings for consistent theming

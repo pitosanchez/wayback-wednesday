@@ -1,4 +1,10 @@
 import blackTeeImage from "../assets/images/blackTee.webp?url";
+// Use uploaded final assets
+import cassetteHoodieImage from "../assets/images/blk-tapedeck-hoodie.webp?url";
+import waybackSnapbackImage from "../assets/images/blk-wayback-hat.webp?url";
+import waybackTruckerImage from "../assets/images/hat-1.webp?url";
+import spaceInvadersTeeImage from "../assets/images/space-invader-t-blk.webp?url";
+import pandaToteImage from "../assets/images/tote-bag.webp?url";
 import ProductCard from "../components/Product/ProductCard";
 import type { Product } from "../types/product";
 import { useState, useEffect, useMemo } from "react";
@@ -7,282 +13,229 @@ import inventoryService from "../services/inventoryService";
 const Shop = () => {
   const [activeFilter, setActiveFilter] = useState("All");
 
-  const products: Product[] = useMemo(() => [
-    {
-      id: "wb-clemente-tee",
-      name: "WB Clemente Black Tee",
-      basePrice: 55,
-      category: "Apparel",
-      image: blackTeeImage,
-      hasWBDesign: true,
-      description:
-        "Limited edition black tee featuring the iconic WB Clemente design. Premium cotton blend for ultimate comfort.",
-      featured: true,
-      tags: ["limited-edition", "hip-hop", "east-harlem"],
-      variants: [
-        {
-          id: "wb-tee-s-black",
-          size: "S",
-          color: "Black",
-          stock: 15,
-          sku: "WB-TEE-S-BLK",
-        },
-        {
-          id: "wb-tee-m-black",
-          size: "M",
-          color: "Black",
-          stock: 20,
-          sku: "WB-TEE-M-BLK",
-        },
-        {
-          id: "wb-tee-l-black",
-          size: "L",
-          color: "Black",
-          stock: 18,
-          sku: "WB-TEE-L-BLK",
-        },
-        {
-          id: "wb-tee-xl-black",
-          size: "XL",
-          color: "Black",
-          stock: 12,
-          sku: "WB-TEE-XL-BLK",
-        },
-        {
-          id: "wb-tee-s-white",
-          size: "S",
-          color: "White",
-          stock: 8,
-          price: 60,
-          sku: "WB-TEE-S-WHT",
-        },
-        {
-          id: "wb-tee-m-white",
-          size: "M",
-          color: "White",
-          stock: 10,
-          price: 60,
-          sku: "WB-TEE-M-WHT",
-        },
-        {
-          id: "wb-tee-l-white",
-          size: "L",
-          color: "White",
-          stock: 0,
-          price: 60,
-          sku: "WB-TEE-L-WHT",
-        },
-        {
-          id: "wb-tee-xl-white",
-          size: "XL",
-          color: "White",
-          stock: 5,
-          price: 60,
-          sku: "WB-TEE-XL-WHT",
-        },
-      ],
-    },
-    {
-      id: "wayback-hoodie",
-      name: "WAYBACK Hoodie",
-      basePrice: 85,
-      category: "Apparel",
-      image:
-        "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400&h=400&fit=crop",
-      description:
-        "Premium heavyweight hoodie with embroidered WAYBACK logo. Perfect for those East Harlem nights.",
-      tags: ["premium", "embroidered", "streetwear"],
-      variants: [
-        {
-          id: "hoodie-s-black",
-          size: "S",
-          color: "Black",
-          stock: 12,
-          sku: "WB-HOOD-S-BLK",
-        },
-        {
-          id: "hoodie-m-black",
-          size: "M",
-          color: "Black",
-          stock: 15,
-          sku: "WB-HOOD-M-BLK",
-        },
-        {
-          id: "hoodie-l-black",
-          size: "L",
-          color: "Black",
-          stock: 10,
-          sku: "WB-HOOD-L-BLK",
-        },
-        {
-          id: "hoodie-xl-black",
-          size: "XL",
-          color: "Black",
-          stock: 8,
-          sku: "WB-HOOD-XL-BLK",
-        },
-        {
-          id: "hoodie-s-navy",
-          size: "S",
-          color: "Navy",
-          stock: 6,
-          sku: "WB-HOOD-S-NVY",
-        },
-        {
-          id: "hoodie-m-navy",
-          size: "M",
-          color: "Navy",
-          stock: 9,
-          sku: "WB-HOOD-M-NVY",
-        },
-        {
-          id: "hoodie-l-navy",
-          size: "L",
-          color: "Navy",
-          stock: 7,
-          sku: "WB-HOOD-L-NVY",
-        },
-        {
-          id: "hoodie-xl-navy",
-          size: "XL",
-          color: "Navy",
-          stock: 4,
-          sku: "WB-HOOD-XL-NVY",
-        },
-        {
-          id: "hoodie-s-gray",
-          size: "S",
-          color: "Gray",
-          stock: 8,
-          sku: "WB-HOOD-S-GRY",
-        },
-        {
-          id: "hoodie-m-gray",
-          size: "M",
-          color: "Gray",
-          stock: 12,
-          sku: "WB-HOOD-M-GRY",
-        },
-        {
-          id: "hoodie-l-gray",
-          size: "L",
-          color: "Gray",
-          stock: 10,
-          sku: "WB-HOOD-L-GRY",
-        },
-        {
-          id: "hoodie-xl-gray",
-          size: "XL",
-          color: "Gray",
-          stock: 6,
-          sku: "WB-HOOD-XL-GRY",
-        },
-      ],
-    },
-    {
-      id: "vintage-tee",
-      name: "Vintage Tee",
-      basePrice: 45,
-      category: "Apparel",
-      image:
-        "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop",
-      description:
-        "Soft vintage-style tee with a worn-in feel. Classic fit with subtle WAYBACK branding.",
-      tags: ["vintage", "classic", "comfortable"],
-      variants: [
-        {
-          id: "vintage-s-gray",
-          size: "S",
-          color: "Gray",
-          stock: 20,
-          sku: "WB-VTG-S-GRY",
-        },
-        {
-          id: "vintage-m-gray",
-          size: "M",
-          color: "Gray",
-          stock: 25,
-          sku: "WB-VTG-M-GRY",
-        },
-        {
-          id: "vintage-l-gray",
-          size: "L",
-          color: "Gray",
-          stock: 22,
-          sku: "WB-VTG-L-GRY",
-        },
-        {
-          id: "vintage-xl-gray",
-          size: "XL",
-          color: "Gray",
-          stock: 18,
-          sku: "WB-VTG-XL-GRY",
-        },
-        {
-          id: "vintage-s-white",
-          size: "S",
-          color: "White",
-          stock: 15,
-          sku: "WB-VTG-S-WHT",
-        },
-        {
-          id: "vintage-m-white",
-          size: "M",
-          color: "White",
-          stock: 18,
-          sku: "WB-VTG-M-WHT",
-        },
-        {
-          id: "vintage-l-white",
-          size: "L",
-          color: "White",
-          stock: 16,
-          sku: "WB-VTG-L-WHT",
-        },
-        {
-          id: "vintage-xl-white",
-          size: "XL",
-          color: "White",
-          stock: 12,
-          sku: "WB-VTG-XL-WHT",
-        },
-      ],
-    },
-    {
-      id: "logo-cap",
-      name: "Logo Cap",
-      basePrice: 35,
-      category: "Accessories",
-      image:
-        "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400&h=400&fit=crop",
-      description:
-        "Adjustable snapback cap with embroidered WAYBACK logo. One size fits most.",
-      tags: ["adjustable", "snapback", "logo"],
-      variants: [
-        { id: "cap-os-black", color: "Black", stock: 30, sku: "WB-CAP-OS-BLK" },
-        { id: "cap-os-navy", color: "Navy", stock: 25, sku: "WB-CAP-OS-NVY" },
-        { id: "cap-os-white", color: "White", stock: 20, sku: "WB-CAP-OS-WHT" },
-        { id: "cap-os-red", color: "Red", stock: 15, sku: "WB-CAP-OS-RED" },
-        { id: "cap-os-gray", color: "Gray", stock: 18, sku: "WB-CAP-OS-GRY" },
-      ],
-    },
-    {
-      id: "vinyl-collection",
-      name: "Vinyl Collection",
-      basePrice: 120,
-      category: "Music",
-      image:
-        "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
-      description:
-        "Curated collection of classic East Harlem hip-hop vinyl records. Limited edition box set.",
-      featured: true,
-      tags: ["vinyl", "collection", "limited", "hip-hop"],
-      variants: [
-        { id: "vinyl-standard", stock: 50, sku: "WB-VINYL-STD" },
-        { id: "vinyl-deluxe", price: 180, stock: 15, sku: "WB-VINYL-DLX" },
-      ],
-    },
-  ], []);
+  const products: Product[] = useMemo(
+    () => [
+      {
+        id: "wb-clemente-tee",
+        name: "WB Clemente Black Tee",
+        basePrice: 55,
+        category: "Apparel",
+        image: blackTeeImage,
+        hasWBDesign: true,
+        description:
+          "Limited edition black tee featuring the iconic WB Clemente design. Premium cotton blend for ultimate comfort.",
+        featured: true,
+        tags: ["limited-edition", "hip-hop", "east-harlem"],
+        variants: [
+          {
+            id: "wb-tee-s-black",
+            size: "S",
+            color: "Black",
+            stock: 15,
+            sku: "WB-TEE-S-BLK",
+          },
+          {
+            id: "wb-tee-m-black",
+            size: "M",
+            color: "Black",
+            stock: 20,
+            sku: "WB-TEE-M-BLK",
+          },
+          {
+            id: "wb-tee-l-black",
+            size: "L",
+            color: "Black",
+            stock: 18,
+            sku: "WB-TEE-L-BLK",
+          },
+          {
+            id: "wb-tee-xl-black",
+            size: "XL",
+            color: "Black",
+            stock: 12,
+            sku: "WB-TEE-XL-BLK",
+          },
+          {
+            id: "wb-tee-s-white",
+            size: "S",
+            color: "White",
+            stock: 8,
+            price: 60,
+            sku: "WB-TEE-S-WHT",
+          },
+          {
+            id: "wb-tee-m-white",
+            size: "M",
+            color: "White",
+            stock: 10,
+            price: 60,
+            sku: "WB-TEE-M-WHT",
+          },
+          {
+            id: "wb-tee-l-white",
+            size: "L",
+            color: "White",
+            stock: 0,
+            price: 60,
+            sku: "WB-TEE-L-WHT",
+          },
+          {
+            id: "wb-tee-xl-white",
+            size: "XL",
+            color: "White",
+            stock: 5,
+            price: 60,
+            sku: "WB-TEE-XL-WHT",
+          },
+        ],
+      },
+      {
+        id: "cassette-hoodie",
+        name: "Vintage Cassette Hoodie",
+        basePrice: 75,
+        category: "Apparel",
+        image: cassetteHoodieImage,
+        description:
+          "Premium black hoodie featuring a vintage Sony cassette tape design. Perfect for music lovers and nostalgia enthusiasts.",
+        featured: true,
+        tags: ["vintage", "cassette", "music", "retro"],
+        variants: [
+          {
+            id: "cassette-hoodie-s-black",
+            size: "S",
+            color: "Black",
+            stock: 8,
+            sku: "WB-CASS-S-BLK",
+          },
+          {
+            id: "cassette-hoodie-m-black",
+            size: "M",
+            color: "Black",
+            stock: 12,
+            sku: "WB-CASS-M-BLK",
+          },
+          {
+            id: "cassette-hoodie-l-black",
+            size: "L",
+            color: "Black",
+            stock: 10,
+            sku: "WB-CASS-L-BLK",
+          },
+          {
+            id: "cassette-hoodie-xl-black",
+            size: "XL",
+            color: "Black",
+            stock: 6,
+            sku: "WB-CASS-XL-BLK",
+          },
+        ],
+      },
+      {
+        id: "space-invaders-tee",
+        name: "G-BO Space Invaders Tee",
+        basePrice: 55,
+        category: "Apparel",
+        image: spaceInvadersTeeImage,
+        description:
+          "G-BO THE PRO spins classics every Wayback Whensday! Retro Space Invaders design tee from Camaradas El Barrio 2241 1st Ave NYC.",
+        featured: true,
+        tags: ["retro", "gaming", "space-invaders", "gbo"],
+        variants: [
+          {
+            id: "space-invaders-s-charcoal",
+            size: "S",
+            color: "Charcoal",
+            stock: 15,
+            sku: "WB-SI-S-CHR",
+          },
+          {
+            id: "space-invaders-m-charcoal",
+            size: "M",
+            color: "Charcoal",
+            stock: 20,
+            sku: "WB-SI-M-CHR",
+          },
+          {
+            id: "space-invaders-l-charcoal",
+            size: "L",
+            color: "Charcoal",
+            stock: 18,
+            sku: "WB-SI-L-CHR",
+          },
+          {
+            id: "space-invaders-xl-charcoal",
+            size: "XL",
+            color: "Charcoal",
+            stock: 12,
+            sku: "WB-SI-XL-CHR",
+          },
+          {
+            id: "space-invaders-xxl-charcoal",
+            size: "XXL",
+            color: "Charcoal",
+            stock: 8,
+            sku: "WB-SI-XXL-CHR",
+          },
+        ],
+      },
+      {
+        id: "wayback-snapback",
+        name: "G-BO's Wayback Whensday Snapback",
+        basePrice: 45,
+        category: "Accessories",
+        image: waybackSnapbackImage,
+        description:
+          "Premium snapback cap featuring G-BO THE PRO'S WAYBACK WHENSDAY embroidered design. Adjustable fit with flat brim.",
+        featured: true,
+        tags: ["snapback", "embroidered", "gbo", "wayback"],
+        variants: [
+          {
+            id: "snapback-os-black",
+            color: "Black",
+            stock: 25,
+            sku: "WB-SNAP-OS-BLK",
+          },
+        ],
+      },
+      {
+        id: "wayback-trucker",
+        name: "G-BO's Wayback Whensday Trucker",
+        basePrice: 40,
+        category: "Accessories",
+        image: waybackTruckerImage,
+        description:
+          "Classic trucker cap with mesh back featuring G-BO THE PRO'S WAYBACK WHENSDAY embroidered front panel.",
+        tags: ["trucker", "mesh", "embroidered", "gbo"],
+        variants: [
+          {
+            id: "trucker-os-white",
+            color: "White/Black",
+            stock: 20,
+            sku: "WB-TRUCK-OS-WB",
+          },
+        ],
+      },
+      {
+        id: "panda-tote",
+        name: "Priority Mail Panda Tote",
+        basePrice: 30,
+        category: "Accessories",
+        image: pandaToteImage,
+        description:
+          "Unique canvas tote bag with artistic panda design inspired by vintage priority mail aesthetics. Perfect for records and everyday use.",
+        tags: ["tote", "canvas", "panda", "vintage"],
+        variants: [
+          {
+            id: "tote-os-natural",
+            color: "Natural",
+            stock: 35,
+            sku: "WB-TOTE-OS-NAT",
+          },
+        ],
+      },
+    ],
+    []
+  );
 
   const filteredProducts =
     activeFilter === "All"

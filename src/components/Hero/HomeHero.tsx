@@ -1,98 +1,71 @@
 import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
 import g2vid1 from "../../assets/images/g2vid_1.mp4";
 import gboNoBg from "../../assets/images/gbo-no-bg.webp";
 import HeroNav from "../Nav/HeroNav";
 import { MAIN_NAV_ITEMS, USER_NAV_ITEMS } from "../../utils/constants";
+import { useAdminAuth } from "../../context/AdminAuthContext";
+import { HeroFooter } from "../Footer";
 
 const HomeHero: React.FC = () => {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
+  const { isAuthenticated } = useAdminAuth();
 
+  // Ensure video autoplays with sound and stops at 10 seconds (only once per session)
   useEffect(() => {
-    if (!rootRef.current) return;
-    const ctx = gsap.context(() => {
-      gsap.set(imageRef.current, { x: -40, y: 20, opacity: 0, rotate: -2 });
+    let fadeInterval: number | undefined;
+    let stopTimeout: number | undefined;
+    let fadeTimeout: number | undefined;
+    let handlerAttached = false;
 
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.to(imageRef.current, {
-        x: 0,
-        y: 0,
-        opacity: 1,
-        rotate: 0,
-        duration: 1.0,
-      });
-
-      // subtle float loop for image
-      gsap.to(imageRef.current, {
-        y: "-=10",
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-    }, rootRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  // Ensure video autoplays with sound and stops at 9 seconds
-  useEffect(() => {
     const playVideo = async () => {
+      // Check if video has already been played in this session
+      const hasPlayedVideo = sessionStorage.getItem("heroVideoPlayed");
+
+      if (hasPlayedVideo) {
+        console.log("Video already played in this session, skipping...");
+        return;
+      }
+
       if (videoRef.current) {
         console.log("Attempting to play video...");
         videoRef.current.muted = false;
         videoRef.current.volume = 1.0;
 
-        // Add event listeners for debugging
-        videoRef.current.addEventListener("loadstart", () =>
-          console.log("Video load started")
-        );
-        videoRef.current.addEventListener("loadeddata", () =>
-          console.log("Video data loaded")
-        );
-        videoRef.current.addEventListener("canplay", () =>
-          console.log("Video can play")
-        );
-        videoRef.current.addEventListener("play", () =>
-          console.log("Video started playing")
-        );
-        videoRef.current.addEventListener("error", (e) =>
-          console.log("Video error:", e)
-        );
-
         // Handle video playback with fade and stop
         const handleVideoPlay = () => {
-          console.log("Video started playing - setting up fade and stop");
+          // Mark video as played in session storage
+          sessionStorage.setItem("heroVideoPlayed", "true");
 
-          // Start fading volume at 7 seconds
-          setTimeout(() => {
+          // Start fading volume at 7.0 seconds
+          fadeTimeout = window.setTimeout(() => {
             if (videoRef.current) {
-              console.log("Starting volume fade...");
-              const fadeOut = setInterval(() => {
-                if (videoRef.current && videoRef.current.volume > 0) {
-                  videoRef.current.volume -= 0.1;
-                  if (videoRef.current.volume <= 0) {
-                    videoRef.current.volume = 0;
-                    clearInterval(fadeOut);
-                    console.log("Volume faded to 0");
-                  }
+              const target = videoRef.current;
+              fadeInterval = window.setInterval(() => {
+                if (!target) return;
+                const next = Math.max(0, target.volume - 0.1);
+                target.volume = next;
+                if (next <= 0) {
+                  window.clearInterval(fadeInterval);
                 }
               }, 100);
             }
           }, 7000);
 
-          // Stop video at 10 seconds
-          setTimeout(() => {
+          // Stop video at 10 seconds and keep last frame (image remains visible)
+          stopTimeout = window.setTimeout(() => {
             if (videoRef.current) {
               videoRef.current.pause();
-              console.log("Video stopped at 10 seconds");
             }
           }, 10000);
         };
 
-        videoRef.current.addEventListener("play", handleVideoPlay);
+        // Prevent duplicate handlers across HMR or re-renders
+        if (!handlerAttached) {
+          videoRef.current.onplay = handleVideoPlay;
+          handlerAttached = true;
+        }
 
         try {
           await videoRef.current.play();
@@ -125,6 +98,16 @@ const HomeHero: React.FC = () => {
 
     // Small delay to ensure video element is ready
     setTimeout(playVideo, 100);
+
+    const node = videoRef.current;
+    return () => {
+      if (node) {
+        node.onplay = null;
+      }
+      if (fadeTimeout) window.clearTimeout(fadeTimeout);
+      if (stopTimeout) window.clearTimeout(stopTimeout);
+      if (fadeInterval) window.clearInterval(fadeInterval);
+    };
   }, []);
 
   return (
@@ -139,13 +122,14 @@ const HomeHero: React.FC = () => {
         autoPlay
         playsInline
         preload="auto"
-        loop
         muted={false}
-        style={{
-          imageRendering: "crisp-edges",
-          WebkitImageRendering: "optimize-contrast",
-          filter: "contrast(1.1) saturate(1.1) brightness(1.05)",
-        }}
+        style={
+          {
+            imageRendering: "crisp-edges",
+            WebkitImageRendering: "optimize-contrast",
+            filter: "contrast(1.1) saturate(1.1) brightness(1.05)",
+          } as React.CSSProperties
+        }
       >
         <source src={g2vid1} type="video/mp4" />
       </video>
@@ -154,7 +138,9 @@ const HomeHero: React.FC = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/20"></div>
 
       {/* Navigation - kept on the left */}
-      <HeroNav items={[...MAIN_NAV_ITEMS, ...USER_NAV_ITEMS]} />
+      <HeroNav
+        items={[...MAIN_NAV_ITEMS, ...(isAuthenticated ? USER_NAV_ITEMS : [])]}
+      />
 
       {/* G-bo image on the left */}
       <img
@@ -163,6 +149,9 @@ const HomeHero: React.FC = () => {
         alt="G-bo The Pro"
         className="absolute -left-[15rem] bottom-0 w-[50rem] h-[50rem] object-contain object-bottom z-10"
       />
+
+      {/* Hero Footer with Social Links */}
+      <HeroFooter />
     </section>
   );
 };
