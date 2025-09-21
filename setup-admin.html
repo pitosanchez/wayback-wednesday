@@ -66,7 +66,7 @@
       <h1>🔐 Admin Password Hash Generator</h1>
       <p>This will generate the SHA-256 hash for your admin password.</p>
 
-      <button onclick="generateHash()">Generate Hash for "Gv2!25343038"</button>
+        <button onclick="generateHash()">Generate Hash for your password</button>
 
       <div id="hashResult" style="display: none">
         <h3>Your Password Hash:</h3>
@@ -103,8 +103,9 @@
           .join("");
       }
 
-      async function generateHash() {
-        const password = "Gv2!25343038";
+        async function generateHash() {
+            const password = prompt('Enter a password to hash (will not be saved):') || '';
+            if (!password) { return; }
         const hash = await sha256(password);
 
         document.getElementById("hashResult").style.display = "block";

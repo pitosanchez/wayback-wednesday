@@ -108,11 +108,7 @@ const AdminSignInPage: React.FC = () => {
             </button>
           </div>
 
-          <div className="mt-6 p-4 bg-white/5 rounded-md">
-            <p className="text-white/60 text-xs text-center">
-              <strong>Password:</strong> Gv2!25343038
-            </p>
-          </div>
+          {/* Security: Do not display passwords or secrets on the page */}
         </div>
       </div>
     </div>
