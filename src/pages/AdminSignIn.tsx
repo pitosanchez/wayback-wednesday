@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAdminAuth } from "../context/AdminAuthContext";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +8,17 @@ const AdminSignInPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { signInWithPassword } = useAdminAuth();
   const navigate = useNavigate();
+
+  // Security: prevent indexing of admin page
+  useEffect(() => {
+    const meta = document.createElement("meta");
+    meta.name = "robots";
+    meta.content = "noindex, nofollow";
+    document.head.appendChild(meta);
+    return () => {
+      document.head.removeChild(meta);
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
