@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 const router = Router();
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-11-20.acacia",
+  apiVersion: "2023-10-16",
 });
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -64,10 +64,10 @@ router.post("/stripe", async (req: Request, res: Response) => {
         console.log(`Unhandled event type ${event.type}`);
     }
 
-    res.json({ received: true });
+    return res.json({ received: true });
   } catch (error) {
     console.error("Error processing webhook:", error);
-    res.status(500).json({ error: "Webhook processing failed" });
+    return res.status(500).json({ error: "Webhook processing failed" });
   }
 });
 

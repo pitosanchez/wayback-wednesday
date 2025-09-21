@@ -116,13 +116,13 @@ router.get("/:orderId", async (req, res) => {
       return res.status(403).json({ error: "Access denied" });
     }
 
-    res.json({
+    return res.json({
       id: orderDoc.id,
       ...orderData,
     });
   } catch (error) {
     console.error("Failed to fetch order:", error);
-    res.status(500).json({ error: "Failed to fetch order" });
+    return res.status(500).json({ error: "Failed to fetch order" });
   }
 });
 

@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAdminAuth } from "../context/AdminAuthContext";
+import BookingForm, {
+  type BookingRequest,
+} from "../components/Events/BookingForm";
 
 interface Event {
   id: string;
@@ -76,6 +79,11 @@ const Events: React.FC = () => {
     return map;
   }, [events]);
 
+  const disabledDates = useMemo(
+    () => Array.from(new Set(events.map((e) => e.date))),
+    [events]
+  );
+
   const addOrUpdateEvent = (e?: Event) => {
     if (!draft.title || !draft.date) return;
     if (e) {
@@ -122,138 +130,170 @@ const Events: React.FC = () => {
   return (
     <div className="min-h-screen bg-rich-black text-white">
       <div className="container mx-auto px-6 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-alt-gothic mb-4">Events</h1>
-          <p className="text-white/60 text-lg max-w-2xl mx-auto">
-            Join us for amazing music, culture, and community events. From live
-            sessions to workshops, there's always something happening at Wayback
-            Wednesday.
+        <div className="mb-12 text-center">
+          <h1 className="text-5xl font-alt-gothic mb-3">Events & Bookings</h1>
+          <p className="text-white/60 max-w-2xl mx-auto">
+            See what's coming up and request a booking with G‑Bo The Pro for
+            your next show, private event, brand collab, or cultural experience.
           </p>
         </div>
 
-        {/* Calendar controls */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() =>
-                setCurrentMonth(
-                  new Date(
-                    currentMonth.getFullYear(),
-                    currentMonth.getMonth() - 1,
-                    1
-                  )
-                )
-              }
-              className="px-3 py-2 bg-white/10 rounded hover:bg-white/20"
-            >
-              ◀
-            </button>
-            <h2 className="text-2xl font-alt-gothic">
-              {currentMonth.toLocaleString("default", { month: "long" })}{" "}
-              {currentMonth.getFullYear()}
-            </h2>
-            <button
-              onClick={() =>
-                setCurrentMonth(
-                  new Date(
-                    currentMonth.getFullYear(),
-                    currentMonth.getMonth() + 1,
-                    1
-                  )
-                )
-              }
-              className="px-3 py-2 bg-white/10 rounded hover:bg-white/20"
-            >
-              ▶
-            </button>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+          {/* Left: Calendar */}
+          <div>
+            {/* Calendar controls */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() =>
+                    setCurrentMonth(
+                      new Date(
+                        currentMonth.getFullYear(),
+                        currentMonth.getMonth() - 1,
+                        1
+                      )
+                    )
+                  }
+                  className="px-3 py-2 bg-white/10 rounded hover:bg-white/20"
+                >
+                  ◀
+                </button>
+                <h2 className="text-2xl font-alt-gothic">
+                  {currentMonth.toLocaleString("default", { month: "long" })}{" "}
+                  {currentMonth.getFullYear()}
+                </h2>
+                <button
+                  onClick={() =>
+                    setCurrentMonth(
+                      new Date(
+                        currentMonth.getFullYear(),
+                        currentMonth.getMonth() + 1,
+                        1
+                      )
+                    )
+                  }
+                  className="px-3 py-2 bg-white/10 rounded hover:bg-white/20"
+                >
+                  ▶
+                </button>
+              </div>
+
+              {isAuthenticated && (
+                <button
+                  onClick={() => setShowForm(true)}
+                  className="px-4 py-2 bg-white text-rich-black rounded font-semibold hover:bg-white/90"
+                >
+                  + Add Event
+                </button>
+              )}
+            </div>
+
+            {/* Calendar grid */}
+            <div className="grid grid-cols-7 gap-3">
+              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
+                <div key={d} className="text-center text-white/60 text-sm py-2">
+                  {d}
+                </div>
+              ))}
+              {daysInMonth.map((cell, idx) => {
+                const dateStr = cell.date
+                  ? `${cell.date.getFullYear()}-${String(
+                      cell.date.getMonth() + 1
+                    ).padStart(2, "0")}-${String(cell.date.getDate()).padStart(
+                      2,
+                      "0"
+                    )}`
+                  : "";
+                const dayEvents = dateStr ? eventsByDay[dateStr] || [] : [];
+                return (
+                  <div
+                    key={idx}
+                    className={`min-h-[120px] rounded-lg border border-white/10 p-2 ${
+                      cell.date ? "bg-white/5" : "bg-transparent"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs text-white/60">
+                        {cell.date ? cell.date.getDate() : ""}
+                      </span>
+                      {isAuthenticated && cell.date && (
+                        <button
+                          onClick={() => {
+                            setDraft({ ...draft, date: dateStr });
+                            setShowForm(true);
+                          }}
+                          className="text-xs px-2 py-0.5 bg-white/10 rounded hover:bg-white/20"
+                        >
+                          +
+                        </button>
+                      )}
+                    </div>
+                    <div className="space-y-1">
+                      {dayEvents.map((ev) => (
+                        <div
+                          key={ev.id}
+                          className="text-xs bg-white/10 rounded px-2 py-1 hover:bg-white/20 cursor-pointer"
+                          title={`${ev.time} @ ${ev.location}`}
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="truncate">{ev.title}</span>
+                            {isAuthenticated && (
+                              <div className="flex items-center gap-1">
+                                <button
+                                  className="text-white/60 hover:text-white"
+                                  onClick={() => {
+                                    setDraft(ev);
+                                    setShowForm(true);
+                                  }}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  className="text-red-400 hover:text-red-300"
+                                  onClick={() => deleteEvent(ev.id)}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          {isAuthenticated && (
-            <button
-              onClick={() => setShowForm(true)}
-              className="px-4 py-2 bg-white text-rich-black rounded font-semibold hover:bg-white/90"
-            >
-              + Add Event
-            </button>
-          )}
-        </div>
-
-        {/* Calendar grid */}
-        <div className="grid grid-cols-7 gap-3">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
-            <div key={d} className="text-center text-white/60 text-sm py-2">
-              {d}
+          {/* Right: Booking Form */}
+          <div className="sticky top-8">
+            <BookingForm
+              disabledDates={disabledDates}
+              onBooked={(b: BookingRequest) => {
+                setEvents((prev) => [
+                  ...prev,
+                  {
+                    id: `booking-${b.id}`,
+                    title: `${b.type} (Pending)`,
+                    date: b.date,
+                    time: b.time,
+                    location:
+                      b.locationType === "Virtual"
+                        ? "Virtual"
+                        : b.venueAddress || "",
+                    description: b.notes || "",
+                    price: "TBD",
+                    status: "upcoming",
+                    category: "special",
+                  },
+                ]);
+              }}
+            />
+            <div className="mt-6 text-white/50 text-xs">
+              Unavailable dates are disabled based on confirmed events.
             </div>
-          ))}
-          {daysInMonth.map((cell, idx) => {
-            const dateStr = cell.date
-              ? `${cell.date.getFullYear()}-${String(
-                  cell.date.getMonth() + 1
-                ).padStart(2, "0")}-${String(cell.date.getDate()).padStart(
-                  2,
-                  "0"
-                )}`
-              : "";
-            const dayEvents = dateStr ? eventsByDay[dateStr] || [] : [];
-            return (
-              <div
-                key={idx}
-                className={`min-h-[120px] rounded-lg border border-white/10 p-2 ${
-                  cell.date ? "bg-white/5" : "bg-transparent"
-                }`}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-white/60">
-                    {cell.date ? cell.date.getDate() : ""}
-                  </span>
-                  {isAuthenticated && cell.date && (
-                    <button
-                      onClick={() => {
-                        setDraft({ ...draft, date: dateStr });
-                        setShowForm(true);
-                      }}
-                      className="text-xs px-2 py-0.5 bg-white/10 rounded hover:bg-white/20"
-                    >
-                      +
-                    </button>
-                  )}
-                </div>
-                <div className="space-y-1">
-                  {dayEvents.map((ev) => (
-                    <div
-                      key={ev.id}
-                      className="text-xs bg-white/10 rounded px-2 py-1 hover:bg-white/20 cursor-pointer"
-                      title={`${ev.time} @ ${ev.location}`}
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="truncate">{ev.title}</span>
-                        {isAuthenticated && (
-                          <div className="flex items-center gap-1">
-                            <button
-                              className="text-white/60 hover:text-white"
-                              onClick={() => {
-                                setDraft(ev);
-                                setShowForm(true);
-                              }}
-                            >
-                              Edit
-                            </button>
-                            <button
-                              className="text-red-400 hover:text-red-300"
-                              onClick={() => deleteEvent(ev.id)}
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+          </div>
         </div>
 
         {/* Admin modal */}

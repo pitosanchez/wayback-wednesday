@@ -7,7 +7,7 @@ const router = Router();
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-11-20.acacia",
+  apiVersion: "2023-10-16",
 });
 
 // Validation schemas
@@ -82,17 +82,24 @@ router.post(
       const { items, successUrl, cancelUrl, customerEmail, metadata } =
         req.body;
 
-      const lineItems = items.map((item) => ({
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: item.name,
-            images: item.image ? [item.image] : undefined,
+      const lineItems = items.map(
+        (item: {
+          name: string;
+          price: number;
+          quantity: number;
+          image?: string;
+        }) => ({
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: item.name,
+              images: item.image ? [item.image] : undefined,
+            },
+            unit_amount: Math.round(item.price * 100), // Convert to cents
           },
-          unit_amount: Math.round(item.price * 100), // Convert to cents
-        },
-        quantity: item.quantity,
-      }));
+          quantity: item.quantity,
+        })
+      );
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],

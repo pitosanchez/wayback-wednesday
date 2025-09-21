@@ -20,11 +20,12 @@ export const authMiddleware = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ error: "Unauthorized - No token provided" });
+    res.status(401).json({ error: "Unauthorized - No token provided" });
+    return;
   }
 
   const token = authHeader.split("Bearer ")[1];
@@ -35,7 +36,8 @@ export const authMiddleware = async (
     next();
   } catch (error) {
     console.error("Token verification failed:", error);
-    return res.status(401).json({ error: "Unauthorized - Invalid token" });
+    res.status(401).json({ error: "Unauthorized - Invalid token" });
+    return;
   }
 };
 
@@ -43,10 +45,11 @@ export const adminMiddleware = async (
   req: AuthRequest,
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   // First check if user is authenticated
   if (!req.user) {
-    return res.status(401).json({ error: "Unauthorized" });
+    res.status(401).json({ error: "Unauthorized" });
+    return;
   }
 
   try {
@@ -60,14 +63,14 @@ export const adminMiddleware = async (
     const userData = userDoc.data();
 
     if (!userData || userData.role !== "admin") {
-      return res
-        .status(403)
-        .json({ error: "Forbidden - Admin access required" });
+      res.status(403).json({ error: "Forbidden - Admin access required" });
+      return;
     }
 
     next();
   } catch (error) {
     console.error("Admin check failed:", error);
-    return res.status(500).json({ error: "Failed to verify admin status" });
+    res.status(500).json({ error: "Failed to verify admin status" });
+    return;
   }
 };

@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
@@ -42,7 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
-app.get("/health", (req, res) => {
+app.get("/health", (_req: Request, res: Response) => {
   res.json({ status: "healthy", timestamp: new Date().toISOString() });
 });
 
@@ -55,7 +55,7 @@ app.use("/api/webhooks", webhookRouter);
 app.use(errorHandler);
 
 // 404 handler
-app.use((req, res) => {
+app.use((_req: Request, res: Response) => {
   res.status(404).json({ error: "Route not found" });
 });
 

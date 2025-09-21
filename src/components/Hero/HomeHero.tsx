@@ -38,18 +38,27 @@ const HomeHero: React.FC = () => {
           // Mark video as played in session storage
           sessionStorage.setItem("heroVideoPlayed", "true");
 
-          // Start fading volume at 7.0 seconds
+          // Start fading volume at 7.0 seconds and end at 10.0 seconds
           fadeTimeout = window.setTimeout(() => {
             if (videoRef.current) {
               const target = videoRef.current;
+              const totalFadeMs = 3000; // 3 seconds from 7s -> 10s
+              const stepMs = 100;
+              const steps = Math.ceil(totalFadeMs / stepMs); // 30 steps
+              const startVolume = Math.min(1, Math.max(0, target.volume || 1));
+              const decrement = startVolume / steps; // ~0.033 each step
+
+              let step = 0;
               fadeInterval = window.setInterval(() => {
                 if (!target) return;
-                const next = Math.max(0, target.volume - 0.1);
+                step += 1;
+                const next = Math.max(0, startVolume - decrement * step);
                 target.volume = next;
-                if (next <= 0) {
+                if (step >= steps || next <= 0) {
+                  target.volume = 0;
                   window.clearInterval(fadeInterval);
                 }
-              }, 100);
+              }, stepMs);
             }
           }, 7000);
 
@@ -127,15 +136,11 @@ const HomeHero: React.FC = () => {
           {
             imageRendering: "crisp-edges",
             WebkitImageRendering: "optimize-contrast",
-            filter: "contrast(1.1) saturate(1.1) brightness(1.05)",
           } as React.CSSProperties
         }
       >
         <source src={g2vid1} type="video/mp4" />
       </video>
-
-      {/* Dynamic gradient overlay for brilliance */}
-      <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/20"></div>
 
       {/* Navigation - kept on the left */}
       <HeroNav
