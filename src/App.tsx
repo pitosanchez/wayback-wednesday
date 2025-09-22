@@ -45,6 +45,13 @@ function AppContent() {
   const location = useLocation();
   const isDevelopment = import.meta.env.DEV;
   const isHomePage = location.pathname === "/";
+  // Maintenance can be toggled via env; default is disabled (site visible)
+  const maintenanceEnabled = String(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (import.meta as any).env?.VITE_MAINTENANCE_ENABLED || "false"
+  )
+    .toString()
+    .toLowerCase() === "true";
   const { isAuthenticated } = useAdminAuth();
 
   // Filter navigation items based on authentication
@@ -59,7 +66,7 @@ function AppContent() {
     : baseNavItems;
 
   return (
-    <MaintenanceGate enabled={import.meta.env.PROD}>
+    <MaintenanceGate enabled={maintenanceEnabled}>
       <div className={`app ${isHomePage ? "hero-mode" : ""}`}>
         {!isHomePage && (
           <Link to="/" className="logo">
@@ -90,14 +97,7 @@ function AppContent() {
           <div className="flex-grow">
             <Routes>
               {/* Main Routes */}
-              <Route
-                path="/"
-                element={
-                  <MaintenanceGate enabled={import.meta.env.PROD}>
-                    <HomeHero />
-                  </MaintenanceGate>
-                }
-              />
+              <Route path="/" element={<HomeHero />} />
               <Route path="/about" element={<About />} />
               <Route path="/history" element={<History />} />
               <Route path="/music" element={<Music />} />
