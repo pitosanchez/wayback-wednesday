@@ -46,12 +46,13 @@ function AppContent() {
   const isDevelopment = import.meta.env.DEV;
   const isHomePage = location.pathname === "/";
   // Maintenance can be toggled via env; default is disabled (site visible)
-  const maintenanceEnabled = String(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (import.meta as any).env?.VITE_MAINTENANCE_ENABLED || "false"
-  )
-    .toString()
-    .toLowerCase() === "true";
+  const maintenanceEnabled =
+    String(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (import.meta as any).env?.VITE_MAINTENANCE_ENABLED || "false"
+    )
+      .toString()
+      .toLowerCase() === "true";
   const { isAuthenticated } = useAdminAuth();
 
   // Filter navigation items based on authentication
