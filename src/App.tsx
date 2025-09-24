@@ -83,11 +83,7 @@ function AppContent() {
           <CartIcon />
         </div>
 
-        <main
-          className={`${
-            !isHomePage ? "content-with-nav" : ""
-          } min-h-screen flex flex-col`}
-        >
+        <main className="min-h-screen flex flex-col">
           <div className="flex-grow">
             <Routes>
               {/* Main Routes */}
@@ -177,8 +173,6 @@ function AppContent() {
           </div>
           {!isHomePage && <Footer />}
         </main>
-
-        <footer></footer>
 
         {/* Cart Drawer */}
         <CartDrawer />

@@ -43,9 +43,25 @@
 @layer components {
   /* Unified footer style */
   .site-footer {
-    @apply w-full border-t border-white/10 bg-rich-black;
-    min-height: 18rem; /* ~3 inches at 96dpi (288px) */
+    @apply w-full border-t border-white/10 text-white;
+    min-height: 0;
+    background-color: var(--rich-black);
+    position: relative;
+    overflow: visible;
   }
+  /* Full-bleed background layer without shifting layout */
+  .site-footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    height: 100%;
+    background-color: var(--rich-black);
+    z-index: -1;
+  }
+  /* remove full-bleed for centered layout */
   /* Alternate Gothic Extra Cond ATF Heavy */
   .font-alt-gothic {
     font-family: "alternate-gothic-extra-cond", sans-serif;

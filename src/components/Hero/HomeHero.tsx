@@ -4,7 +4,7 @@ import gboNoBg from "../../assets/images/gbo-no-bg.webp";
 import HeroNav from "../Nav/HeroNav";
 import { MAIN_NAV_ITEMS, USER_NAV_ITEMS } from "../../utils/constants";
 import { useAdminAuth } from "../../context/AdminAuthContext";
-import { HeroFooter } from "../Footer";
+import HeroSocialBar from "./HeroSocialBar";
 
 const HomeHero: React.FC = () => {
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -118,8 +118,8 @@ const HomeHero: React.FC = () => {
         className="absolute -left-[15rem] bottom-0 w-[50rem] h-[50rem] object-contain object-bottom z-10"
       />
 
-      {/* Hero Footer with Social Links */}
-      <HeroFooter />
+      {/* Hero Social Links Bar */}
+      <HeroSocialBar />
     </section>
   );
 };

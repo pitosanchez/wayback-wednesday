@@ -75,30 +75,32 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="site-footer h-[18rem]">
+    <footer className="site-footer">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
-        <div className="py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="py-4 grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Brand Section */}
-          <div className="space-y-4">
-            <h3 className="font-alt-gothic text-3xl text-white">
-              WAYBACK WEDNESDAY
+          <div className="space-y-2">
+            <h3 className="font-alt-gothic text-[1.75rem] text-white">
+              WAYBACK WHENSDAY
             </h3>
-            <p className="text-white/60 text-sm leading-relaxed">
+            <p className="text-white/60 text-[1rem] leading-relaxed">
               Celebrating the culture, music, and style that shaped generations.
               Every piece tells a story from the golden era of hip-hop.
             </p>
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h4 className="font-semibold text-white text-lg">Quick Links</h4>
-            <nav className="flex flex-col space-y-2">
+          <div className="space-y-2">
+            <h4 className="font-semibold text-white text-[1.5rem]">
+              Quick Links
+            </h4>
+            <nav className="flex flex-col space-y-1.5">
               {footerLinks.map((link) => (
                 <Link
                   key={link.name}
                   to={link.path}
-                  className="text-white/60 hover:text-white transition-colors duration-200 text-sm"
+                  className="text-white/60 hover:text-white transition-colors duration-200 text-[18px]"
                 >
                   {link.name}
                 </Link>
@@ -107,25 +109,27 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Social Media Section */}
-          <div className="space-y-4">
-            <h4 className="font-semibold text-white text-lg">
+          <div className="space-y-2">
+            <h4 className="font-semibold text-white text-[1.5rem]">
               Follow G-Bo The Pro
             </h4>
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col space-y-2">
               {socialLinks.map((social) => (
                 <a
                   key={social.name}
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-3 text-white/60 hover:text-white transition-all duration-200 group"
+                  className="flex items-center space-x-2.5 text-white/60 hover:text-white transition-all duration-200 group"
                 >
-                  <span className="flex items-center justify-center w-10 h-10 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors">
                     {social.icon}
                   </span>
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium">{social.name}</span>
-                    <span className="text-xs text-white/40">
+                    <span className="text-[15px] font-medium">
+                      {social.name}
+                    </span>
+                    <span className="text-[11px] text-white/40">
                       {social.handle}
                     </span>
                   </div>
@@ -139,15 +143,15 @@ const Footer: React.FC = () => {
         <div className="border-t border-white/10" />
 
         {/* Bottom Section */}
-        <div className="py-6 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-          <div className="flex items-center space-x-2 text-white/40 text-xs">
-            <span>© {currentYear} Wayback Wednesday</span>
+        <div className="py-3 flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+          <div className="flex items-center space-x-2 text-white/40 text-[12px]">
+            <span>© {currentYear} Wayback Whensday</span>
             <span>•</span>
             <span>All Rights Reserved</span>
           </div>
 
           {/* Additional Links */}
-          <div className="flex items-center space-x-6 text-xs">
+          <div className="flex items-center space-x-3 text-[12px]">
             <Link
               to="/privacy"
               className="text-white/40 hover:text-white/60 transition-colors"
@@ -162,13 +166,7 @@ const Footer: React.FC = () => {
             </Link>
           </div>
         </div>
-
-        {/* Easter Egg / Tagline */}
-        <div className="pb-6 text-center">
-          <p className="text-white/20 text-xs font-light tracking-wider">
-            EST. 2025 • EAST HARLEM • KEEPING THE CULTURE ALIVE
-          </p>
-        </div>
+        {/* Tagline removed to keep footer compact */}
       </div>
     </footer>
   );
