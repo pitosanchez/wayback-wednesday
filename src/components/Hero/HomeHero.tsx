@@ -12,62 +12,36 @@ const HomeHero: React.FC = () => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const { isAuthenticated } = useAdminAuth();
 
-  // Ensure video autoplays with sound and stops at 10 seconds (only once per session)
+  // Ensure video autoplays muted and hard-stops at 10 seconds (only once per session)
   useEffect(() => {
-    let fadeInterval: number | undefined;
-    let stopTimeout: number | undefined;
-    let fadeTimeout: number | undefined;
+    let timeUpdateHandler:
+      | ((this: HTMLVideoElement, ev: Event) => void)
+      | null = null;
     let handlerAttached = false;
 
     const playVideo = async () => {
-      // Check if video has already been played in this session
-      const hasPlayedVideo = sessionStorage.getItem("heroVideoPlayed");
-
-      if (hasPlayedVideo) {
-        console.log("Video already played in this session, skipping...");
-        return;
-      }
-
       if (videoRef.current) {
-        console.log("Attempting to play video...");
-        videoRef.current.muted = false;
-        videoRef.current.volume = 1.0;
+        console.log("Attempting to play video (muted)...");
+        videoRef.current.muted = true; // keep permanently muted
+        videoRef.current.volume = 0;
 
-        // Handle video playback with fade and stop
+        // Handle video playback and hard stop at 10s
         const handleVideoPlay = () => {
-          // Mark video as played in session storage
-          sessionStorage.setItem("heroVideoPlayed", "true");
+          const target = videoRef.current!;
+          const MAX_TIME = 10; // seconds
+          // Ensure we start at 0
+          if (target.currentTime > MAX_TIME) target.currentTime = 0;
 
-          // Start fading volume at 7.0 seconds and end at 10.0 seconds
-          fadeTimeout = window.setTimeout(() => {
-            if (videoRef.current) {
-              const target = videoRef.current;
-              const totalFadeMs = 3000; // 3 seconds from 7s -> 10s
-              const stepMs = 100;
-              const steps = Math.ceil(totalFadeMs / stepMs); // 30 steps
-              const startVolume = Math.min(1, Math.max(0, target.volume || 1));
-              const decrement = startVolume / steps; // ~0.033 each step
-
-              let step = 0;
-              fadeInterval = window.setInterval(() => {
-                if (!target) return;
-                step += 1;
-                const next = Math.max(0, startVolume - decrement * step);
-                target.volume = next;
-                if (step >= steps || next <= 0) {
-                  target.volume = 0;
-                  window.clearInterval(fadeInterval);
-                }
-              }, stepMs);
+          timeUpdateHandler = () => {
+            if (target.currentTime >= MAX_TIME) {
+              target.currentTime = MAX_TIME;
+              target.pause();
+              if (timeUpdateHandler) {
+                target.removeEventListener("timeupdate", timeUpdateHandler);
+              }
             }
-          }, 7000);
-
-          // Stop video at 10 seconds and keep last frame (image remains visible)
-          stopTimeout = window.setTimeout(() => {
-            if (videoRef.current) {
-              videoRef.current.pause();
-            }
-          }, 10000);
+          };
+          target.addEventListener("timeupdate", timeUpdateHandler);
         };
 
         // Prevent duplicate handlers across HMR or re-renders
@@ -81,25 +55,14 @@ const HomeHero: React.FC = () => {
           console.log("Video play() succeeded");
         } catch (error) {
           console.log("Video autoplay failed:", error);
-          // Try with muted first, then unmute
+          // Try again muted (no unmute behavior)
           videoRef.current.muted = true;
+          videoRef.current.volume = 0;
           try {
             await videoRef.current.play();
-            console.log("Video playing muted, will unmute on user interaction");
-            // Unmute on any user interaction
-            const unmuteHandler = () => {
-              if (videoRef.current) {
-                videoRef.current.muted = false;
-                videoRef.current.volume = 1.0;
-                console.log("Video unmuted");
-              }
-              document.removeEventListener("click", unmuteHandler);
-              document.removeEventListener("keydown", unmuteHandler);
-            };
-            document.addEventListener("click", unmuteHandler);
-            document.addEventListener("keydown", unmuteHandler);
+            console.log("Video playing muted");
           } catch (mutedError) {
-            console.log("Even muted autoplay failed:", mutedError);
+            console.log("Muted autoplay failed:", mutedError);
           }
         }
       }
@@ -112,10 +75,10 @@ const HomeHero: React.FC = () => {
     return () => {
       if (node) {
         node.onplay = null;
+        if (timeUpdateHandler) {
+          node.removeEventListener("timeupdate", timeUpdateHandler);
+        }
       }
-      if (fadeTimeout) window.clearTimeout(fadeTimeout);
-      if (stopTimeout) window.clearTimeout(stopTimeout);
-      if (fadeInterval) window.clearInterval(fadeInterval);
     };
   }, []);
 
@@ -131,7 +94,7 @@ const HomeHero: React.FC = () => {
         autoPlay
         playsInline
         preload="auto"
-        muted={false}
+        muted={true}
         style={
           {
             imageRendering: "crisp-edges",

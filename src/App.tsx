@@ -40,6 +40,7 @@ import { MAIN_NAV_ITEMS, USER_NAV_ITEMS } from "./utils/constants";
 import HomeHero from "./components/Hero/HomeHero";
 import MaintenanceGate from "./components/Maintenance/MaintenanceGate";
 import { Footer } from "./components/Footer";
+import HeroNav from "./components/Nav/HeroNav";
 
 function AppContent() {
   const location = useLocation();
@@ -75,26 +76,18 @@ function AppContent() {
           </Link>
         )}
 
-        {!isHomePage && (
-          <nav className="navigation">
-            <ul className="nav-list">
-              {navItems.map((item) => (
-                <li key={item.name} className="nav-item">
-                  <Link to={item.path} className="nav-link">
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
+        {!isHomePage && <HeroNav items={navItems} />}
 
         <div className="fixed top-8 right-8 z-40 flex items-center space-x-4">
           <UserMenu />
           <CartIcon />
         </div>
 
-        <main className="min-h-screen flex flex-col">
+        <main
+          className={`${
+            !isHomePage ? "content-with-nav" : ""
+          } min-h-screen flex flex-col`}
+        >
           <div className="flex-grow">
             <Routes>
               {/* Main Routes */}

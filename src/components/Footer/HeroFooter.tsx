@@ -1,11 +1,17 @@
 import React from "react";
 
 const HeroFooter: React.FC = () => {
+  const year = new Date().getFullYear();
   const socialLinks = [
     {
       name: "Instagram",
       handle: "@gbothepro",
       url: "https://instagram.com/gbothepro",
+    },
+    {
+      name: "Instagram (Wayback Whensday)",
+      handle: "@waybackwhensday",
+      url: "https://www.instagram.com/waybackwhensday?igsh=MWtueHo5M215MXlwdQ%3D%3D&utm_source=qr",
     },
     {
       name: "Threads",
@@ -20,7 +26,7 @@ const HeroFooter: React.FC = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+    <div className="fixed bottom-0 left-0 right-0 z-30 site-footer h-[18rem] bg-rich-black border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex flex-col sm:flex-row items-center justify-between space-y-2 sm:space-y-0">
           {/* Social Links */}
@@ -45,9 +51,11 @@ const HeroFooter: React.FC = () => {
             ))}
           </div>
 
-          {/* Copyright */}
-          <div className="text-white/40 text-xs">
-            © {new Date().getFullYear()} Wayback Wednesday
+          {/* CTA + Copyright */}
+          <div className="flex items-center gap-4">
+            <div className="text-white/40 text-xs hidden sm:block">
+              © {year} Wayback Wednesday
+            </div>
           </div>
         </div>
       </div>

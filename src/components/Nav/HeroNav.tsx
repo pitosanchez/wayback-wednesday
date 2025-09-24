@@ -42,11 +42,11 @@ const HeroNav: React.FC<HeroNavProps> = ({ items }) => {
 
   return (
     <>
-      {/* Toggle button (top-left) */}
+      {/* Toggle button (top-right) */}
       <button
         aria-label="Open navigation"
         onClick={() => setOpen(true)}
-        className="fixed left-6 top-6 z-50 h-12 w-12 rounded-full bg-rich-black/80 text-white flex items-center justify-center border border-white/10 hover:bg-rich-black/90 transition-colors"
+        className="fixed right-6 top-6 z-50 h-12 w-12 rounded-full bg-rich-black/80 text-white flex items-center justify-center border border-white/10 hover:bg-rich-black/90 transition-colors"
       >
         <span className="sr-only">Open menu</span>
         <div className="space-y-1.5">
@@ -65,10 +65,10 @@ const HeroNav: React.FC<HeroNavProps> = ({ items }) => {
         />
       )}
 
-      {/* Slide-out panel */}
+      {/* Slide-out panel (from right) */}
       <aside
-        className={`fixed left-0 top-0 z-50 h-full w-[78vw] sm:w-[360px] bg-rich-black text-white border-r border-white/10 shadow-2xl transform transition-transform duration-300 ${
-          open ? "translate-x-0" : "-translate-x-full"
+        className={`fixed right-0 top-0 z-50 h-full w-[78vw] sm:w-[360px] bg-rich-black text-white border-l border-white/10 shadow-2xl transform transition-transform duration-300 ${
+          open ? "translate-x-0" : "translate-x-full"
         }`}
         role="dialog"
         aria-modal="true"
