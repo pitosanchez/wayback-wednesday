@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { generateId } from "../../utils/id";
 
 export type BookingType =
   | "DJ Set"
@@ -95,7 +96,7 @@ const BookingForm: React.FC<BookingFormProps> = ({
     setSubmitting(true);
     try {
       const booking: BookingRequest = {
-        id: crypto.randomUUID(),
+        id: generateId(),
         name: form.name!,
         email: form.email!,
         phone: form.phone,

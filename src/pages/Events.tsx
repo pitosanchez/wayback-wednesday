@@ -4,6 +4,7 @@ import { useAdminAuth } from "../context/AdminAuthContext";
 import BookingForm, {
   type BookingRequest,
 } from "../components/Events/BookingForm";
+import { generateId } from "../utils/id";
 
 interface Event {
   id: string;
@@ -56,7 +57,7 @@ const Events: React.FC = () => {
       );
       if (exists) return prev;
       const seeded: Event = {
-        id: crypto.randomUUID(),
+        id: generateId(),
         title: "G‑Bo Double R Documentary Screening",
         date: oct1,
         time: "7:00 PM",
@@ -120,7 +121,7 @@ const Events: React.FC = () => {
       );
     } else {
       const newEvent: Event = {
-        id: crypto.randomUUID(),
+        id: generateId(),
         title: draft.title!,
         date: draft.date!,
         time: draft.time || "8:00 PM",
