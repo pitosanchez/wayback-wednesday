@@ -15,7 +15,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   children = "Add to Cart",
   showQuantity = false,
 }) => {
-  const { addToCart } = useCart();
+  const { addToCart, toggleCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
 
@@ -26,7 +26,9 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
     // Brief loading state for user feedback
     setTimeout(() => {
       setIsAdding(false);
-    }, 500);
+      // Auto-open cart drawer after add
+      toggleCart();
+    }, 250);
   };
 
   return (

@@ -80,7 +80,7 @@ function AppContent() {
 
         <div className="fixed top-8 right-8 z-40 flex items-center space-x-4">
           <UserMenu />
-          <CartIcon />
+          {location.pathname === "/shop" && <CartIcon />}
         </div>
 
         <main className="min-h-screen flex flex-col">

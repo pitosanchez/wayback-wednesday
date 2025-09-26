@@ -7,8 +7,8 @@ const CartIcon: React.FC = () => {
   return (
     <button
       onClick={toggleCart}
-      className="relative p-2 text-white hover:text-sunshine-yellow transition-colors duration-200"
-      style={{ color: "var(--warm-white)" }}
+      className="relative p-2 transition-colors duration-200"
+      style={{ color: "var(--rich-black)" }}
     >
       {/* Shopping Cart Icon */}
       <svg
