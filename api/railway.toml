@@ -1,0 +1,7 @@
+[build]
+# Use Railway Nixpacks builder
+builder = "NIXPACKS"
+# Install with npm ci for clean reproducible installs, then build TypeScript
+buildCommand = "npm ci && npm run build"
+# Start the compiled server
+startCommand = "npm start"
