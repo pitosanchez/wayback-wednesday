@@ -3,6 +3,8 @@ import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
+import bodyParser from "body-parser";
+import { Resend } from "resend";
 import { stripeRouter } from "./routes/stripe";
 import { ordersRouter } from "./routes/orders";
 import { webhookRouter } from "./routes/webhooks";
@@ -18,9 +20,17 @@ const PORT = process.env.PORT || 3001;
 // Security middleware
 app.use(helmet());
 
-// CORS configuration
+// CORS configuration: allow Vercel preview domains, prod domain, and local dev
+const allowedOrigins = [
+  /\.vercel\.app$/,
+  "https://gbothepro.com",
+  "http://localhost:5173",
+  "http://localhost:3000",
+  process.env.FRONTEND_URL,
+].filter(Boolean) as (string | RegExp)[];
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: allowedOrigins,
   credentials: true,
   optionsSuccessStatus: 200,
 };
@@ -50,6 +60,71 @@ app.get("/health", (_req: Request, res: Response) => {
 app.use("/api/stripe", stripeRouter);
 app.use("/api/orders", authMiddleware, ordersRouter);
 app.use("/api/webhooks", webhookRouter);
+
+// ---------- Resend contact form ----------
+const resendApiKey = process.env.RESEND_API_KEY;
+const resend = resendApiKey ? new Resend(resendApiKey) : undefined;
+
+app.post("/api/contact", async (req: Request, res: Response) => {
+  try {
+    const { email, name, message } = req.body as {
+      email?: string;
+      name?: string;
+      message?: string;
+    };
+    if (!resend) {
+      return res.status(503).json({ ok: false, error: "Email service not configured" });
+    }
+    if (!email || !name || !message) {
+      return res.status(400).json({ ok: false, error: "Missing required fields" });
+    }
+    const from = process.env.EMAIL_FROM || "Wayback <no-reply@gbothepro.com>";
+    const to = process.env.CONTACT_TO || "you@gbothepro.com";
+    await resend.emails.send({
+      from,
+      to: [to],
+      reply_to: email,
+      subject: `New contact from ${name}`,
+      text: message,
+    });
+    return res.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ ok: false });
+  }
+});
+
+// ---------- Stripe checkout session (priceId-based) ----------
+// Keep JSON body parser for this route
+app.post("/api/checkout/session", express.json(), async (req: Request, res: Response) => {
+  try {
+    const { priceId, quantity = 1, successUrl, cancelUrl } = req.body as {
+      priceId?: string;
+      quantity?: number;
+      successUrl?: string;
+      cancelUrl?: string;
+    };
+    if (!priceId) {
+      return res.status(400).json({ error: "Missing priceId" });
+    }
+    const stripeSecret = process.env.STRIPE_SECRET_KEY;
+    if (!stripeSecret) {
+      return res.status(503).json({ error: "Stripe not configured" });
+    }
+    const stripe = new (require("stripe").Stripe)(stripeSecret, { apiVersion: "2023-10-16" });
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      line_items: [{ price: priceId, quantity }],
+      success_url:
+        successUrl || "https://gbothepro.com/thank-you?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: cancelUrl || "https://gbothepro.com/cancelled",
+    });
+    return res.json({ url: session.url });
+  } catch (err) {
+    console.error("Checkout session error", err);
+    return res.status(500).json({ error: "Failed to create session" });
+  }
+});
 
 // Error handling middleware
 app.use(errorHandler);

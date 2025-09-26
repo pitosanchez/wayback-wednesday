@@ -37,11 +37,15 @@ Choose a host (Railway/Render/Heroku/Fly). Example assumptions below:
 
 1. Deploy `api/` service
    - Node: 20
-   - Start: `npm run start`
+   - Build: `npm run build`
+   - Start: `npm start`
 2. API environment variables
    - `STRIPE_SECRET_KEY=sk_test_…`
    - `STRIPE_WEBHOOK_SECRET=whsec_…` (after webhook is created)
    - `FRONTEND_URL=https://gbothepro.com`
+   - `RESEND_API_KEY=...`
+   - `EMAIL_FROM="Team <hello@send.gbothepro.com>"`
+   - `CONTACT_TO=you@gbothepro.com`
    - `FIREBASE_PROJECT_ID=…`
    - `FIREBASE_CLIENT_EMAIL=…@…iam.gserviceaccount.com`
    - `FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n…\n-----END PRIVATE KEY-----\n"`
