@@ -52,25 +52,9 @@ const Events: React.FC = () => {
     // Ensure October 1st screening exists
     const oct1 = "2025-10-01";
     setEvents((prev) => {
-      const exists = prev.some(
-        (e) => e.date === oct1 && e.title.includes("Documentary")
-      );
+      const exists = prev.some((e) => e.date === oct1 && e.title);
       if (exists) return prev;
-      const seeded: Event = {
-        id: generateId(),
-        title: "G‑Bo Double R Documentary Screening",
-        date: oct1,
-        time: "7:00 PM",
-        location: "TBD",
-        description:
-          "Special screening: This Is How It Should Be Done – G‑Bo Double R Documentary.",
-        image:
-          "https://images.unsplash.com/photo-1512070679279-8988d32161be?w=640&h=360&fit=crop",
-        price: "Tickets",
-        status: "upcoming",
-        category: "special",
-      };
-      return [...prev, seeded];
+      return prev; // do not seed screening event
     });
   }, []);
   // Make Add Event active by default for admins
@@ -165,16 +149,7 @@ const Events: React.FC = () => {
             See what's coming up and request a booking with G‑Bo The Pro for
             your next show, private event, brand collab, or cultural experience.
           </p>
-          <div className="mt-6">
-            <a
-              href="https://www.ticketleap.events/tickets/gbodoublerdoc/this-is-how-it-should-be-done-g-bo-double-r-documentary-screening"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 rounded-lg bg-white text-rich-black font-semibold shadow hover:bg-white/90 transition-colors"
-            >
-              Get Tickets – Documentary Screening
-            </a>
-          </div>
+          {/* Removed external screening CTA */}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
@@ -307,15 +282,7 @@ const Events: React.FC = () => {
 
           {/* Right: Booking Form */}
           <div className="sticky top-8">
-            {/* Primary CTA */}
-            <a
-              href="https://www.ticketleap.events/tickets/gbodoublerdoc/this-is-how-it-should-be-done-g-bo-double-r-documentary-screening"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mb-6 inline-flex items-center justify-center w-full px-5 py-3 rounded-lg bg-white text-rich-black font-semibold shadow hover:bg-white/90 transition-colors"
-            >
-              Get Tickets – Documentary Screening
-            </a>
+            {/* Removed external screening CTA */}
 
             <BookingForm
               disabledDates={disabledDates}
