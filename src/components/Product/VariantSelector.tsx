@@ -16,9 +16,33 @@ const VariantSelector: React.FC<VariantSelectorProps> = ({
   compact = false,
 }) => {
   // Get unique sizes and colors from variants
+  const SIZE_ORDER = [
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL",
+    "XXL",
+    "2XL",
+    "3XL",
+    "4XL",
+    "OS",
+    "ONE SIZE",
+  ];
+
+  const normalizeSize = (s: string) => s.trim().toUpperCase();
+  const sortBySize = (a: string, b: string) => {
+    const ia = SIZE_ORDER.indexOf(normalizeSize(a));
+    const ib = SIZE_ORDER.indexOf(normalizeSize(b));
+    const ra = ia === -1 ? Number.POSITIVE_INFINITY : ia;
+    const rb = ib === -1 ? Number.POSITIVE_INFINITY : ib;
+    if (ra !== rb) return ra - rb;
+    return a.localeCompare(b); // fallback stable ordering
+  };
+
   const availableSizes = Array.from(
     new Set(product.variants.filter((v) => v.size).map((v) => v.size!))
-  ).sort();
+  ).sort(sortBySize);
 
   const availableColors = Array.from(
     new Set(product.variants.filter((v) => v.color).map((v) => v.color!))

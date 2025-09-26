@@ -232,7 +232,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         )}
 
         {/* Variant Selection */}
-        {hasVariants && (showVariants || compact) ? (
+        {hasVariants ? (
           <div className="mt-4">
             <VariantSelector
               product={product}
