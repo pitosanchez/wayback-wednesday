@@ -43,19 +43,24 @@ const Events: React.FC = () => {
     const raw = localStorage.getItem("events");
     if (raw) {
       try {
-        setEvents(JSON.parse(raw));
+        const list = JSON.parse(raw) as Event[];
+        // Scrub any previously-seeded documentary screening events
+        const filtered = list.filter(
+          (e) =>
+            !/documentary/i.test(e.title) &&
+            !/documentary/i.test(e.description || "")
+        );
+        if (filtered.length !== list.length) {
+          localStorage.setItem("events", JSON.stringify(filtered));
+        }
+        setEvents(filtered);
       } catch (err) {
         console.warn("Failed to parse events from localStorage", err);
         localStorage.removeItem("events");
       }
     }
     // Ensure October 1st screening exists
-    const oct1 = "2025-10-01";
-    setEvents((prev) => {
-      const exists = prev.some((e) => e.date === oct1 && e.title);
-      if (exists) return prev;
-      return prev; // do not seed screening event
-    });
+    // No default seeding
   }, []);
   // Make Add Event active by default for admins
   useEffect(() => {
