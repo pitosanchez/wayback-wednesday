@@ -127,7 +127,7 @@ const AnimatedPortrait: React.FC = () => {
       repeat: -1,
       defaults: { ease: "power2.inOut" },
     });
-    tl.to(ringRef.current, { rotate: 360, duration: 20 })
+    tl.to(ringRef.current, { rotate: 360, duration: 12 })
       .to(glowRef.current, { opacity: 0.5, duration: 2 }, 0)
       .to(glowRef.current, { opacity: 0.15, duration: 2 }, 2);
 
@@ -156,7 +156,7 @@ const AnimatedPortrait: React.FC = () => {
           className="absolute inset-0 rounded-full"
           style={{
             background:
-              "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 55%), repeating-radial-gradient(circle at 50% 50%, #0b0b0b 0px, #0b0b0b 2px, #121212 2px, #121212 4px)",
+              "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0) 55%), repeating-radial-gradient(circle at 50% 50%, #0a0a0a 0px, #0a0a0a 1.5px, #1a1a1a 1.5px, #1a1a1a 3px)",
           }}
         />
 
@@ -176,15 +176,19 @@ const AnimatedPortrait: React.FC = () => {
         <div
           className="absolute rounded-full overflow-hidden"
           style={{
-            width: "12rem",
-            height: "12rem",
+            width: "13rem",
+            height: "13rem",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            boxShadow: "0 0 0 6px #111, inset 0 0 0 2px rgba(255,255,255,0.08)",
+            boxShadow: "0 0 0 6px #111, inset 0 0 0 2px rgba(255,255,255,0.1)",
           }}
         >
-          <img src={gboImage} alt="G-Bo The Pro" className="w-full h-full object-cover" />
+          <img
+            src={gboImage}
+            alt="G-Bo The Pro"
+            className="w-full h-full object-cover"
+          />
         </div>
 
         {/* Spindle hole */}
