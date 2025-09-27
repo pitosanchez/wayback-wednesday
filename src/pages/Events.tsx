@@ -95,10 +95,7 @@ const Events: React.FC = () => {
     return map;
   }, [events]);
 
-  const disabledDates = useMemo(
-    () => Array.from(new Set(events.map((e) => e.date))),
-    [events]
-  );
+  // Note: disabledDates no longer passed to BookingForm after simplification.
 
   const addOrUpdateEvent = (e?: Event) => {
     if (!draft.title || !draft.date) return;
@@ -290,7 +287,6 @@ const Events: React.FC = () => {
             {/* Removed external screening CTA */}
 
             <BookingForm
-              disabledDates={disabledDates}
               onBooked={(b: BookingRequest) => {
                 setEvents((prev) => [
                   ...prev,
