@@ -123,16 +123,23 @@ const AnimatedPortrait: React.FC = () => {
   useEffect(() => {
     if (!ringRef.current || !glowRef.current) return;
 
-    const tl = gsap.timeline({
+    // Continuous spin without pauses
+    const spin = gsap.to(ringRef.current, {
+      rotation: 360,
+      duration: 8,
+      ease: "none",
       repeat: -1,
-      defaults: { ease: "power2.inOut" },
     });
-    tl.to(ringRef.current, { rotate: 360, duration: 12 })
-      .to(glowRef.current, { opacity: 0.5, duration: 2 }, 0)
-      .to(glowRef.current, { opacity: 0.15, duration: 2 }, 2);
+
+    // Subtle independent glow breathing
+    const glow = gsap
+      .timeline({ repeat: -1, yoyo: true, defaults: { ease: "power1.inOut" } })
+      .to(glowRef.current, { opacity: 0.5, duration: 1.6 })
+      .to(glowRef.current, { opacity: 0.15, duration: 1.6 });
 
     return () => {
-      tl.kill();
+      spin.kill();
+      glow.kill();
     };
   }, []);
 
