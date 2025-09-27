@@ -123,7 +123,10 @@ const AnimatedPortrait: React.FC = () => {
   useEffect(() => {
     if (!ringRef.current || !glowRef.current) return;
 
-    const tl = gsap.timeline({ repeat: -1, defaults: { ease: "power2.inOut" } });
+    const tl = gsap.timeline({
+      repeat: -1,
+      defaults: { ease: "power2.inOut" },
+    });
     tl.to(ringRef.current, { rotate: 360, duration: 20 })
       .to(glowRef.current, { opacity: 0.5, duration: 2 }, 0)
       .to(glowRef.current, { opacity: 0.15, duration: 2 }, 2);
@@ -137,22 +140,66 @@ const AnimatedPortrait: React.FC = () => {
     <div className="relative flex items-center justify-center">
       <div
         ref={glowRef}
-        className="absolute -inset-10 rounded-full bg-gradient-to-tr from-red-600/30 via-white/10 to-transparent blur-3xl -z-10"
+        className="absolute -inset-12 rounded-full bg-gradient-to-tr from-red-600/30 via-white/10 to-transparent blur-3xl -z-10"
       />
       <div
         ref={ringRef}
         className="relative rounded-full overflow-hidden shadow-2xl"
-        style={{ width: "24rem", height: "24rem", boxShadow: "0 20px 60px rgba(0,0,0,0.35)" }}
+        style={{
+          width: "26rem",
+          height: "26rem",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.35)",
+        }}
       >
-        {/* Thick ring using pseudo ring element */}
+        {/* Vinyl base with grooves */}
         <div
           className="absolute inset-0 rounded-full"
           style={{
-            boxShadow: "0 0 0 14px var(--fire-red), inset 0 0 0 2px rgba(255,255,255,0.08)",
-            pointerEvents: "none",
+            background:
+              "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 55%), repeating-radial-gradient(circle at 50% 50%, #0b0b0b 0px, #0b0b0b 2px, #121212 2px, #121212 4px)",
           }}
         />
-        <img src={gboImage} alt="G-Bo The Pro" className="w-full h-full object-cover" />
+
+        {/* Thick red outer ring */}
+        <div
+          className="absolute inset-0 rounded-full pointer-events-none"
+          style={{ boxShadow: "0 0 0 18px var(--fire-red)" }}
+        />
+
+        {/* Inner black rim */}
+        <div
+          className="absolute inset-0 rounded-full pointer-events-none"
+          style={{ boxShadow: "inset 0 0 0 18px #0a0a0a" }}
+        />
+
+        {/* Center label with portrait */}
+        <div
+          className="absolute rounded-full overflow-hidden"
+          style={{
+            width: "12rem",
+            height: "12rem",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            boxShadow: "0 0 0 6px #111, inset 0 0 0 2px rgba(255,255,255,0.08)",
+          }}
+        >
+          <img src={gboImage} alt="G-Bo The Pro" className="w-full h-full object-cover" />
+        </div>
+
+        {/* Spindle hole */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: "0.8rem",
+            height: "0.8rem",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "#d9d9d9",
+            boxShadow: "0 0 0 2px #111",
+          }}
+        />
       </div>
     </div>
   );
