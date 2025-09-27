@@ -3,13 +3,14 @@ import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
-import bodyParser from "body-parser";
+// import bodyParser from "body-parser"; // not needed here; raw used on specific route
 import { Resend } from "resend";
 import { stripeRouter } from "./routes/stripe";
 import { ordersRouter } from "./routes/orders";
 import { webhookRouter } from "./routes/webhooks";
 import { errorHandler } from "./middleware/errorHandler";
 import { authMiddleware } from "./middleware/auth";
+import Stripe from "stripe";
 
 // Load environment variables
 dotenv.config();
@@ -73,17 +74,21 @@ app.post("/api/contact", async (req: Request, res: Response) => {
       message?: string;
     };
     if (!resend) {
-      return res.status(503).json({ ok: false, error: "Email service not configured" });
+      return res
+        .status(503)
+        .json({ ok: false, error: "Email service not configured" });
     }
     if (!email || !name || !message) {
-      return res.status(400).json({ ok: false, error: "Missing required fields" });
+      return res
+        .status(400)
+        .json({ ok: false, error: "Missing required fields" });
     }
     const from = process.env.EMAIL_FROM || "Wayback <no-reply@gbothepro.com>";
-    const to = process.env.CONTACT_TO || "you@gbothepro.com";
+    const to = process.env.CONTACT_TO || "gbothepro1@gmail.com";
     await resend.emails.send({
       from,
       to: [to],
-      reply_to: email,
+      replyTo: email,
       subject: `New contact from ${name}`,
       text: message,
     });
@@ -96,35 +101,45 @@ app.post("/api/contact", async (req: Request, res: Response) => {
 
 // ---------- Stripe checkout session (priceId-based) ----------
 // Keep JSON body parser for this route
-app.post("/api/checkout/session", express.json(), async (req: Request, res: Response) => {
-  try {
-    const { priceId, quantity = 1, successUrl, cancelUrl } = req.body as {
-      priceId?: string;
-      quantity?: number;
-      successUrl?: string;
-      cancelUrl?: string;
-    };
-    if (!priceId) {
-      return res.status(400).json({ error: "Missing priceId" });
+app.post(
+  "/api/checkout/session",
+  express.json(),
+  async (req: Request, res: Response) => {
+    try {
+      const {
+        priceId,
+        quantity = 1,
+        successUrl,
+        cancelUrl,
+      } = req.body as {
+        priceId?: string;
+        quantity?: number;
+        successUrl?: string;
+        cancelUrl?: string;
+      };
+      if (!priceId) {
+        return res.status(400).json({ error: "Missing priceId" });
+      }
+      const stripeSecret = process.env.STRIPE_SECRET_KEY;
+      if (!stripeSecret) {
+        return res.status(503).json({ error: "Stripe not configured" });
+      }
+      const stripe = new Stripe(stripeSecret, { apiVersion: "2023-10-16" });
+      const session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        line_items: [{ price: priceId, quantity }],
+        success_url:
+          successUrl ||
+          "https://gbothepro.com/thank-you?session_id={CHECKOUT_SESSION_ID}",
+        cancel_url: cancelUrl || "https://gbothepro.com/cancelled",
+      });
+      return res.json({ url: session.url });
+    } catch (err) {
+      console.error("Checkout session error", err);
+      return res.status(500).json({ error: "Failed to create session" });
     }
-    const stripeSecret = process.env.STRIPE_SECRET_KEY;
-    if (!stripeSecret) {
-      return res.status(503).json({ error: "Stripe not configured" });
-    }
-    const stripe = new (require("stripe").Stripe)(stripeSecret, { apiVersion: "2023-10-16" });
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      line_items: [{ price: priceId, quantity }],
-      success_url:
-        successUrl || "https://gbothepro.com/thank-you?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: cancelUrl || "https://gbothepro.com/cancelled",
-    });
-    return res.json({ url: session.url });
-  } catch (err) {
-    console.error("Checkout session error", err);
-    return res.status(500).json({ error: "Failed to create session" });
   }
-});
+);
 
 // Error handling middleware
 app.use(errorHandler);

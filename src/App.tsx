@@ -11,6 +11,7 @@ import Music from "./pages/Music";
 import Culture from "./pages/Culture";
 import Shop from "./pages/Shop";
 import Collections from "./pages/Collections";
+import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import AuthDemo from "./pages/AuthDemo";
@@ -95,6 +96,7 @@ function AppContent() {
               <Route path="/shop" element={<Shop />} />
               <Route path="/events" element={<Events />} />
               <Route path="/collections" element={<Collections />} />
+              <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/admin-signin" element={<AdminSignInPage />} />
 
