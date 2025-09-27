@@ -70,6 +70,14 @@
     letter-spacing: 0.02em;
   }
 
+  /* Rama Gothic C (Adobe Fonts) */
+  .font-rama-gothic {
+    font-family: "rama-gothic-c", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+    letter-spacing: 0.01em;
+  }
+
   .hero-black {
     @apply w-screen h-screen bg-black relative overflow-hidden flex items-center justify-center;
   }
