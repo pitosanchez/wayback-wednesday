@@ -4,13 +4,13 @@ import helmet from "helmet";
 import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
 // import bodyParser from "body-parser"; // not needed here; raw used on specific route
-import { Resend } from "resend";
 import { stripeRouter } from "./routes/stripe";
 import { ordersRouter } from "./routes/orders";
 import { webhookRouter } from "./routes/webhooks";
 import { errorHandler } from "./middleware/errorHandler";
 import { authMiddleware } from "./middleware/auth";
 import Stripe from "stripe";
+import { contactRouter } from "./routes/contact";
 
 // Load environment variables
 dotenv.config();
@@ -61,43 +61,9 @@ app.get("/health", (_req: Request, res: Response) => {
 app.use("/api/stripe", stripeRouter);
 app.use("/api/orders", authMiddleware, ordersRouter);
 app.use("/api/webhooks", webhookRouter);
+app.use("/api", contactRouter);
 
-// ---------- Resend contact form ----------
-const resendApiKey = process.env.RESEND_API_KEY;
-const resend = resendApiKey ? new Resend(resendApiKey) : undefined;
-
-app.post("/api/contact", async (req: Request, res: Response) => {
-  try {
-    const { email, name, message } = req.body as {
-      email?: string;
-      name?: string;
-      message?: string;
-    };
-    if (!resend) {
-      return res
-        .status(503)
-        .json({ ok: false, error: "Email service not configured" });
-    }
-    if (!email || !name || !message) {
-      return res
-        .status(400)
-        .json({ ok: false, error: "Missing required fields" });
-    }
-    const from = process.env.EMAIL_FROM || "noreply@gbothepro.com";
-    const to = process.env.CONTACT_TO || "gbothepro1@gmail.com";
-    await resend.emails.send({
-      from,
-      to: [to],
-      replyTo: email,
-      subject: `New contact from ${name}`,
-      text: message,
-    });
-    return res.json({ ok: true });
-  } catch (e) {
-    console.error(e);
-    return res.status(500).json({ ok: false });
-  }
-});
+// Contact handled in contactRouter
 
 // ---------- Stripe checkout session (priceId-based) ----------
 // Keep JSON body parser for this route
