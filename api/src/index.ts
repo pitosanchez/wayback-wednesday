@@ -21,10 +21,11 @@ const PORT = process.env.PORT || 3001;
 // Security middleware
 app.use(helmet());
 
-// CORS configuration: allow Vercel preview domains, prod domain, and local dev
+// CORS configuration: allow Vercel previews, production domains, and local dev
 const allowedOrigins = [
   /\.vercel\.app$/,
   "https://gbothepro.com",
+  "https://www.gbothepro.com",
   "http://localhost:5173",
   "http://localhost:3000",
   process.env.FRONTEND_URL,
@@ -33,6 +34,7 @@ const allowedOrigins = [
 const corsOptions = {
   origin: allowedOrigins,
   credentials: true,
+  methods: ["GET", "POST", "OPTIONS"],
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
