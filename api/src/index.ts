@@ -83,7 +83,7 @@ app.post("/api/contact", async (req: Request, res: Response) => {
         .status(400)
         .json({ ok: false, error: "Missing required fields" });
     }
-    const from = process.env.EMAIL_FROM || "Wayback <no-reply@gbothepro.com>";
+    const from = process.env.EMAIL_FROM || "noreply@gbothepro.com";
     const to = process.env.CONTACT_TO || "gbothepro1@gmail.com";
     await resend.emails.send({
       from,
