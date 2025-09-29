@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { generateId } from "../../utils/id";
+import { Resend } from "resend";
 
 export type BookingType =
   | "DJ Set"
@@ -76,6 +77,22 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
         notes: form.notes,
         createdAt: new Date().toISOString(),
       };
+
+      const resend = new Resend(process.env.RESEND_API_KEY);
+
+      const { data, error } = await resend.emails.send({
+        from: `${form.name} <${form.email}>`,
+        to: ["robsanchez124@gmail.com"],
+        subject: "New Booking Request",
+        html: "<p>it works!</p>",
+        replyTo: form.email,
+      });
+
+      if (error) {
+        return console.error({ error });
+      }
+
+      console.log({ data });
 
       const raw = localStorage.getItem("bookings") || "[]";
       const list = JSON.parse(raw) as BookingRequest[];
