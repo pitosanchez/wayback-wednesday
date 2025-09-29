@@ -80,6 +80,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
 
       const resend = new Resend(process.env.RESEND_API_KEY);
 
+      console.log("getting resend api key", process.env.RESEND_API_KEY);
+
       const { data, error } = await resend.emails.send({
         from: `${form.name} <${form.email}>`,
         to: ["robsanchez124@gmail.com"],
