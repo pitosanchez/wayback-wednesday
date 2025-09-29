@@ -14,6 +14,7 @@ import {
 } from "firebase/auth";
 import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../config/firebase";
+import { emailService } from "./emailService";
 import type {
   User,
   LoginCredentials,
@@ -108,7 +109,15 @@ class AuthService {
       // Send email verification
       await sendEmailVerification(firebaseUser);
 
-      return this.convertFirebaseUser(firebaseUser);
+      // Convert Firebase user to our User type
+      const user = await this.convertFirebaseUser(firebaseUser);
+
+      // Send welcome email via Resend (non-blocking)
+      emailService.sendWelcomeEmail(user).catch(error => {
+        console.warn('Failed to send welcome email:', error);
+      });
+
+      return user;
     } catch (error: unknown) {
       throw new Error(this.getErrorMessage(error));
     }
@@ -146,7 +155,16 @@ class AuthService {
   // Reset password
   async resetPassword(data: ResetPasswordData): Promise<void> {
     try {
+      // Always send Firebase password reset email for functionality
       await sendPasswordResetEmail(auth, data.email);
+
+      // If Resend is configured, also send a branded reset email
+      if (emailService.isConfigured()) {
+        // Note: Firebase doesn't provide the reset link directly, so we'd need
+        // to implement custom password reset flow to use Resend fully.
+        // For now, we'll rely on Firebase's email and optionally send a notification
+        console.log('📧 Password reset email sent via Firebase. Consider implementing custom reset flow for branded emails.');
+      }
     } catch (error: unknown) {
       throw new Error(this.getErrorMessage(error));
     }

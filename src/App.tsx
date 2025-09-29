@@ -37,6 +37,7 @@ import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import Events from "./pages/Events";
 import AdminSignInPage from "./pages/AdminSignIn";
 import DemoHub from "./pages/DemoHub";
+import EmailDemo from "./pages/EmailDemo";
 import { MAIN_NAV_ITEMS, USER_NAV_ITEMS } from "./utils/constants";
 import HomeHero from "./components/Hero/HomeHero";
 import MaintenanceGate from "./components/Maintenance/MaintenanceGate";
@@ -157,6 +158,7 @@ function AppContent() {
                     element={<ProductVariantsDemo />}
                   />
                   <Route path="/inventory-demo" element={<InventoryDemo />} />
+                  <Route path="/email-demo" element={<EmailDemo />} />
                   <Route
                     path="/admin-demo"
                     element={

@@ -73,6 +73,14 @@ const DemoHub: React.FC = () => {
       category: "ecommerce",
       tags: ["Search", "Reviews", "Wishlist"],
     },
+    {
+      title: "Email Integration",
+      description: "Resend email service with branded templates for welcome, orders, and custom emails",
+      path: "/email-demo",
+      icon: "📧",
+      category: "core",
+      tags: ["Resend", "Email", "Templates"],
+    },
   ];
 
   const categories = {

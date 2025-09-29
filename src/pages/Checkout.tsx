@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 import { stripePromise } from "../config/stripe";
 import StripePaymentForm from "../components/Stripe/StripePaymentForm";
+import { emailService } from "../services/emailService";
 import type { PaymentResult } from "../types/stripe";
 
 const Checkout: React.FC = () => {
   const { cart, processPurchase } = useCart();
+  const { authState } = useAuth();
   const [paymentStatus, setPaymentStatus] = useState<
     "idle" | "processing" | "success" | "error"
   >("idle");
@@ -15,7 +18,7 @@ const Checkout: React.FC = () => {
     null
   );
 
-  const handlePaymentSuccess = (result: PaymentResult) => {
+  const handlePaymentSuccess = async (result: PaymentResult) => {
     setPaymentResult(result);
     setPaymentStatus("success");
 
@@ -25,6 +28,28 @@ const Checkout: React.FC = () => {
 
     if (!purchaseSuccess) {
       console.error("Failed to process purchase in inventory system");
+      return;
+    }
+
+    // Send order confirmation email if user is logged in
+    if (authState.user && emailService.isConfigured()) {
+      try {
+        const orderData = {
+          orderNumber: orderId,
+          items: cart.items.map(item => ({
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price * item.quantity
+          })),
+          total: cart.total * 1.08, // Include tax
+          shippingAddress: "123 Main St\nAnytown, ST 12345\nUnited States" // This would come from a shipping form in a real app
+        };
+
+        await emailService.sendOrderConfirmationEmail(authState.user.email, orderData);
+        console.log('✅ Order confirmation email sent successfully');
+      } catch (error) {
+        console.warn('⚠️ Failed to send order confirmation email:', error);
+      }
     }
   };
 
