@@ -8,7 +8,8 @@
       "Bash(npm run lint)",
       "Bash(timeout 10 npm run dev)",
       "Bash(true)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }
