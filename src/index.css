@@ -37,6 +37,13 @@
     min-height: 100vh;
     display: block;
     overflow-y: auto;
+    font-size: 14px;
+  }
+
+  @media (min-width: 640px) {
+    body {
+      font-size: 16px;
+    }
   }
 }
 
@@ -197,7 +204,7 @@
   }
 
   .page-container {
-    @apply p-8 max-w-7xl mx-auto w-full;
+    @apply px-4 py-6 sm:px-6 sm:py-8 lg:px-8 max-w-7xl mx-auto w-full;
   }
 
   /* Header Styles */
@@ -217,7 +224,7 @@
 
   /* Button Styles */
   .btn-primary {
-    @apply border-none px-6 py-3 font-semibold cursor-pointer transition-colors duration-300;
+    @apply border-none px-4 py-2.5 sm:px-6 sm:py-3 font-semibold cursor-pointer transition-colors duration-300 text-sm sm:text-base rounded-lg;
     background-color: var(--fire-red);
     color: var(--warm-white);
   }
@@ -227,7 +234,7 @@
   }
 
   .btn-secondary {
-    @apply bg-transparent px-6 py-3 font-semibold cursor-pointer transition-all duration-300;
+    @apply bg-transparent px-4 py-2.5 sm:px-6 sm:py-3 font-semibold cursor-pointer transition-all duration-300 text-sm sm:text-base rounded-lg;
     color: var(--fire-red);
     border: 1px solid var(--fire-red);
   }

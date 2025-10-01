@@ -80,7 +80,7 @@ function AppContent() {
 
         {!isHomePage && <HeroNav items={navItems} />}
 
-        <div className="fixed top-8 right-8 z-40 flex items-center space-x-4">
+        <div className="fixed top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-40 flex items-center space-x-2 sm:space-x-4">
           <UserMenu />
           {location.pathname === "/shop" && <CartIcon />}
         </div>
