@@ -27,7 +27,7 @@ router.post("/contact", async (req: Request, res: Response) => {
     }
 
     const from = process.env.EMAIL_FROM || "noreply@gbothepro.com"; // verified sender
-    const to = process.env.CONTACT_TO || "gbothepro1@gmail.com"; // recipient
+    const to = process.env.CONTACT_TO || "robsanchez124@gmail.com"; // recipient (test)
 
     const subject = `New contact from ${name}`;
     const html = `

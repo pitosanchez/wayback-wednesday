@@ -9,7 +9,8 @@
       "Bash(timeout 10 npm run dev)",
       "Bash(true)",
       "Bash(node:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: implement comprehensive responsive design for all screen sizes\n\nBookingForm Improvements:\n- Enhanced mobile-first responsive design with proper spacing\n- Improved form fields with better focus states and placeholders\n- Responsive typography (text scaling from mobile to desktop)\n- Enhanced success state with better visual feedback and mobile layout\n- Loading spinner and improved error handling display\n\nGlobal Responsive Updates:\n- Updated page-container with responsive padding (px-4 on mobile, px-8 on desktop)\n- Enhanced button styles (.btn-primary, .btn-secondary) with responsive sizing\n- Improved fixed positioning for UserMenu and CartIcon across screen sizes\n- Added responsive base font size (14px mobile, 16px desktop)\n\nLayout Improvements:\n- Better spacing and padding across all screen sizes\n- Mobile-optimized form layouts with proper touch targets\n- Responsive navigation and overlay positioning\n- Enhanced visual hierarchy for mobile devices\n\nFeatures:\n- Mobile-first approach with progressive enhancement\n- Touch-friendly interface elements (min 44px touch targets)\n- Improved readability on small screens\n- Consistent design language across all breakpoints\n- Better accessibility with proper focus states and ARIA labels\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
     ],
     "deny": []
   }
