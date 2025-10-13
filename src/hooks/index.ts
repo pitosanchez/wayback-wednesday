@@ -2,6 +2,7 @@
 
 export { useLocalStorage } from "./useLocalStorage";
 export { default as useAnalytics } from "./useAnalytics";
+export { useEvents } from "./useEvents";
 
 // Future hooks can be added here:
 // export { default as useDebounce } from "./useDebounce";
