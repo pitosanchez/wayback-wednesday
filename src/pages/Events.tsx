@@ -52,27 +52,33 @@ const Events: React.FC = () => {
       }
     }
 
-    // Ensure G-Bo Documentary Screening exists
-    const hasDocScreening = loadedEvents.some(
+    // Ensure G-Bo Documentary Screening exists and is up to date
+    const docScreeningIndex = loadedEvents.findIndex(
       (e) => e.id === "gbo-documentary-screening"
     );
-    if (!hasDocScreening) {
-      const docScreening: Event = {
-        id: "gbo-documentary-screening",
-        title: "This Is How It Should Be Done",
-        date: "2025-11-11", // Tuesday, November 11, 2025
-        time: "7:00 PM",
-        location: "TBA",
-        description:
-          "G-Bo Double R Documentary Screening - An intimate look at the journey and impact of G-Bo The Pro. Join us for this special screening event.",
-        image: docPoster,
-        price: "See TicketLeap",
-        status: "upcoming",
-        category: "special",
-      };
+
+    const docScreening: Event = {
+      id: "gbo-documentary-screening",
+      title: "This Is How It Should Be Done",
+      date: "2025-11-11", // Tuesday, November 11, 2025
+      time: "7:00 PM",
+      location: "TBA",
+      description:
+        "G-Bo Double R Documentary Screening - An intimate look at the journey and impact of G-Bo The Pro. Join us for this special screening event.",
+      image: docPoster,
+      price: "See TicketLeap",
+      status: "upcoming",
+      category: "special",
+    };
+
+    if (docScreeningIndex >= 0) {
+      // Update existing event
+      loadedEvents[docScreeningIndex] = docScreening;
+    } else {
+      // Add new event
       loadedEvents = [docScreening, ...loadedEvents];
-      localStorage.setItem("events", JSON.stringify(loadedEvents));
     }
+    localStorage.setItem("events", JSON.stringify(loadedEvents));
 
     setEvents(loadedEvents);
   }, []);
