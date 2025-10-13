@@ -28,22 +28,22 @@ const History = () => {
         <div className="max-w-6xl mx-auto">
           <div className="relative">
             {/* Vertical Timeline Line - Desktop only */}
-            <div className="absolute left-0 sm:left-24 lg:left-32 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-400 via-red-400 to-emerald-400 hidden sm:block opacity-30"></div>
+            <div className="absolute left-0 sm:left-14 lg:left-16 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-400 via-red-400 to-emerald-400 hidden sm:block opacity-30"></div>
             
             <div className="space-y-8 sm:space-y-12 lg:space-y-16">
               
               {/* Timeline Entry 1 - The Beginning (2008) */}
               <article className="relative">
-                <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 lg:gap-12">
-                  {/* Date Badge - Left Side */}
-                  <div className="flex-shrink-0 sm:w-40 lg:w-48 flex justify-center sm:justify-start">
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8">
+                  {/* Date Badge - Left Side (Smaller, more proportional) */}
+                  <div className="flex-shrink-0 sm:w-28 lg:w-32 flex justify-center sm:justify-start">
                     <div className="relative inline-block">
                       {/* Connection dot to timeline */}
-                      <div className="absolute top-1/2 -right-4 sm:-right-8 lg:-right-12 w-4 sm:w-8 lg:w-12 h-0.5 bg-purple-400 hidden sm:block"></div>
+                      <div className="absolute top-1/2 -right-3 sm:-right-6 lg:-right-8 w-3 sm:w-6 lg:w-8 h-0.5 bg-purple-400 hidden sm:block"></div>
                       
-                      <div className="w-32 sm:w-36 lg:w-40 h-32 sm:h-36 lg:h-40 bg-gradient-to-br from-purple-500 to-purple-700 rounded-2xl flex flex-col items-center justify-center shadow-2xl border-4 border-purple-300/30 relative">
-                        <span className="text-sm font-bold text-white/60 uppercase tracking-wide">Est</span>
-                        <span className="text-4xl sm:text-5xl lg:text-6xl font-alt-gothic text-white leading-none">2008</span>
+                      <div className="w-24 sm:w-28 lg:w-32 h-24 sm:h-28 lg:h-32 bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl flex flex-col items-center justify-center shadow-xl border-2 border-purple-300/30 relative">
+                        <span className="text-xs font-bold text-white/60 uppercase tracking-wide">Est</span>
+                        <span className="text-3xl sm:text-4xl lg:text-5xl font-alt-gothic text-white leading-none">2008</span>
                       </div>
                     </div>
                   </div>
@@ -73,16 +73,16 @@ const History = () => {
 
               {/* Timeline Entry 2 - The Golden Era (2008-2018) */}
               <article className="relative">
-                <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 lg:gap-12">
-                  {/* Date Badge - Left Side */}
-                  <div className="flex-shrink-0 sm:w-40 lg:w-48 flex justify-center sm:justify-start">
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8">
+                  {/* Date Badge - Left Side (Smaller, more proportional) */}
+                  <div className="flex-shrink-0 sm:w-28 lg:w-32 flex justify-center sm:justify-start">
                     <div className="relative inline-block">
                       {/* Connection dot to timeline */}
-                      <div className="absolute top-1/2 -right-4 sm:-right-8 lg:-right-12 w-4 sm:w-8 lg:w-12 h-0.5 bg-red-400 hidden sm:block"></div>
+                      <div className="absolute top-1/2 -right-3 sm:-right-6 lg:-right-8 w-3 sm:w-6 lg:w-8 h-0.5 bg-red-400 hidden sm:block"></div>
                       
-                      <div className="w-32 sm:w-36 lg:w-40 h-32 sm:h-36 lg:h-40 bg-gradient-to-br from-red-500 to-red-700 rounded-2xl flex flex-col items-center justify-center shadow-2xl border-4 border-red-300/30">
-                        <span className="text-base sm:text-lg font-alt-gothic text-white leading-none mb-1">08-18</span>
-                        <span className="text-xs sm:text-sm font-bold text-white/80 uppercase tracking-wide">Decade</span>
+                      <div className="w-24 sm:w-28 lg:w-32 h-24 sm:h-28 lg:h-32 bg-gradient-to-br from-red-500 to-red-700 rounded-xl flex flex-col items-center justify-center shadow-xl border-2 border-red-300/30">
+                        <span className="text-sm sm:text-base font-alt-gothic text-white leading-none mb-1">08-18</span>
+                        <span className="text-xs font-bold text-white/80 uppercase tracking-wide">Decade</span>
                       </div>
                     </div>
                   </div>
@@ -127,19 +127,19 @@ const History = () => {
 
               {/* Timeline Entry 3 - The Reboot (2025) */}
               <article className="relative">
-                <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 lg:gap-12">
-                  {/* Date Badge - Left Side with Animation */}
-                  <div className="flex-shrink-0 sm:w-40 lg:w-48 flex justify-center sm:justify-start">
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8">
+                  {/* Date Badge - Left Side with Animation (Smaller, more proportional) */}
+                  <div className="flex-shrink-0 sm:w-28 lg:w-32 flex justify-center sm:justify-start">
                     <div className="relative inline-block">
                       {/* Connection dot to timeline */}
-                      <div className="absolute top-1/2 -right-4 sm:-right-8 lg:-right-12 w-4 sm:w-8 lg:w-12 h-0.5 bg-emerald-400 hidden sm:block"></div>
+                      <div className="absolute top-1/2 -right-3 sm:-right-6 lg:-right-8 w-3 sm:w-6 lg:w-8 h-0.5 bg-emerald-400 hidden sm:block"></div>
                       
                       {/* Animated glow for current */}
-                      <div className="absolute inset-0 bg-emerald-400 rounded-2xl blur-2xl opacity-40 animate-pulse"></div>
+                      <div className="absolute inset-0 bg-emerald-400 rounded-xl blur-xl opacity-40 animate-pulse"></div>
                       
-                      <div className="relative w-32 sm:w-36 lg:w-40 h-32 sm:h-36 lg:h-40 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex flex-col items-center justify-center shadow-2xl border-4 border-emerald-300/50">
-                        <span className="text-sm font-bold text-white uppercase tracking-wide">Now</span>
-                        <span className="text-4xl sm:text-5xl lg:text-6xl font-alt-gothic text-white leading-none">2025</span>
+                      <div className="relative w-24 sm:w-28 lg:w-32 h-24 sm:h-28 lg:h-32 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex flex-col items-center justify-center shadow-xl border-2 border-emerald-300/50">
+                        <span className="text-xs font-bold text-white uppercase tracking-wide">Now</span>
+                        <span className="text-3xl sm:text-4xl lg:text-5xl font-alt-gothic text-white leading-none">2025</span>
                       </div>
                     </div>
                   </div>
