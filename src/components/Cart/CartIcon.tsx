@@ -7,13 +7,13 @@ const CartIcon: React.FC = () => {
   return (
     <button
       onClick={toggleCart}
-      className="relative p-2 transition-colors duration-200"
-      style={{ color: "var(--rich-black)" }}
+      className="relative p-3 sm:p-3.5 bg-fire-red hover:bg-red-600 text-white rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 border-2 border-red-400/30"
+      aria-label="Shopping Cart"
     >
-      {/* Shopping Cart Icon */}
+      {/* Shopping Cart Icon - High Contrast */}
       <svg
-        width="24"
-        height="24"
+        width="28"
+        height="28"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -26,12 +26,9 @@ const CartIcon: React.FC = () => {
         <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6" />
       </svg>
 
-      {/* Item Count Badge */}
+      {/* Item Count Badge - Visual Indicator */}
       {cart.itemCount > 0 && (
-        <span
-          className="absolute -top-1 -right-1 min-w-5 h-5 flex items-center justify-center text-xs font-bold rounded-full text-white"
-          style={{ backgroundColor: "var(--fire-red)" }}
-        >
+        <span className="absolute -top-2 -right-2 min-w-6 h-6 flex items-center justify-center text-xs font-bold rounded-full bg-white text-fire-red border-2 border-fire-red shadow-lg animate-pulse">
           {cart.itemCount > 99 ? "99+" : cart.itemCount}
         </span>
       )}

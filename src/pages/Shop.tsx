@@ -9,9 +9,11 @@ import ProductCard from "../components/Product/ProductCard";
 import type { Product } from "../types/product";
 import { useState, useEffect, useMemo } from "react";
 import inventoryService from "../services/inventoryService";
+import { useCart } from "../context/CartContext";
 
 const Shop = () => {
   const [activeFilter, setActiveFilter] = useState("All");
+  const { cart } = useCart();
 
   const products: Product[] = useMemo(
     () => [
@@ -250,74 +252,122 @@ const Shop = () => {
   const categories = ["All", "Apparel", "Accessories", "Music"];
 
   return (
-    <div className="page-container">
-      <div className="space-y-16">
-        <div className="page-header text-center">
-          <h1
-            className="text-6xl font-bold mb-6"
-            style={{ color: "var(--rich-black)" }}
-          >
-            Shop
-          </h1>
-          <div className="accent-line mx-auto"></div>
-        </div>
-
-        <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
-          <div className="flex flex-wrap gap-4">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setActiveFilter(category)}
-                className={`filter-button ${
-                  activeFilter === category ? "active" : ""
-                }`}
-              >
-                {category}
-              </button>
-            ))}
+    <div className="min-h-screen bg-white">
+      {/* Z-Pattern Layout with Visual Hierarchy */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        
+        {/* Z-Pattern: Top Left - Primary Heading with Cart Icon */}
+        <header className="mb-12 sm:mb-16 lg:mb-20">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 sm:gap-8">
+            <div className="text-center sm:text-left">
+              {/* Size Hierarchy - Largest element */}
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-alt-gothic text-rich-black mb-3 sm:mb-4 leading-tight">
+                Shop
+              </h1>
+              
+              {/* Visual Cue - Accent line */}
+              <div className="flex items-center gap-4">
+                <div className="h-1 w-20 bg-fire-red"></div>
+                <span className="text-fire-red text-sm font-bold tracking-wider uppercase">Official Merch</span>
+                <div className="h-1 flex-grow bg-gradient-to-r from-fire-red/60 to-transparent hidden sm:block"></div>
+              </div>
+            </div>
+            
+            {/* Shopping Cart - High Contrast, Prominent Placement */}
+            <a 
+              href="/#/checkout"
+              className="inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-fire-red hover:bg-red-600 text-white text-base sm:text-lg font-bold rounded-xl shadow-2xl hover:scale-105 transition-all group self-center sm:self-auto"
+            >
+              <svg className="w-6 h-6 sm:w-7 sm:h-7 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              <div className="flex flex-col items-start">
+                <span className="text-xs opacity-80 leading-none mb-0.5">Shopping Cart</span>
+                <span className="leading-none">{cart.itemCount} {cart.itemCount === 1 ? 'Item' : 'Items'}</span>
+              </div>
+            </a>
           </div>
-          <select
-            className="bg-white border border-gray-300 px-4 py-2 rounded-lg"
-            style={{ color: "var(--rich-black)" }}
-          >
-            <option>Sort by: Featured</option>
-            <option>Price: Low to High</option>
-            <option>Price: High to Low</option>
-            <option>Newest</option>
-          </select>
+          
+          {/* Subheading with proper white space */}
+          <p className="text-lg sm:text-xl text-gray-700 mt-6 sm:mt-8 max-w-3xl text-center sm:text-left">
+            Represent the culture. Limited edition apparel and accessories celebrating Hip Hop heritage.
+          </p>
+        </header>
+
+        {/* Filter Controls - Aligned and Spaced */}
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8 mb-12 sm:mb-16">
+          {/* Proximity - Filter buttons grouped */}
+          <div className="w-full lg:w-auto">
+            <label className="block text-sm font-medium text-gray-600 mb-3 uppercase tracking-wide">Filter by Category</label>
+            <div className="flex flex-wrap gap-2 sm:gap-3">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveFilter(category)}
+                  className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base transition-all hover:scale-105 ${
+                    activeFilter === category
+                      ? "bg-fire-red text-white shadow-lg"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300"
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          {/* Sort control with clear label */}
+          <div className="w-full lg:w-auto">
+            <label className="block text-sm font-medium text-gray-600 mb-3 uppercase tracking-wide">Sort Products</label>
+            <select className="w-full lg:w-auto bg-white border-2 border-gray-300 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-gray-900 font-medium hover:border-gray-400 focus:border-fire-red focus:ring-2 focus:ring-fire-red/20 transition-all text-sm sm:text-base">
+              <option>Sort by: Featured</option>
+              <option>Price: Low to High</option>
+              <option>Price: High to Low</option>
+              <option>Newest</option>
+            </select>
+          </div>
         </div>
 
-        <div className="grid-auto">
+        {/* Product Grid - Main Content Area */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 mb-16 sm:mb-20 lg:mb-24">
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
 
-        <div
-          style={{ background: "rgba(61, 90, 254, 0.1)" }}
-          className="p-12 rounded-2xl text-center"
-        >
-          <h2
-            className="text-4xl font-bold mb-6"
-            style={{ color: "var(--rich-black)" }}
-          >
-            Join the WAYBACK Community
-          </h2>
-          <p
-            className="text-xl mb-8 max-w-2xl mx-auto"
-            style={{ color: "rgba(10, 10, 10, 0.8)" }}
-          >
-            Get exclusive access to new drops, behind-the-scenes content, and
-            special events.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg"
-              style={{ color: "var(--rich-black)" }}
-            />
-            <button className="btn-primary">Subscribe</button>
+        {/* Z-Pattern: Bottom - Newsletter CTA with High Contrast */}
+        <div className="bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-200 p-8 sm:p-12 lg:p-16 rounded-2xl text-center shadow-xl">
+          <div className="max-w-3xl mx-auto">
+            {/* Visual Indicator */}
+            <div className="inline-flex items-center gap-2 bg-fire-red/10 px-4 py-2 rounded-full mb-6">
+              <svg className="w-5 h-5 text-fire-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              <span className="text-fire-red font-bold text-sm uppercase tracking-wide">VIP Access</span>
+            </div>
+            
+            {/* Typography Hierarchy */}
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-alt-gothic text-rich-black mb-4 sm:mb-6">
+              Join the WAYBACK Community
+            </h2>
+            
+            {/* White Space - Readable line length */}
+            <p className="text-base sm:text-lg lg:text-xl text-gray-700 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto">
+              Get exclusive access to new drops, behind-the-scenes content, and
+              special events.
+            </p>
+            
+            {/* CTA Form - Grouped with proximity */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-lg mx-auto">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 px-4 sm:px-5 py-3 sm:py-4 border-2 border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:border-fire-red focus:ring-2 focus:ring-fire-red/20 transition-all text-sm sm:text-base"
+              />
+              <button className="px-6 sm:px-8 py-3 sm:py-4 bg-fire-red hover:bg-red-600 text-white font-bold rounded-lg shadow-lg hover:scale-105 transition-all text-sm sm:text-base whitespace-nowrap">
+                Subscribe
+              </button>
+            </div>
           </div>
         </div>
       </div>
