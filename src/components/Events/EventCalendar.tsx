@@ -89,19 +89,19 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
     );
   };
 
-  // Category color mapping - Solid colors only
+  // Category color mapping - Soft colors with glassmorphism
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "music":
-        return "bg-red-600";
+        return "bg-red-400/70 backdrop-blur-sm";
       case "culture":
-        return "bg-blue-600";
+        return "bg-blue-400/70 backdrop-blur-sm";
       case "community":
-        return "bg-white text-black";
+        return "bg-white/80 backdrop-blur-sm text-black";
       case "special":
-        return "bg-red-600";
+        return "bg-red-400/70 backdrop-blur-sm";
       default:
-        return "bg-red-600";
+        return "bg-red-400/70 backdrop-blur-sm";
     }
   };
 
@@ -123,13 +123,15 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
   return (
     <div className="relative">
       {/* Calendar Container */}
-      <div className="relative bg-black rounded-2xl p-6 border-4 border-red-600 shadow-2xl">
+      <div className="relative glass-morphism-3d rounded-2xl p-6 shadow-2xl">
+        {/* Animated glow effect */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur-xl animate-pulse-slow"></div>
         {/* Calendar Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 relative z-10">
           <div className="flex items-center gap-4">
             <button
               onClick={onPrevMonth}
-              className="group p-3 bg-red-600 rounded-lg border-2 border-white hover:bg-red-700 transition-all"
+              className="group p-3 bg-rose-500/70 hover:bg-rose-400/70 backdrop-blur-md rounded-lg border-2 border-rose-300/30 hover:border-rose-300/60 hover:scale-110 transition-all"
             >
               <svg
                 className="w-5 h-5 text-white transition-colors"
@@ -146,14 +148,14 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
               </svg>
             </button>
 
-            <h2 className="text-3xl font-alt-gothic text-white">
+            <h2 className="text-4xl font-alt-gothic text-white drop-shadow-lg">
               {currentMonth.toLocaleString("default", { month: "long" })}{" "}
               {currentMonth.getFullYear()}
             </h2>
 
             <button
               onClick={onNextMonth}
-              className="group p-3 bg-blue-600 rounded-lg border-2 border-white hover:bg-blue-700 transition-all"
+              className="group p-3 bg-sky-500/70 hover:bg-sky-400/70 backdrop-blur-md rounded-lg border-2 border-sky-300/30 hover:border-sky-300/60 hover:scale-110 transition-all"
             >
               <svg
                 className="w-5 h-5 text-white transition-colors"
@@ -174,19 +176,19 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
           {isAdmin && (
             <button
               onClick={onAddEvent}
-              className="px-6 py-3 bg-white text-red-600 rounded-lg font-bold border-2 border-red-600 hover:bg-red-600 hover:text-white transition-all"
+              className="px-6 py-3 bg-emerald-500/80 hover:bg-emerald-400/80 backdrop-blur-md text-white rounded-lg font-bold border-2 border-emerald-300/30 hover:border-emerald-300/60 hover:scale-105 transition-all shadow-xl"
             >
-              + Add Event
+              ✨ Add Event
             </button>
           )}
         </div>
 
         {/* Day Headers */}
-        <div className="grid grid-cols-7 gap-3 mb-4">
+        <div className="grid grid-cols-7 gap-3 mb-4 relative z-10">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
             <div
               key={d}
-              className="text-center text-white text-sm font-bold py-3 bg-red-600 rounded-lg border-2 border-white"
+              className="text-center text-white text-sm font-bold py-3 glass-badge rounded-lg border border-white/40 shadow-lg"
             >
               {d}
             </div>
@@ -194,7 +196,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
         </div>
 
         {/* Calendar Grid */}
-        <div className="grid grid-cols-7 gap-3">
+        <div className="grid grid-cols-7 gap-3 relative z-10">
           {daysInMonth.map((cell, idx) => {
             const dateStr = cell.date
               ? `${cell.date.getFullYear()}-${String(
@@ -210,12 +212,12 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
             return (
               <div
                 key={idx}
-                className={`min-h-[140px] rounded-xl transition-all ${
+                className={`calendar-cell min-h-[140px] rounded-xl transition-all ${
                   cell.date
                     ? isTodayDate
-                      ? "bg-blue-600 border-4 border-white"
-                      : "bg-black border-2 border-white hover:border-red-600"
-                    : "bg-transparent border-2 border-white/20"
+                      ? "glass-card-highlight border-2 border-blue-400/60 shadow-xl shadow-blue-400/30"
+                      : "glass-card border border-white/20 hover:border-purple-400/60 hover:shadow-2xl"
+                    : "bg-transparent border border-white/10"
                 } p-3 relative overflow-hidden group`}
               >
                 {/* Date Header */}
@@ -234,7 +236,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
                   {isAdmin && cell.date && (
                     <button
                       onClick={() => onQuickAddDate(dateStr)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity px-2 py-1 bg-white text-red-600 rounded-md hover:bg-red-600 hover:text-white text-xs font-bold border-2 border-red-600"
+                      className="opacity-0 group-hover:opacity-100 transition-opacity px-2 py-1 bg-white/90 backdrop-blur-sm text-red-400 rounded-md hover:bg-red-400 hover:text-white text-xs font-bold border border-red-400/50"
                     >
                       +
                     </button>
@@ -249,7 +251,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
                       onClick={() => handleEventClick(ev)}
                       className={`text-xs rounded-lg px-2 py-1.5 cursor-pointer transition-all hover:scale-105 ${getCategoryColor(
                         ev.category
-                      )} border-2 border-white`}
+                      )} border border-white/40 shadow-md`}
                       title={`Click to view details: ${ev.time} @ ${ev.location}`}
                     >
                       <div className="flex items-center justify-between gap-2">
@@ -286,7 +288,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
                 {/* Today indicator */}
                 {isTodayDate && (
                   <div className="absolute bottom-2 right-2">
-                    <div className="w-3 h-3 bg-white rounded-full animate-pulse border-2 border-blue-600"></div>
+                    <div className="w-3 h-3 bg-white rounded-full animate-pulse border-2 border-blue-400 shadow-lg shadow-blue-400/50"></div>
                   </div>
                 )}
               </div>
@@ -295,10 +297,10 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
         </div>
 
         {/* EST Timezone Indicator */}
-        <div className="mt-6 text-center">
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full border-2 border-red-600 text-red-600 text-xs font-bold">
+        <div className="mt-6 text-center relative z-10">
+          <span className="inline-flex items-center gap-2 px-4 py-2 glass-badge rounded-full border border-white/40 text-white text-xs font-bold shadow-2xl">
             <svg
-              className="w-4 h-4"
+              className="w-4 h-4 animate-spin-slow"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

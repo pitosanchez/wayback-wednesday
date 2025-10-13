@@ -46,7 +46,7 @@ const HeroNav: React.FC<HeroNavProps> = ({ items }) => {
       <button
         aria-label="Open navigation"
         onClick={() => setOpen(true)}
-        className="fixed right-6 top-6 z-50 h-12 w-12 rounded-full bg-rich-black/80 text-white flex items-center justify-center border border-white/10 hover:bg-rich-black/90 transition-colors"
+        className="fixed right-6 top-6 z-50 h-12 w-12 rounded-xl bg-rich-black/80 text-white flex items-center justify-center border-2 border-white/30 hover:bg-rich-black/90 hover:border-white/50 transition-all backdrop-blur-md"
       >
         <span className="sr-only">Open menu</span>
         <div className="space-y-1.5">

@@ -121,8 +121,8 @@
     font-size: clamp(3rem, 10vw, 12rem);
   }
   .app {
-    @apply w-full min-h-screen flex flex-col relative max-w-screen-2xl mx-auto;
-    background-color: var(--warm-white);
+    @apply w-full min-h-screen flex flex-col relative;
+    background-color: #0a0a0a;
     color: var(--rich-black);
   }
 
@@ -192,6 +192,11 @@
 
   .logo {
     @apply fixed top-8 left-8 z-50 cursor-pointer transition-transform duration-300 hover:scale-105;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 0.75rem;
+    padding: 0.5rem;
+    background-color: rgba(10, 10, 10, 0.5);
+    backdrop-filter: blur(8px);
   }
 
   .logo-img {
@@ -412,6 +417,39 @@
     @apply absolute left-0 top-0 h-full w-1/3;
     background-color: var(--fire-red);
   }
+
+  /* Glass Morphism 3D Styles */
+  .glass-morphism-3d {
+    @apply bg-gradient-to-br from-black/40 via-black/30 to-black/40 backdrop-blur-2xl border-2 border-white/20 rounded-2xl shadow-2xl;
+    transform-style: preserve-3d;
+    background-image: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+  }
+
+  .glass-card {
+    @apply bg-black/40 backdrop-blur-md border border-white/20 rounded-lg shadow-xl;
+    transform-style: preserve-3d;
+  }
+
+  .glass-card-highlight {
+    @apply bg-gradient-to-br from-blue-500/30 via-purple-500/20 to-blue-500/30 backdrop-blur-md border-2 border-blue-400/50 rounded-lg shadow-2xl;
+    transform-style: preserve-3d;
+  }
+
+  .glass-button {
+    @apply bg-white/10 backdrop-blur-md hover:bg-white/20;
+    transform-style: preserve-3d;
+    transition: all 0.3s ease;
+  }
+
+  .glass-badge {
+    @apply bg-white/20 backdrop-blur-md;
+    transform-style: preserve-3d;
+  }
 }
 
 @layer utilities {
@@ -477,15 +515,62 @@
   animation: fadeInUp 0.6s ease-out;
 }
 
+/* Glass Morphism 3D Animations */
+@keyframes gradient {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 8s ease infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+.delay-1000 {
+  animation-delay: 1s;
+}
+
 /* Theme overrides: remap legacy blue utilities to red/gray palette */
 .text-blue-500 {
-  color: var(--fire-red) !important;
+  color: #3b82f6 !important;
 }
 .text-blue-600 {
-  color: var(--fire-red) !important;
+  color: #2563eb !important;
 }
 .text-blue-700 {
-  color: #b91c1c !important;
+  color: #1d4ed8 !important;
 }
 .text-blue-800 {
   color: var(--gray-800) !important;
@@ -501,23 +586,23 @@
   background-color: var(--gray-100) !important;
 }
 .bg-blue-500 {
-  background-color: var(--fire-red) !important;
+  background-color: #3b82f6 !important;
 }
 .bg-blue-600 {
-  background-color: var(--fire-red) !important;
+  background-color: #2563eb !important;
 }
 .hover\:bg-blue-600:hover {
-  background-color: #dc2626 !important;
+  background-color: #2563eb !important;
 }
 .hover\:bg-blue-700:hover {
-  background-color: #b91c1c !important;
+  background-color: #1d4ed8 !important;
 }
 
 .border-blue-200 {
   border-color: var(--gray-300) !important;
 }
 .border-blue-600 {
-  border-color: var(--fire-red) !important;
+  border-color: #2563eb !important;
 }
 .hover\:border-blue-300:hover {
   border-color: var(--gray-300) !important;
