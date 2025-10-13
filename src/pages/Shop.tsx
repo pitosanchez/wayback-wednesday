@@ -255,24 +255,26 @@ const Shop = () => {
     <div className="min-h-screen bg-white">
       {/* Z-Pattern Layout with Visual Hierarchy */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-        
         {/* Z-Pattern: Top Left - Primary Heading */}
         <header className="mb-12 sm:mb-16 lg:mb-20 text-center sm:text-left">
           {/* Size Hierarchy - Largest element */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-alt-gothic text-rich-black mb-3 sm:mb-4 leading-tight">
             Shop
           </h1>
-          
+
           {/* Visual Cue - Accent line */}
           <div className="flex items-center gap-4">
             <div className="h-1 w-20 bg-fire-red"></div>
-            <span className="text-fire-red text-sm font-bold tracking-wider uppercase">Official Merch</span>
+            <span className="text-fire-red text-sm font-bold tracking-wider uppercase">
+              Official Merch
+            </span>
             <div className="h-1 flex-grow bg-gradient-to-r from-fire-red/60 to-transparent hidden sm:block"></div>
           </div>
-          
+
           {/* Subheading with proper white space */}
           <p className="text-lg sm:text-xl text-gray-700 mt-6 sm:mt-8 max-w-3xl mx-auto sm:mx-0">
-            Represent the culture. Limited edition apparel and accessories celebrating Hip Hop heritage.
+            Represent the culture. Limited edition apparel and accessories
+            celebrating Hip Hop heritage.
           </p>
         </header>
 
@@ -280,7 +282,9 @@ const Shop = () => {
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 sm:gap-8 mb-12 sm:mb-16">
           {/* Proximity - Filter buttons grouped */}
           <div className="w-full lg:w-auto">
-            <label className="block text-sm font-medium text-gray-600 mb-3 uppercase tracking-wide">Filter by Category</label>
+            <label className="block text-sm font-medium text-gray-600 mb-3 uppercase tracking-wide">
+              Filter by Category
+            </label>
             <div className="flex flex-wrap gap-2 sm:gap-3">
               {categories.map((category) => (
                 <button
@@ -297,10 +301,12 @@ const Shop = () => {
               ))}
             </div>
           </div>
-          
+
           {/* Sort control with clear label */}
           <div className="w-full lg:w-auto">
-            <label className="block text-sm font-medium text-gray-600 mb-3 uppercase tracking-wide">Sort Products</label>
+            <label className="block text-sm font-medium text-gray-600 mb-3 uppercase tracking-wide">
+              Sort Products
+            </label>
             <select className="w-full lg:w-auto bg-white border-2 border-gray-300 px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-gray-900 font-medium hover:border-gray-400 focus:border-fire-red focus:ring-2 focus:ring-fire-red/20 transition-all text-sm sm:text-base">
               <option>Sort by: Featured</option>
               <option>Price: Low to High</option>
@@ -322,23 +328,35 @@ const Shop = () => {
           <div className="max-w-3xl mx-auto">
             {/* Visual Indicator */}
             <div className="inline-flex items-center gap-2 bg-fire-red/10 px-4 py-2 rounded-full mb-6">
-              <svg className="w-5 h-5 text-fire-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              <svg
+                className="w-5 h-5 text-fire-red"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                />
               </svg>
-              <span className="text-fire-red font-bold text-sm uppercase tracking-wide">VIP Access</span>
+              <span className="text-fire-red font-bold text-sm uppercase tracking-wide">
+                VIP Access
+              </span>
             </div>
-            
+
             {/* Typography Hierarchy */}
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-alt-gothic text-rich-black mb-4 sm:mb-6">
               Join the WAYBACK Community
             </h2>
-            
+
             {/* White Space - Readable line length */}
             <p className="text-base sm:text-lg lg:text-xl text-gray-700 mb-8 sm:mb-10 leading-relaxed max-w-2xl mx-auto">
               Get exclusive access to new drops, behind-the-scenes content, and
               special events.
             </p>
-            
+
             {/* CTA Form - Grouped with proximity */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 max-w-lg mx-auto">
               <input

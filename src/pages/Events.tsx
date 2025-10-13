@@ -117,23 +117,27 @@ const Events: React.FC = () => {
 
   // Render Events page with Z-pattern visual hierarchy
   return (
-    <div className="min-h-screen bg-rich-black text-white relative overflow-hidden">
+    <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Z-Pattern Layout Container */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-        {/* Animated Background Orbs - Subtle visual cues */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
-
         {/* Z-Pattern: Top Left - Header (Primary focal point) */}
         <div className="mb-8 sm:mb-12 lg:mb-16 relative">
           {/* Mobile: Center-aligned, Desktop: Left-aligned for Z-pattern */}
           <div className="text-center lg:text-left max-w-4xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-alt-gothic mb-3 sm:mb-4 text-white drop-shadow-2xl leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-alt-gothic mb-3 sm:mb-4 text-rich-black leading-tight">
               Events & Bookings
             </h1>
-            <p className="text-white/80 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+
+            {/* Visual Cue - Accent line */}
+            <div className="flex items-center gap-4 mb-6">
+              <div className="h-1 w-20 bg-fire-red"></div>
+              <span className="text-fire-red text-sm sm:text-base font-bold tracking-wider uppercase">
+                Book G-Bo
+              </span>
+              <div className="h-1 flex-grow bg-gradient-to-r from-fire-red/60 to-transparent"></div>
+            </div>
+
+            <p className="text-gray-700 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto lg:mx-0 leading-relaxed">
               See what's coming up and request a booking with G‑Bo The Pro for
               your next show, private event, brand collab, or cultural
               experience.

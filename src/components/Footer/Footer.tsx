@@ -105,7 +105,7 @@ const Footer: React.FC = () => {
               <h4 className="font-alt-gothic text-lg sm:text-xl text-white uppercase tracking-wide">
                 Navigate
               </h4>
-              
+
               {/* Proximity - Links grouped with consistent spacing */}
               <nav className="flex flex-col space-y-2">
                 {footerLinks.map((link) => (
@@ -127,7 +127,7 @@ const Footer: React.FC = () => {
               <h4 className="font-alt-gothic text-lg sm:text-xl text-white uppercase tracking-wide">
                 Connect
               </h4>
-              
+
               {/* Grid for better alignment */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                 {socialLinks.map((social) => (

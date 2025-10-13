@@ -308,14 +308,16 @@ const Checkout: React.FC = () => {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-alt-gothic text-white mb-4 sm:mb-6 leading-tight">
               Checkout
             </h1>
-            
+
             {/* Visual Cue - Accent line */}
             <div className="flex items-center justify-center gap-4 mb-6">
               <div className="h-1 w-20 bg-fire-red"></div>
-              <span className="text-fire-red text-sm sm:text-base font-bold tracking-wider uppercase">Secure Payment</span>
+              <span className="text-fire-red text-sm sm:text-base font-bold tracking-wider uppercase">
+                Secure Payment
+              </span>
               <div className="h-1 w-20 bg-fire-red"></div>
             </div>
-            
+
             <p className="text-base sm:text-lg text-white/80">
               Complete your order securely
             </p>
@@ -325,7 +327,6 @@ const Checkout: React.FC = () => {
 
       {/* Checkout Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 lg:pb-20">
-
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12">
           {/* Order Summary */}
           <div className="order-2 lg:order-1">
@@ -346,7 +347,9 @@ const Checkout: React.FC = () => {
                       className="w-16 h-16 object-cover rounded-lg"
                     />
                     <div className="flex-1">
-                      <h3 className="font-semibold text-rich-black">{item.name}</h3>
+                      <h3 className="font-semibold text-rich-black">
+                        {item.name}
+                      </h3>
                       <p className="text-sm text-gray-600">{item.category}</p>
                       {(item.size || item.color) && (
                         <div className="flex gap-2 text-sm text-gray-500">
@@ -355,7 +358,9 @@ const Checkout: React.FC = () => {
                         </div>
                       )}
                       <div className="flex justify-between items-center mt-2">
-                        <span className="text-sm text-gray-700">Qty: {item.quantity}</span>
+                        <span className="text-sm text-gray-700">
+                          Qty: {item.quantity}
+                        </span>
                         <span className="font-bold text-fire-red">
                           ${(item.price * item.quantity).toFixed(2)}
                         </span>
@@ -368,7 +373,9 @@ const Checkout: React.FC = () => {
               <div className="border-t-2 border-gray-300 pt-4 space-y-3">
                 <div className="flex justify-between text-gray-700">
                   <span className="font-medium">Subtotal:</span>
-                  <span className="font-semibold">${cart.total.toFixed(2)}</span>
+                  <span className="font-semibold">
+                    ${cart.total.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span className="font-medium">Shipping:</span>
@@ -376,7 +383,9 @@ const Checkout: React.FC = () => {
                 </div>
                 <div className="flex justify-between text-gray-700">
                   <span className="font-medium">Tax:</span>
-                  <span className="font-semibold">${(cart.total * 0.08).toFixed(2)}</span>
+                  <span className="font-semibold">
+                    ${(cart.total * 0.08).toFixed(2)}
+                  </span>
                 </div>
                 <div className="border-t-2 border-gray-300 pt-3 flex justify-between text-xl sm:text-2xl font-bold">
                   <span className="text-rich-black">Total:</span>
@@ -399,11 +408,20 @@ const Checkout: React.FC = () => {
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
-                  <span className="font-bold text-base sm:text-lg">Payment Error</span>
+                  <span className="font-bold text-base sm:text-lg">
+                    Payment Error
+                  </span>
                 </div>
-                <p className="text-sm sm:text-base text-red-700 font-medium">{paymentError}</p>
+                <p className="text-sm sm:text-base text-red-700 font-medium">
+                  {paymentError}
+                </p>
               </div>
             )}
 
