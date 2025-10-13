@@ -137,8 +137,7 @@ const Events: React.FC = () => {
 
           <p className="text-gray-700 text-base sm:text-lg lg:text-xl max-w-3xl mx-auto leading-relaxed">
             See what's coming up and request a booking with G‑Bo The Pro for
-            your next show, private event, brand collab, or cultural
-            experience.
+            your next show, private event, brand collab, or cultural experience.
           </p>
         </header>
 
