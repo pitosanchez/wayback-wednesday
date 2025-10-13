@@ -115,6 +115,7 @@ const Events: React.FC = () => {
 
   const featuredEvent = getFeaturedEvent();
 
+  // Render Events page with Z-pattern visual hierarchy
   return (
     <div className="min-h-screen bg-rich-black text-white relative overflow-hidden">
       {/* Z-Pattern Layout Container */}
