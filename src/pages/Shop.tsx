@@ -9,11 +9,9 @@ import ProductCard from "../components/Product/ProductCard";
 import type { Product } from "../types/product";
 import { useState, useEffect, useMemo } from "react";
 import inventoryService from "../services/inventoryService";
-import { useCart } from "../context/CartContext";
 
 const Shop = () => {
   const [activeFilter, setActiveFilter] = useState("All");
-  const { cart } = useCart();
 
   const products: Product[] = useMemo(
     () => [
