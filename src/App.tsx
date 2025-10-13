@@ -80,10 +80,12 @@ function AppContent() {
 
         {!isHomePage && <HeroNav items={navItems} />}
 
-        <div className="fixed top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-40 flex items-center space-x-2 sm:space-x-4">
-          <UserMenu />
-          {location.pathname === "/shop" && <CartIcon />}
-        </div>
+        {/* Shopping Cart and Menu - Top Right */}
+        {!isHomePage && (
+          <div className="fixed top-6 right-6 z-50 flex items-center gap-4">
+            <CartIcon />
+          </div>
+        )}
 
         <main className="min-h-screen flex flex-col">
           <div className="flex-grow">
