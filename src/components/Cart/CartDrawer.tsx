@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useCart } from "../../context/CartContext";
 import CartItem from "./CartItem";
 
 const CartDrawer: React.FC = () => {
   const { cart, isCartOpen, toggleCart, clearCart } = useCart();
+
+  // Auto-close drawer when cart becomes empty (e.g., after successful payment)
+  useEffect(() => {
+    if (isCartOpen && cart.items.length === 0) {
+      // Close after a brief delay to allow user to see the change
+      const timer = setTimeout(() => {
+        toggleCart();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [cart.items.length, isCartOpen, toggleCart]);
 
   if (!isCartOpen) return null;
 

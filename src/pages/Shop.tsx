@@ -256,40 +256,22 @@ const Shop = () => {
       {/* Z-Pattern Layout with Visual Hierarchy */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         
-        {/* Z-Pattern: Top Left - Primary Heading with Cart Icon */}
-        <header className="mb-12 sm:mb-16 lg:mb-20">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 sm:gap-8">
-            <div className="text-center sm:text-left">
-              {/* Size Hierarchy - Largest element */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-alt-gothic text-rich-black mb-3 sm:mb-4 leading-tight">
-                Shop
-              </h1>
-              
-              {/* Visual Cue - Accent line */}
-              <div className="flex items-center gap-4">
-                <div className="h-1 w-20 bg-fire-red"></div>
-                <span className="text-fire-red text-sm font-bold tracking-wider uppercase">Official Merch</span>
-                <div className="h-1 flex-grow bg-gradient-to-r from-fire-red/60 to-transparent hidden sm:block"></div>
-              </div>
-            </div>
-            
-            {/* Shopping Cart - High Contrast, Prominent Placement */}
-            <a 
-              href="/#/checkout"
-              className="inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-fire-red hover:bg-red-600 text-white text-base sm:text-lg font-bold rounded-xl shadow-2xl hover:scale-105 transition-all group self-center sm:self-auto"
-            >
-              <svg className="w-6 h-6 sm:w-7 sm:h-7 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-              <div className="flex flex-col items-start">
-                <span className="text-xs opacity-80 leading-none mb-0.5">Shopping Cart</span>
-                <span className="leading-none">{cart.itemCount} {cart.itemCount === 1 ? 'Item' : 'Items'}</span>
-              </div>
-            </a>
+        {/* Z-Pattern: Top Left - Primary Heading */}
+        <header className="mb-12 sm:mb-16 lg:mb-20 text-center sm:text-left">
+          {/* Size Hierarchy - Largest element */}
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-alt-gothic text-rich-black mb-3 sm:mb-4 leading-tight">
+            Shop
+          </h1>
+          
+          {/* Visual Cue - Accent line */}
+          <div className="flex items-center gap-4">
+            <div className="h-1 w-20 bg-fire-red"></div>
+            <span className="text-fire-red text-sm font-bold tracking-wider uppercase">Official Merch</span>
+            <div className="h-1 flex-grow bg-gradient-to-r from-fire-red/60 to-transparent hidden sm:block"></div>
           </div>
           
           {/* Subheading with proper white space */}
-          <p className="text-lg sm:text-xl text-gray-700 mt-6 sm:mt-8 max-w-3xl text-center sm:text-left">
+          <p className="text-lg sm:text-xl text-gray-700 mt-6 sm:mt-8 max-w-3xl mx-auto sm:mx-0">
             Represent the culture. Limited edition apparel and accessories celebrating Hip Hop heritage.
           </p>
         </header>
