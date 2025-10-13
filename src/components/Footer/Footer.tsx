@@ -78,34 +78,36 @@ const Footer: React.FC = () => {
     <footer className="site-footer">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Main Footer Content - Visual Hierarchy Applied */}
-        <div className="py-12 sm:py-16 lg:py-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12 lg:gap-16">
-            
+        <div className="py-8 sm:py-10 lg:py-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
             {/* Brand Section - Primary (Larger visual weight) */}
-            <div className="sm:col-span-2 lg:col-span-1 space-y-4 sm:space-y-6">
+            <div className="sm:col-span-2 lg:col-span-1 space-y-3 sm:space-y-4">
               {/* Size hierarchy - Largest heading in footer */}
               <h3 className="font-alt-gothic text-2xl sm:text-3xl text-white leading-tight">
-                WAYBACK<br />WHENSDAY
+                WAYBACK
+                <br />
+                WHENSDAY
               </h3>
-              
+
               {/* Whitespace - Proper line height */}
               <p className="text-white/70 text-sm sm:text-base leading-relaxed max-w-xs">
-                Celebrating the culture, music, and style that shaped generations.
+                Celebrating the culture, music, and style that shaped
+                generations.
               </p>
-              
+
               {/* Visual indicator - Accent line */}
               <div className="h-1 w-16 bg-gradient-to-r from-red-400 to-purple-400"></div>
             </div>
 
             {/* Quick Links - Secondary */}
-            <div className="space-y-4 sm:space-y-5">
+            <div className="space-y-3 sm:space-y-4">
               {/* Typography hierarchy */}
               <h4 className="font-alt-gothic text-lg sm:text-xl text-white uppercase tracking-wide">
                 Navigate
               </h4>
               
               {/* Proximity - Links grouped with consistent spacing */}
-              <nav className="flex flex-col space-y-3">
+              <nav className="flex flex-col space-y-2">
                 {footerLinks.map((link) => (
                   <Link
                     key={link.name}
@@ -120,27 +122,27 @@ const Footer: React.FC = () => {
             </div>
 
             {/* Social Media Section - Secondary */}
-            <div className="sm:col-span-2 lg:col-span-2 space-y-4 sm:space-y-5">
+            <div className="sm:col-span-2 lg:col-span-2 space-y-3 sm:space-y-4">
               {/* Typography hierarchy */}
               <h4 className="font-alt-gothic text-lg sm:text-xl text-white uppercase tracking-wide">
                 Connect
               </h4>
               
               {/* Grid for better alignment */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                 {socialLinks.map((social) => (
                   <a
                     key={social.name}
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 sm:p-4 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 hover:border-white/20 transition-all duration-200 group"
+                    className="flex items-center gap-2 sm:gap-3 p-2 sm:p-3 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 hover:border-white/20 transition-all duration-200 group"
                   >
                     {/* Icon with visual weight */}
-                    <span className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-red-500/20 to-purple-500/20 group-hover:from-red-500/30 group-hover:to-purple-500/30 transition-all flex-shrink-0">
+                    <span className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-gradient-to-br from-red-500/20 to-purple-500/20 group-hover:from-red-500/30 group-hover:to-purple-500/30 transition-all flex-shrink-0">
                       {social.icon}
                     </span>
-                    
+
                     {/* Proximity - Name and handle grouped */}
                     <div className="flex flex-col min-w-0">
                       <span className="text-sm font-semibold text-white truncate">
@@ -161,11 +163,13 @@ const Footer: React.FC = () => {
         <div className="border-t border-white/20"></div>
 
         {/* Bottom Section - Proper alignment and spacing */}
-        <div className="py-6 sm:py-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-6">
+        <div className="py-4 sm:py-5">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
             {/* Copyright - Clear hierarchy */}
             <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-white/50 text-xs sm:text-sm">
-              <span className="font-medium">© {currentYear} Wayback Whensday</span>
+              <span className="font-medium">
+                © {currentYear} Wayback Whensday
+              </span>
               <span className="hidden sm:inline">•</span>
               <span>All Rights Reserved</span>
             </div>
