@@ -99,6 +99,7 @@ const CartDrawer: React.FC = () => {
               <div className="space-y-3">
                 <a
                   href="#/checkout"
+                  onClick={toggleCart}
                   className="btn-primary w-full text-center block"
                 >
                   Proceed to Checkout
