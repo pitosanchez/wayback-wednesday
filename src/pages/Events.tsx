@@ -62,7 +62,7 @@ const Events: React.FC = () => {
       title: "This Is How It Should Be Done",
       date: "2025-11-11", // Tuesday, November 11, 2025
       time: "7:00 PM",
-      location: "TBA",
+      location: "El Barrio Art Space PS 109",
       description:
         "G-Bo Double R Documentary Screening - An intimate look at the journey and impact of G-Bo The Pro. Join us for this special screening event.",
       image: docPoster,
@@ -205,7 +205,7 @@ const Events: React.FC = () => {
 
               {/* Event Details */}
               <div className="flex flex-col justify-center">
-                <div className="inline-block px-3 py-1 bg-amber-500/20 text-amber-300 rounded-full text-sm font-semibold mb-4 w-fit">
+                <div className="inline-block px-3 py-1 bg-blue-600 text-white border-2 border-red-600 rounded-full text-sm font-semibold mb-4 w-fit">
                   SPECIAL EVENT
                 </div>
                 <h2 className="text-4xl font-alt-gothic mb-4 text-amber-100">
