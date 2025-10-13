@@ -115,11 +115,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
 
   if (success) {
     return (
-      <div className="glass-morphism-3d p-4 sm:p-6 max-w-full">
+      <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 border-2 border-emerald-300 rounded-2xl p-4 sm:p-6 max-w-full shadow-xl">
         <div className="text-center">
-          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-500/30 to-emerald-500/30 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-green-400/40 shadow-xl shadow-green-500/20">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
             <svg
-              className="w-6 h-6 sm:w-8 sm:h-8 text-green-400 animate-pulse"
+              className="w-6 h-6 sm:w-8 sm:h-8 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -132,31 +132,31 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
               />
             </svg>
           </div>
-          <h3 className="text-xl sm:text-2xl font-alt-gothic mb-2 sm:mb-3 text-white">
+          <h3 className="text-xl sm:text-2xl font-alt-gothic mb-2 sm:mb-3 text-rich-black">
             Booking Request Sent!
           </h3>
-          <p className="text-white/70 mb-4 text-sm sm:text-base leading-relaxed">
+          <p className="text-gray-700 mb-4 text-sm sm:text-base leading-relaxed">
             Thanks {success.name}! We'll review your request and follow up at{" "}
-            <span className="text-white font-medium break-all">
+            <span className="text-rich-black font-medium break-all">
               {success.email}
             </span>
             .
           </p>
 
           {success.notes && (
-            <div className="glass-card p-3 mb-4 text-left">
-              <p className="text-xs sm:text-sm text-white/60 mb-1 font-medium">
+            <div className="bg-white border-2 border-gray-200 p-3 mb-4 text-left rounded-lg">
+              <p className="text-xs sm:text-sm text-gray-600 mb-1 font-medium">
                 Your Message:
               </p>
-              <p className="text-sm text-white/80 italic">{success.notes}</p>
+              <p className="text-sm text-gray-700 italic">{success.notes}</p>
             </div>
           )}
 
-          <div className="glass-card bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-blue-400/30 p-3 mb-6 text-left">
-            <h4 className="text-sm font-semibold text-blue-300 mb-2">
+          <div className="bg-blue-50 border-2 border-blue-300 p-3 mb-6 text-left rounded-lg">
+            <h4 className="text-sm font-semibold text-blue-900 mb-2">
               What happens next?
             </h4>
-            <ul className="text-xs sm:text-sm text-white/70 space-y-1">
+            <ul className="text-xs sm:text-sm text-blue-800 space-y-1">
               <li>• We'll review your request within 24-48 hours</li>
               <li>• You'll receive a follow-up email or phone call</li>
               <li>• We'll discuss details and finalize arrangements</li>
@@ -165,7 +165,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
         </div>
 
         <button
-          className="w-full py-3 bg-slate-600/80 hover:bg-slate-500/80 backdrop-blur-md text-white rounded-lg font-semibold hover:scale-105 transition-all duration-200 text-sm sm:text-base border-2 border-slate-400/30 hover:border-slate-400/60 shadow-xl"
+          className="w-full py-3 bg-slate-600 hover:bg-slate-700 text-white rounded-lg font-semibold hover:scale-105 transition-all duration-200 text-sm sm:text-base shadow-lg"
           onClick={() => setSuccess(null)}
         >
           Submit Another Request
@@ -177,24 +177,24 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="glass-morphism-3d p-4 sm:p-6 max-w-full"
+      className="bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-200 rounded-2xl p-4 sm:p-6 max-w-full shadow-xl"
     >
       <div className="mb-4 sm:mb-6">
-        <h3 className="text-xl sm:text-2xl font-alt-gothic text-white">
+        <h3 className="text-xl sm:text-2xl font-alt-gothic text-rich-black">
           Booking Request
         </h3>
-        <p className="text-white/60 text-xs sm:text-sm mt-1">
+        <p className="text-gray-600 text-xs sm:text-sm mt-1">
           Name, email, phone and message.
         </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div className="sm:col-span-2">
-          <label className="block text-sm text-white/60 mb-1 font-medium">
+          <label className="block text-sm text-gray-700 mb-1 font-medium">
             Name*
           </label>
           <input
-            className="w-full glass-card px-3 py-2.5 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/60 transition-all duration-200"
+            className="w-full bg-white border-2 border-gray-300 px-3 py-2.5 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 rounded-lg"
             value={form.name || ""}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             placeholder="Your full name"
@@ -202,12 +202,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
           />
         </div>
         <div>
-          <label className="block text-sm text-white/60 mb-1 font-medium">
+          <label className="block text-sm text-gray-700 mb-1 font-medium">
             Email*
           </label>
           <input
             type="email"
-            className="w-full glass-card px-3 py-2.5 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/60 transition-all duration-200"
+            className="w-full bg-white border-2 border-gray-300 px-3 py-2.5 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 rounded-lg"
             value={form.email || ""}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             placeholder="your@email.com"
@@ -215,24 +215,24 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
           />
         </div>
         <div>
-          <label className="block text-sm text-white/60 mb-1 font-medium">
+          <label className="block text-sm text-gray-700 mb-1 font-medium">
             Phone
           </label>
           <input
             type="tel"
-            className="w-full glass-card px-3 py-2.5 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/60 transition-all duration-200"
+            className="w-full bg-white border-2 border-gray-300 px-3 py-2.5 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 rounded-lg"
             value={form.phone || ""}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
             placeholder="(555) 123-4567"
           />
         </div>
         <div className="sm:col-span-2">
-          <label className="block text-sm text-white/60 mb-1 font-medium">
+          <label className="block text-sm text-gray-700 mb-1 font-medium">
             Message*
           </label>
           <textarea
             rows={4}
-            className="w-full glass-card px-3 py-2.5 text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-400/40 focus:border-purple-400/60 transition-all duration-200 resize-none"
+            className="w-full bg-white border-2 border-gray-300 px-3 py-2.5 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 resize-none rounded-lg"
             value={form.notes || ""}
             onChange={(e) => setForm({ ...form, notes: e.target.value })}
             placeholder="Tell us about your booking request, event details, preferred dates, etc."
@@ -242,15 +242,15 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
       </div>
 
       {error ? (
-        <div className="mt-4 p-3 glass-card bg-gradient-to-br from-red-500/20 to-red-600/20 border-red-400/30">
-          <p className="text-sm text-red-400">{error}</p>
+        <div className="mt-4 p-3 bg-red-50 border-2 border-red-300 rounded-lg">
+          <p className="text-sm text-red-700 font-medium">{error}</p>
         </div>
       ) : null}
 
       <button
         type="submit"
         disabled={submitting}
-        className="mt-6 w-full py-3 sm:py-3.5 bg-purple-500/80 hover:bg-purple-400/80 backdrop-blur-md text-white rounded-lg font-semibold hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-sm sm:text-base border-2 border-purple-300/30 hover:border-purple-300/60 shadow-xl"
+        className="mt-6 w-full py-3 sm:py-3.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-sm sm:text-base shadow-lg"
       >
         {submitting ? (
           <div className="flex items-center justify-center gap-2">

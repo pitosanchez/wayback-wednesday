@@ -123,18 +123,16 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
   return (
     <div className="relative">
       {/* Calendar Container */}
-      <div className="relative glass-morphism-3d rounded-2xl p-6 shadow-2xl">
-        {/* Animated glow effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur-xl animate-pulse-slow"></div>
+      <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-200 rounded-2xl p-6 shadow-xl">
         {/* Calendar Header */}
-        <div className="flex items-center justify-between mb-8 relative z-10">
+        <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <button
               onClick={onPrevMonth}
-              className="group p-3 bg-rose-500/70 hover:bg-rose-400/70 backdrop-blur-md rounded-lg border-2 border-rose-300/30 hover:border-rose-300/60 hover:scale-110 transition-all"
+              className="group p-3 bg-rose-600 hover:bg-rose-700 rounded-lg hover:scale-110 transition-all shadow-md"
             >
               <svg
-                className="w-5 h-5 text-white transition-colors"
+                className="w-5 h-5 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -148,17 +146,17 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
               </svg>
             </button>
 
-            <h2 className="text-4xl font-alt-gothic text-white drop-shadow-lg">
+            <h2 className="text-4xl font-alt-gothic text-rich-black">
               {currentMonth.toLocaleString("default", { month: "long" })}{" "}
               {currentMonth.getFullYear()}
             </h2>
 
             <button
               onClick={onNextMonth}
-              className="group p-3 bg-sky-500/70 hover:bg-sky-400/70 backdrop-blur-md rounded-lg border-2 border-sky-300/30 hover:border-sky-300/60 hover:scale-110 transition-all"
+              className="group p-3 bg-sky-600 hover:bg-sky-700 rounded-lg hover:scale-110 transition-all shadow-md"
             >
               <svg
-                className="w-5 h-5 text-white transition-colors"
+                className="w-5 h-5 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -176,7 +174,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
           {isAdmin && (
             <button
               onClick={onAddEvent}
-              className="px-6 py-3 bg-emerald-500/80 hover:bg-emerald-400/80 backdrop-blur-md text-white rounded-lg font-bold border-2 border-emerald-300/30 hover:border-emerald-300/60 hover:scale-105 transition-all shadow-xl"
+              className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold hover:scale-105 transition-all shadow-lg"
             >
               ✨ Add Event
             </button>
@@ -184,11 +182,11 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
         </div>
 
         {/* Day Headers */}
-        <div className="grid grid-cols-7 gap-3 mb-4 relative z-10">
+        <div className="grid grid-cols-7 gap-3 mb-4">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
             <div
               key={d}
-              className="text-center text-white text-sm font-bold py-3 glass-badge rounded-lg border border-white/40 shadow-lg"
+              className="text-center text-rich-black text-sm font-bold py-3 bg-gray-200 rounded-lg border border-gray-300 shadow-sm"
             >
               {d}
             </div>
@@ -196,7 +194,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
         </div>
 
         {/* Calendar Grid */}
-        <div className="grid grid-cols-7 gap-3 relative z-10">
+        <div className="grid grid-cols-7 gap-3">
           {daysInMonth.map((cell, idx) => {
             const dateStr = cell.date
               ? `${cell.date.getFullYear()}-${String(
@@ -215,9 +213,9 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
                 className={`calendar-cell min-h-[140px] rounded-xl transition-all ${
                   cell.date
                     ? isTodayDate
-                      ? "glass-card-highlight border-2 border-blue-400/60 shadow-xl shadow-blue-400/30"
-                      : "glass-card border border-white/20 hover:border-purple-400/60 hover:shadow-2xl"
-                    : "bg-transparent border border-white/10"
+                      ? "bg-blue-50 border-2 border-blue-400 shadow-lg"
+                      : "bg-white border-2 border-gray-200 hover:border-purple-400 hover:shadow-lg"
+                    : "bg-transparent border border-gray-100"
                 } p-3 relative overflow-hidden group`}
               >
                 {/* Date Header */}
@@ -225,7 +223,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
                   {cell.date ? (
                     <div
                       className={`text-lg font-bold px-2 py-1 ${
-                        isTodayDate ? "text-white" : "text-white"
+                        isTodayDate ? "text-blue-700" : "text-gray-900"
                       }`}
                     >
                       {cell.date.getDate()}
@@ -236,7 +234,7 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
                   {isAdmin && cell.date && (
                     <button
                       onClick={() => onQuickAddDate(dateStr)}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity px-2 py-1 bg-white/90 backdrop-blur-sm text-red-400 rounded-md hover:bg-red-400 hover:text-white text-xs font-bold border border-red-400/50"
+                      className="opacity-0 group-hover:opacity-100 transition-opacity px-2 py-1 bg-fire-red text-white rounded-md hover:bg-red-700 text-xs font-bold"
                     >
                       +
                     </button>
@@ -297,10 +295,10 @@ const EventCalendar: React.FC<EventCalendarProps> = ({
         </div>
 
         {/* EST Timezone Indicator */}
-        <div className="mt-6 text-center relative z-10">
-          <span className="inline-flex items-center gap-2 px-4 py-2 glass-badge rounded-full border border-white/40 text-white text-xs font-bold shadow-2xl">
+        <div className="mt-6 text-center">
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 rounded-full border border-gray-300 text-gray-700 text-xs font-bold shadow-md">
             <svg
-              className="w-4 h-4 animate-spin-slow"
+              className="w-4 h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

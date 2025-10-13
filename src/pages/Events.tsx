@@ -120,30 +120,27 @@ const Events: React.FC = () => {
     <div className="min-h-screen bg-white relative overflow-hidden">
       {/* Z-Pattern Layout Container */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-        {/* Z-Pattern: Top Left - Header (Primary focal point) */}
-        <div className="mb-8 sm:mb-12 lg:mb-16 relative">
-          {/* Mobile: Center-aligned, Desktop: Left-aligned for Z-pattern */}
-          <div className="text-center lg:text-left max-w-4xl">
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-alt-gothic mb-3 sm:mb-4 text-rich-black leading-tight">
-              Events & Bookings
-            </h1>
+        {/* Header - Center-aligned */}
+        <header className="text-center mb-12 sm:mb-16 lg:mb-20">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-alt-gothic mb-4 sm:mb-6 text-rich-black leading-tight">
+            Events & Bookings
+          </h1>
 
-            {/* Visual Cue - Accent line */}
-            <div className="flex items-center gap-4 mb-6">
-              <div className="h-1 w-20 bg-fire-red"></div>
-              <span className="text-fire-red text-sm sm:text-base font-bold tracking-wider uppercase">
-                Book G-Bo
-              </span>
-              <div className="h-1 flex-grow bg-gradient-to-r from-fire-red/60 to-transparent"></div>
-            </div>
-
-            <p className="text-gray-700 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              See what's coming up and request a booking with G‑Bo The Pro for
-              your next show, private event, brand collab, or cultural
-              experience.
-            </p>
+          {/* Visual Cue - Accent line */}
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="h-1 w-20 bg-fire-red"></div>
+            <span className="text-fire-red text-sm sm:text-base font-bold tracking-wider uppercase">
+              Book G-Bo
+            </span>
+            <div className="h-1 w-20 bg-fire-red"></div>
           </div>
-        </div>
+
+          <p className="text-gray-700 text-base sm:text-lg lg:text-xl max-w-3xl mx-auto leading-relaxed">
+            See what's coming up and request a booking with G‑Bo The Pro for
+            your next show, private event, brand collab, or cultural
+            experience.
+          </p>
+        </header>
 
         {/* Z-Pattern: Top Right - Featured Event (Secondary focal point) */}
         {featuredEvent && (
@@ -190,11 +187,11 @@ const Events: React.FC = () => {
             <div className="h-1 flex-grow bg-gradient-to-r from-transparent via-purple-400/30 to-transparent"></div>
           </div>
 
-          <div className="text-center lg:text-left mb-6 sm:mb-8">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-alt-gothic mb-3 sm:mb-4 text-white">
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-alt-gothic mb-3 sm:mb-4 text-rich-black">
               Request a Booking
             </h2>
-            <p className="text-white/70 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0">
+            <p className="text-gray-700 text-base sm:text-lg max-w-2xl mx-auto">
               Ready to bring the energy? Fill out the form below and let's make
               it happen.
             </p>
@@ -203,7 +200,7 @@ const Events: React.FC = () => {
           <BookingForm onBooked={handleBooking} />
 
           {/* White space for breathing room */}
-          <div className="mt-8 sm:mt-10 text-white/50 text-xs sm:text-sm text-center lg:text-left leading-relaxed">
+          <div className="mt-8 sm:mt-10 text-gray-500 text-xs sm:text-sm text-center leading-relaxed">
             <span className="inline-flex items-center gap-2">
               <svg
                 className="w-4 h-4"
@@ -235,10 +232,10 @@ const Events: React.FC = () => {
         )}
 
         {/* Navigation - White space separation */}
-        <div className="text-center mt-16 sm:mt-20 lg:mt-24 pt-12 sm:pt-16 border-t border-white/10">
+        <div className="text-center mt-16 sm:mt-20 lg:mt-24 pt-12 sm:pt-16 border-t-2 border-gray-200">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-slate-600/80 hover:bg-slate-500/80 text-white text-sm sm:text-base font-medium rounded-xl hover:scale-105 transition-all shadow-2xl backdrop-blur-md group"
+            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-slate-600 hover:bg-slate-700 text-white text-sm sm:text-base font-medium rounded-xl hover:scale-105 transition-all shadow-lg group"
           >
             <svg
               className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
