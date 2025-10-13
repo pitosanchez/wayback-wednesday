@@ -117,34 +117,50 @@ const Events: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-rich-black text-white relative overflow-hidden">
-      <div className="container mx-auto px-6 py-12">
-        {/* Animated Background Orbs */}
+      {/* Z-Pattern Layout Container */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
+        {/* Animated Background Orbs - Subtle visual cues */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/4 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
 
-        {/* Header */}
-        <div className="mb-12 text-center relative">
-          <h1 className="text-6xl font-alt-gothic mb-3 text-white drop-shadow-2xl">
-            Events & Bookings
-          </h1>
-          <p className="text-white/80 max-w-2xl mx-auto text-lg">
-            See what's coming up and request a booking with G‑Bo The Pro for
-            your next show, private event, brand collab, or cultural experience.
-          </p>
+        {/* Z-Pattern: Top Left - Header (Primary focal point) */}
+        <div className="mb-8 sm:mb-12 lg:mb-16 relative">
+          {/* Mobile: Center-aligned, Desktop: Left-aligned for Z-pattern */}
+          <div className="text-center lg:text-left max-w-4xl">
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-alt-gothic mb-3 sm:mb-4 text-white drop-shadow-2xl leading-tight">
+              Events & Bookings
+            </h1>
+            <p className="text-white/80 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              See what's coming up and request a booking with G‑Bo The Pro for
+              your next show, private event, brand collab, or cultural
+              experience.
+            </p>
+          </div>
         </div>
 
-        {/* Featured Documentary Screening */}
+        {/* Z-Pattern: Top Right - Featured Event (Secondary focal point) */}
         {featuredEvent && (
-          <FeaturedEvent
-            event={featuredEvent}
-            ticketUrl="https://www.ticketleap.events/tickets/gbodoublerdoc/this-is-how-it-should-be-done-g-bo-double-r-documentary-screening"
-          />
+          <div className="mb-12 sm:mb-16 lg:mb-20">
+            <FeaturedEvent
+              event={featuredEvent}
+              ticketUrl="https://www.ticketleap.events/tickets/gbodoublerdoc/this-is-how-it-should-be-done-g-bo-double-r-documentary-screening"
+            />
+          </div>
         )}
 
-        {/* Calendar Section */}
-        <div className="mb-16">
+        {/* Z-Pattern: Diagonal/Center - Calendar (Main content area with visual weight) */}
+        <div className="mb-12 sm:mb-16 lg:mb-24">
+          {/* Visual indicator - Section divider */}
+          <div className="flex items-center gap-4 mb-6 sm:mb-8">
+            <div className="h-1 flex-grow bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+            <span className="text-white/60 text-sm font-medium tracking-wider uppercase">
+              Upcoming Events
+            </span>
+            <div className="h-1 flex-grow bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          </div>
+
           <EventCalendar
             currentMonth={currentMonth}
             events={events}
@@ -158,14 +174,47 @@ const Events: React.FC = () => {
           />
         </div>
 
-        {/* Booking Request Section */}
-        <div className="max-w-2xl mx-auto">
-          <h2 className="text-4xl font-alt-gothic mb-6 text-center text-white">
-            Request a Booking
-          </h2>
+        {/* Z-Pattern: Bottom - Call to Action (Final focal point) */}
+        <div className="max-w-4xl mx-auto">
+          {/* Visual indicator - Section divider */}
+          <div className="flex items-center gap-4 mb-8 sm:mb-10">
+            <div className="h-1 flex-grow bg-gradient-to-r from-transparent via-purple-400/30 to-transparent"></div>
+            <span className="text-white/60 text-sm font-medium tracking-wider uppercase">
+              Book G-Bo
+            </span>
+            <div className="h-1 flex-grow bg-gradient-to-r from-transparent via-purple-400/30 to-transparent"></div>
+          </div>
+
+          <div className="text-center lg:text-left mb-6 sm:mb-8">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-alt-gothic mb-3 sm:mb-4 text-white">
+              Request a Booking
+            </h2>
+            <p className="text-white/70 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0">
+              Ready to bring the energy? Fill out the form below and let's make
+              it happen.
+            </p>
+          </div>
+
           <BookingForm onBooked={handleBooking} />
-          <div className="mt-6 text-white/50 text-xs text-center">
-            Unavailable dates are disabled based on confirmed events.
+
+          {/* White space for breathing room */}
+          <div className="mt-8 sm:mt-10 text-white/50 text-xs sm:text-sm text-center lg:text-left leading-relaxed">
+            <span className="inline-flex items-center gap-2">
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              Unavailable dates are disabled based on confirmed events.
+            </span>
           </div>
         </div>
 
@@ -180,14 +229,14 @@ const Events: React.FC = () => {
           />
         )}
 
-        {/* Back to Home */}
-        <div className="text-center mt-12">
+        {/* Navigation - White space separation */}
+        <div className="text-center mt-16 sm:mt-20 lg:mt-24 pt-12 sm:pt-16 border-t border-white/10">
           <Link
             to="/"
-            className="inline-flex items-center px-6 py-3 bg-slate-600/80 hover:bg-slate-500/80 text-white rounded-xl hover:scale-105 transition-all shadow-2xl backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-slate-600/80 hover:bg-slate-500/80 text-white text-sm sm:text-base font-medium rounded-xl hover:scale-105 transition-all shadow-2xl backdrop-blur-md group"
           >
             <svg
-              className="w-5 h-5 mr-2"
+              className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -199,7 +248,7 @@ const Events: React.FC = () => {
                 d="M10 19l-7-7m0 0l7-7m-7 7h18"
               />
             </svg>
-            Back to Home
+            <span>Back to Home</span>
           </Link>
         </div>
       </div>
