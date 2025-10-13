@@ -16,7 +16,7 @@ import Checkout from "./pages/Checkout";
 import Login from "./pages/Login";
 import AuthDemo from "./pages/AuthDemo";
 import gboLogo from "./assets/images/svgbo.svg";
-import { CartProvider } from "./context/CartContext";
+import { CartProvider, useCart } from "./context/CartContext";
 import { AuthProvider } from "./context/AuthContext";
 import CartIcon from "./components/Cart/CartIcon";
 import CartDrawer from "./components/Cart/CartDrawer";
@@ -48,6 +48,7 @@ function AppContent() {
   const location = useLocation();
   const isDevelopment = import.meta.env.DEV;
   const isHomePage = location.pathname === "/";
+  const { cart } = useCart();
   // Maintenance can be toggled via env; default is disabled (site visible)
   const maintenanceEnabled =
     String(
@@ -80,9 +81,9 @@ function AppContent() {
 
         {!isHomePage && <HeroNav items={navItems} />}
 
-        {/* Shopping Cart and Menu - Top Right */}
-        {!isHomePage && (
-          <div className="fixed top-6 right-6 z-50 flex items-center gap-4">
+        {/* Shopping Cart - Only shows when cart has items */}
+        {!isHomePage && cart.itemCount > 0 && (
+          <div className="fixed top-6 right-6 z-50">
             <CartIcon />
           </div>
         )}

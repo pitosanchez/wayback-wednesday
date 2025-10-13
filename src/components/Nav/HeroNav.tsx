@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAdminAuth } from "../../context/AdminAuthContext";
+import { useCart } from "../../context/CartContext";
 import AdminSignIn from "../Auth/AdminSignIn";
 
 export interface NavItem {
@@ -16,6 +17,7 @@ const HeroNav: React.FC<HeroNavProps> = ({ items }) => {
   const [open, setOpen] = useState(false);
   const [showAdminSignIn, setShowAdminSignIn] = useState(false);
   const { isAuthenticated, signOut } = useAdminAuth();
+  const { cart } = useCart();
 
   // Filter items based on authentication status
   const filteredItems = items.filter((item) => {
@@ -42,11 +44,11 @@ const HeroNav: React.FC<HeroNavProps> = ({ items }) => {
 
   return (
     <>
-      {/* Toggle button (top-right) - Positioned next to cart */}
+      {/* Toggle button (top-right) - Shifts left when cart is visible */}
       <button
         aria-label="Open navigation"
         onClick={() => setOpen(true)}
-        className="fixed right-24 sm:right-28 top-6 z-50 h-12 w-12 rounded-xl bg-rich-black/80 text-white flex items-center justify-center border-2 border-white/30 hover:bg-rich-black/90 hover:border-white/50 transition-all backdrop-blur-md"
+        className={`fixed ${cart.itemCount > 0 ? 'right-24 sm:right-28' : 'right-6'} top-6 z-50 h-12 w-12 rounded-xl bg-rich-black/80 text-white flex items-center justify-center border-2 border-white/30 hover:bg-rich-black/90 hover:border-white/50 transition-all backdrop-blur-md`}
       >
         <span className="sr-only">Open menu</span>
         <div className="space-y-1.5">
