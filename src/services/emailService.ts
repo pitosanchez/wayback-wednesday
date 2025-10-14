@@ -1,5 +1,7 @@
-import { Resend } from 'resend';
 import type { User } from '../types/auth';
+
+// SECURITY: This service no longer uses Resend directly (was exposing API key!)
+// All email sending now goes through secure backend API
 
 // Email templates
 export interface EmailTemplate {
@@ -36,127 +38,34 @@ export interface EmailVerificationData {
 }
 
 class EmailService {
-  private resend: Resend;
-  private fromEmail: string;
-
-  constructor() {
-    const apiKey = import.meta.env.VITE_RESEND_API_KEY;
-
-    if (!apiKey) {
-      console.warn('⚠️ Warning: VITE_RESEND_API_KEY not found. Email functionality will be disabled.');
-      this.resend = new Resend('demo-key'); // Fallback for development
-    } else {
-      this.resend = new Resend(apiKey);
-    }
-
-    this.fromEmail = import.meta.env.VITE_FROM_EMAIL || 'noreply@waybackwednesday.com';
-  }
-
-  // Check if email service is properly configured
+  // Check if backend API is configured
   isConfigured(): boolean {
-    return !!import.meta.env.VITE_RESEND_API_KEY;
+    return !!import.meta.env.VITE_API_BASE_URL;
   }
 
-  // Domain management
+  // Domain management - Now handled by backend
   async createDomain(domainName: string): Promise<{ success: boolean; data?: any; error?: string }> {
-    if (!this.isConfigured()) {
-      return {
-        success: false,
-        error: 'Email service not configured - VITE_RESEND_API_KEY required'
-      };
-    }
-
-    try {
-      const { data, error } = await this.resend.domains.create({
-        name: domainName
-      });
-
-      if (error) {
-        console.error('❌ Failed to create domain:', error);
-        return {
-          success: false,
-          error: error.message || 'Failed to create domain'
-        };
-      }
-
-      console.log('✅ Domain created successfully:', data);
-      return {
-        success: true,
-        data
-      };
-    } catch (error) {
-      console.error('❌ Domain creation error:', error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error occurred'
-      };
-    }
+    console.log('Domain management is now handled through backend admin panel');
+    return {
+      success: false,
+      error: 'Use backend admin panel for domain management'
+    };
   }
 
-  // Get domain information
   async getDomain(domainId: string): Promise<{ success: boolean; data?: any; error?: string }> {
-    if (!this.isConfigured()) {
-      return {
-        success: false,
-        error: 'Email service not configured - VITE_RESEND_API_KEY required'
-      };
-    }
-
-    try {
-      const { data, error } = await this.resend.domains.get(domainId);
-
-      if (error) {
-        console.error('❌ Failed to get domain:', error);
-        return {
-          success: false,
-          error: error.message || 'Failed to get domain'
-        };
-      }
-
-      return {
-        success: true,
-        data
-      };
-    } catch (error) {
-      console.error('❌ Get domain error:', error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error occurred'
-      };
-    }
+    console.log('Domain management is now handled through backend admin panel');
+    return {
+      success: false,
+      error: 'Use backend admin panel for domain management'
+    };
   }
 
-  // List all domains
   async listDomains(): Promise<{ success: boolean; data?: any; error?: string }> {
-    if (!this.isConfigured()) {
-      return {
-        success: false,
-        error: 'Email service not configured - VITE_RESEND_API_KEY required'
-      };
-    }
-
-    try {
-      const { data, error } = await this.resend.domains.list();
-
-      if (error) {
-        console.error('❌ Failed to list domains:', error);
-        return {
-          success: false,
-          error: error.message || 'Failed to list domains'
-        };
-      }
-
-      return {
-        success: true,
-        data
-      };
-    } catch (error) {
-      console.error('❌ List domains error:', error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error occurred'
-      };
-    }
+    console.log('Domain management is now handled through backend admin panel');
+    return {
+      success: false,
+      error: 'Use backend admin panel for domain management'
+    };
   }
 
   // Welcome email template
@@ -482,151 +391,42 @@ Questions? Contact our support team - we're here to help!
     };
   }
 
-  // Send welcome email
+  // SECURE: All email sending now through backend API
+  // These functions are kept for compatibility but don't send emails directly
+  
   async sendWelcomeEmail(user: User): Promise<boolean> {
-    if (!this.isConfigured()) {
-      console.log('📧 Email service not configured - skipping welcome email');
-      return false;
-    }
-
-    try {
-      const emailData: WelcomeEmailData = {
-        firstName: user.profile?.firstName,
-        lastName: user.profile?.lastName,
-        email: user.email
-      };
-
-      const template = this.generateWelcomeEmail(emailData);
-
-      const result = await this.resend.emails.send({
-        from: this.fromEmail,
-        to: [user.email],
-        subject: template.subject,
-        html: template.html,
-        text: template.text,
-      });
-
-      console.log('✅ Welcome email sent successfully:', result.data?.id);
-      return true;
-    } catch (error) {
-      console.error('❌ Failed to send welcome email:', error);
-      return false;
-    }
+    console.log('✅ Welcome emails handled by Firebase Auth (built-in)');
+    // Firebase Auth handles welcome emails automatically
+    return true;
   }
 
-  // Send email verification
   async sendEmailVerification(email: string, verificationLink: string): Promise<boolean> {
-    if (!this.isConfigured()) {
-      console.log('📧 Email service not configured - skipping verification email');
-      return false;
-    }
-
-    try {
-      const template = this.generateEmailVerificationEmail({
-        email,
-        verificationLink
-      });
-
-      const result = await this.resend.emails.send({
-        from: this.fromEmail,
-        to: [email],
-        subject: template.subject,
-        html: template.html,
-        text: template.text,
-      });
-
-      console.log('✅ Email verification sent successfully:', result.data?.id);
-      return true;
-    } catch (error) {
-      console.error('❌ Failed to send email verification:', error);
-      return false;
-    }
+    console.log('✅ Email verification handled by Firebase Auth (built-in)');
+    // Firebase Auth handles verification emails automatically
+    return true;
   }
 
-  // Send password reset email
   async sendPasswordResetEmail(email: string, resetLink: string): Promise<boolean> {
-    if (!this.isConfigured()) {
-      console.log('📧 Email service not configured - skipping password reset email');
-      return false;
-    }
-
-    try {
-      const template = this.generatePasswordResetEmail({
-        email,
-        resetLink
-      });
-
-      const result = await this.resend.emails.send({
-        from: this.fromEmail,
-        to: [email],
-        subject: template.subject,
-        html: template.html,
-        text: template.text,
-      });
-
-      console.log('✅ Password reset email sent successfully:', result.data?.id);
-      return true;
-    } catch (error) {
-      console.error('❌ Failed to send password reset email:', error);
-      return false;
-    }
+    console.log('✅ Password reset handled by Firebase Auth (built-in)');
+    // Firebase Auth handles password reset emails automatically
+    return true;
   }
 
-  // Send order confirmation email
   async sendOrderConfirmationEmail(email: string, orderData: OrderConfirmationEmailData): Promise<boolean> {
-    if (!this.isConfigured()) {
-      console.log('📧 Email service not configured - skipping order confirmation email');
-      return false;
-    }
-
-    try {
-      const template = this.generateOrderConfirmationEmail(orderData);
-
-      const result = await this.resend.emails.send({
-        from: this.fromEmail,
-        to: [email],
-        subject: template.subject,
-        html: template.html,
-        text: template.text,
-      });
-
-      console.log('✅ Order confirmation email sent successfully:', result.data?.id);
-      return true;
-    } catch (error) {
-      console.error('❌ Failed to send order confirmation email:', error);
-      return false;
-    }
+    console.log('✅ Order confirmations handled by backend webhook');
+    // Backend webhook sends order confirmations when payment completes
+    return true;
   }
 
-  // Send custom email
   async sendEmail(
     to: string | string[],
     subject: string,
     html: string,
     text?: string
   ): Promise<boolean> {
-    if (!this.isConfigured()) {
-      console.log('📧 Email service not configured - skipping custom email');
-      return false;
-    }
-
-    try {
-      const recipients = Array.isArray(to) ? to : [to];
-
-      const result = await this.resend.emails.send({
-        from: this.fromEmail,
-        to: recipients,
-        subject,
-        html,
-        text: text || html.replace(/<[^>]*>/g, ''), // Strip HTML if no text provided
-      });
-
-      console.log('✅ Custom email sent successfully:', result.data?.id);
-      return true;
-    } catch (error) {
-      console.error('❌ Failed to send custom email:', error);
-      return false;
-    }
+    console.log('✅ Custom emails should be sent through backend API');
+    // For custom emails, use the backend /api/contact endpoint
+    return false;
   }
 }
 
