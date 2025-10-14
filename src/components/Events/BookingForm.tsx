@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from "react";
 import { generateId } from "../../utils/id";
-import { Resend } from "resend";
 
 export type BookingType =
   | "DJ Set"
@@ -59,54 +58,59 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
 
     setSubmitting(true);
     try {
-      const booking: BookingRequest = {
-        id: generateId(),
-        name: form.name!,
-        email: form.email!,
-        phone: form.phone,
-        organization: form.organization,
-        type: form.type as BookingType,
-        date: form.date || todayStr,
-        time: form.time!,
-        duration: Number(form.duration || 2),
-        locationType: (form.locationType || "In-Person") as
-          | "In-Person"
-          | "Virtual",
-        venueAddress: form.venueAddress,
-        budget: form.budget || "TBD",
-        notes: form.notes,
-        createdAt: new Date().toISOString(),
-      };
-
-      const resend = new Resend(import.meta.env.VITE_RESEND_API_KEY);
-
-      console.log(
-        "getting resend api key",
-        import.meta.env.VITE_RESEND_API_KEY
-      );
-
-      const { data, error } = await resend.emails.send({
-        from: `${form.name} <${form.email}>`,
-        to: ["robsanchez124@gmail.com"],
-        subject: "New Booking Request",
-        html: "<p>it works!</p>",
-        replyTo: form.email,
+      // SECURE: Send booking request to backend API (Resend API key stays on server)
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/bookings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          organization: form.organization,
+          bookingType: form.type,
+          eventDate: form.date || todayStr,
+          eventTime: form.time,
+          duration: Number(form.duration || 2),
+          locationType: form.locationType || "In-Person",
+          venueAddress: form.venueAddress,
+          budget: form.budget || "TBD",
+          notes: form.notes
+        })
       });
 
-      if (error) {
-        return console.error({ error });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to submit booking");
       }
 
-      console.log({ data });
+      const result = await response.json();
+      
+      if (result.ok) {
+        // Create booking object for local state
+        const booking: BookingRequest = {
+          id: result.booking.id || generateId(),
+          name: form.name!,
+          email: form.email!,
+          phone: form.phone,
+          organization: form.organization,
+          type: form.type as BookingType,
+          date: form.date || todayStr,
+          time: form.time!,
+          duration: Number(form.duration || 2),
+          locationType: (form.locationType || "In-Person") as "In-Person" | "Virtual",
+          venueAddress: form.venueAddress,
+          budget: form.budget || "TBD",
+          notes: form.notes,
+          createdAt: new Date().toISOString(),
+        };
 
-      const raw = localStorage.getItem("bookings") || "[]";
-      const list = JSON.parse(raw) as BookingRequest[];
-      list.push(booking);
-      localStorage.setItem("bookings", JSON.stringify(list));
-
-      setSuccess(booking);
-      onBooked?.(booking);
-    } catch {
+        setSuccess(booking);
+        onBooked?.(booking);
+      } else {
+        throw new Error("Failed to create booking");
+      }
+    } catch (error) {
+      console.error("Booking error:", error);
       setError("Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);

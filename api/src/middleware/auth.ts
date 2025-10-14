@@ -1,76 +1,72 @@
-import { Request, Response, NextFunction } from "express";
-import admin from "firebase-admin";
+import { Request, Response, NextFunction } from 'express';
+import { verifyUserToken } from '../lib/supabase.js';
+import { logger } from '../lib/logger.js';
 
-// Initialize Firebase Admin
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-    }),
-  });
-}
-
-export interface AuthRequest extends Request {
-  user?: admin.auth.DecodedIdToken;
-}
-
-export const authMiddleware = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    res.status(401).json({ error: "Unauthorized - No token provided" });
-    return;
-  }
-
-  const token = authHeader.split("Bearer ")[1];
-
+/**
+ * Middleware to verify Supabase JWT tokens
+ * Add this to routes that require authentication
+ */
+export async function authMiddleware(req: Request, res: Response, next: NextFunction) {
   try {
-    const decodedToken = await admin.auth().verifyIdToken(token);
-    req.user = decodedToken;
-    next();
-  } catch (error) {
-    console.error("Token verification failed:", error);
-    res.status(401).json({ error: "Unauthorized - Invalid token" });
-    return;
-  }
-};
+    const authHeader = req.headers.authorization;
 
-export const adminMiddleware = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  // First check if user is authenticated
-  if (!req.user) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
-
-  try {
-    // Check if user has admin role in Firestore
-    const userDoc = await admin
-      .firestore()
-      .collection("users")
-      .doc(req.user.uid)
-      .get();
-
-    const userData = userDoc.data();
-
-    if (!userData || userData.role !== "admin") {
-      res.status(403).json({ error: "Forbidden - Admin access required" });
-      return;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({
+        ok: false,
+        error: 'UNAUTHORIZED',
+        message: 'Missing or invalid authorization header'
+      });
     }
 
+    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+
+    const user = await verifyUserToken(token);
+
+    if (!user) {
+      return res.status(401).json({
+        ok: false,
+        error: 'INVALID_TOKEN',
+        message: 'Invalid or expired token'
+      });
+    }
+
+    // Attach user to request object
+    (req as any).user = user;
+    
     next();
   } catch (error) {
-    console.error("Admin check failed:", error);
-    res.status(500).json({ error: "Failed to verify admin status" });
-    return;
+    logger.error('Auth middleware error', error);
+    res.status(500).json({
+      ok: false,
+      error: 'AUTH_ERROR',
+      message: 'Authentication failed'
+    });
   }
-};
+}
+
+/**
+ * Middleware for admin-only routes
+ * Check if user has admin role (implement based on your needs)
+ */
+export async function adminMiddleware(req: Request, res: Response, next: NextFunction) {
+  try {
+    const user = (req as any).user;
+
+    if (!user) {
+      return res.status(401).json({
+        ok: false,
+        error: 'UNAUTHORIZED',
+        message: 'Authentication required'
+      });
+    }
+
+    // TODO: Check if user has admin role
+    // For now, you could check user metadata or a separate admins table
+    // Example: if (user.app_metadata?.role !== 'admin') { return res.status(403)... }
+
+    next();
+  } catch (error) {
+    logger.error('Admin middleware error', error);
+    res.status(500).json({ ok: false, error: 'AUTH_ERROR' });
+  }
+}

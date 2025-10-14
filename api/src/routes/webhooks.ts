@@ -1,121 +1,125 @@
-import { Router } from "express";
-import Stripe from "stripe";
-import { Request, Response } from "express";
+import { Router, Request, Response } from 'express';
+import { stripe } from '../lib/stripe.js';
+import { supabase } from '../lib/supabase.js';
+import { sendOrderConfirmation } from '../lib/mail.js';
+import { env } from '../lib/env.js';
+import { logger } from '../lib/logger.js';
+import Stripe from 'stripe';
 
-const router = Router();
+export const webhooksRouter = Router();
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2023-10-16",
-});
+/**
+ * POST /webhooks/stripe
+ * Handle Stripe webhook events
+ * IMPORTANT: This route must use express.raw() middleware, not express.json()
+ */
+webhooksRouter.post('/webhooks/stripe', async (req: Request, res: Response) => {
+  const sig = req.headers['stripe-signature'];
 
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-
-// Stripe webhook handler
-router.post("/stripe", async (req: Request, res: Response) => {
-  const sig = req.headers["stripe-signature"] as string;
+  if (!sig) {
+    logger.warn('Webhook called without signature');
+    return res.status(400).send('Missing stripe-signature header');
+  }
 
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    // Verify webhook signature
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      env.STRIPE_WEBHOOK_SECRET
+    );
   } catch (err) {
-    console.error("Webhook signature verification failed:", err);
-    return res
-      .status(400)
-      .send(
-        `Webhook Error: ${err instanceof Error ? err.message : "Unknown error"}`
-      );
+    const error = err as Error;
+    logger.error('Webhook signature verification failed', error);
+    return res.status(400).send(`Webhook Error: ${error.message}`);
   }
 
-  // Handle the event
+  // Handle events
   try {
     switch (event.type) {
-      case "payment_intent.succeeded":
-        const paymentIntent = event.data.object as Stripe.PaymentIntent;
-        console.log("💰 Payment succeeded:", paymentIntent.id);
-        // Update order status in database
-        await handlePaymentSuccess(paymentIntent);
-        break;
-
-      case "payment_intent.payment_failed":
-        const failedPayment = event.data.object as Stripe.PaymentIntent;
-        console.log("❌ Payment failed:", failedPayment.id);
-        // Handle payment failure
-        await handlePaymentFailure(failedPayment);
-        break;
-
-      case "checkout.session.completed":
+      case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
-        console.log("✅ Checkout completed:", session.id);
-        // Fulfill the order
-        await fulfillOrder(session);
-        break;
+        logger.info('Checkout session completed', { sessionId: session.id });
 
-      case "customer.subscription.created":
-      case "customer.subscription.updated":
-      case "customer.subscription.deleted":
-        const subscription = event.data.object as Stripe.Subscription;
-        console.log("📊 Subscription event:", event.type, subscription.id);
-        // Handle subscription changes
-        await handleSubscriptionChange(subscription, event.type);
+        // Create order record in database
+        const { data: order, error: orderError } = await supabase
+          .from('orders')
+          .insert([{
+            stripe_session_id: session.id,
+            stripe_payment_intent_id: session.payment_intent as string,
+            customer_email: session.customer_details?.email || session.customer_email,
+            total_cents: session.amount_total || 0,
+            status: 'completed'
+          }])
+          .select()
+          .single();
+
+        if (orderError) {
+          logger.error('Failed to create order record', orderError);
+        } else {
+          logger.info('Order record created', { orderId: order.id });
+
+          // Send order confirmation email
+          if (session.customer_details?.email) {
+            try {
+              await sendOrderConfirmation({
+                email: session.customer_details.email,
+                orderNumber: order.id,
+                items: [], // TODO: Get items from session line_items
+                total: (session.amount_total || 0) / 100
+              });
+            } catch (emailError) {
+              logger.warn('Order confirmation email failed', { error: emailError });
+            }
+          }
+        }
         break;
+      }
+
+      case 'payment_intent.succeeded': {
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        logger.info('Payment intent succeeded', { paymentIntentId: paymentIntent.id });
+        
+        // Update order status if exists
+        await supabase
+          .from('orders')
+          .update({ status: 'completed' })
+          .eq('stripe_payment_intent_id', paymentIntent.id);
+        break;
+      }
+
+      case 'payment_intent.payment_failed': {
+        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        logger.warn('Payment intent failed', { paymentIntentId: paymentIntent.id });
+        
+        await supabase
+          .from('orders')
+          .update({ status: 'failed' })
+          .eq('stripe_payment_intent_id', paymentIntent.id);
+        break;
+      }
+
+      case 'customer.subscription.created':
+      case 'customer.subscription.updated':
+      case 'customer.subscription.deleted': {
+        const subscription = event.data.object as Stripe.Subscription;
+        logger.info('Subscription event', { type: event.type, subscriptionId: subscription.id });
+        // TODO: Handle subscription logic
+        break;
+      }
 
       default:
-        console.log(`Unhandled event type ${event.type}`);
+        logger.debug('Unhandled event type', { type: event.type });
     }
 
-    return res.json({ received: true });
+    // Always return 200 to acknowledge receipt
+    res.json({ received: true, eventType: event.type });
+    
   } catch (error) {
-    console.error("Error processing webhook:", error);
-    return res.status(500).json({ error: "Webhook processing failed" });
+    logger.error('Webhook handler error', error);
+    // Still return 200 to prevent Stripe from retrying
+    res.json({ received: true, error: 'Handler error' });
   }
 });
-
-// Helper functions
-async function handlePaymentSuccess(paymentIntent: Stripe.PaymentIntent) {
-  // TODO: Update order status in Firestore
-  // TODO: Send confirmation email
-  // TODO: Update inventory
-  console.log("Processing successful payment:", {
-    id: paymentIntent.id,
-    amount: paymentIntent.amount / 100,
-    currency: paymentIntent.currency,
-    metadata: paymentIntent.metadata,
-  });
-}
-
-async function handlePaymentFailure(paymentIntent: Stripe.PaymentIntent) {
-  // TODO: Update order status
-  // TODO: Send failure notification
-  console.log("Processing failed payment:", {
-    id: paymentIntent.id,
-    error: paymentIntent.last_payment_error?.message,
-  });
-}
-
-async function fulfillOrder(session: Stripe.Checkout.Session) {
-  // TODO: Create order in database
-  // TODO: Send order confirmation
-  // TODO: Update inventory
-  console.log("Fulfilling order from checkout session:", {
-    id: session.id,
-    customerEmail: session.customer_email,
-    amount: session.amount_total ? session.amount_total / 100 : 0,
-    metadata: session.metadata,
-  });
-}
-
-async function handleSubscriptionChange(
-  subscription: Stripe.Subscription,
-  eventType: string
-) {
-  // TODO: Update user subscription status
-  console.log("Processing subscription change:", {
-    type: eventType,
-    id: subscription.id,
-    status: subscription.status,
-    customerId: subscription.customer,
-  });
-}
-
-export { router as webhookRouter };

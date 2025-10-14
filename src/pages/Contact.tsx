@@ -15,8 +15,14 @@ const Contact: React.FC = () => {
     setError("");
     setStatus("sending");
     try {
+      // SECURE: Contact form now goes through backend API
       await api.sendContact({ email, name, message });
       setStatus("sent");
+      
+      // Reset form on success
+      setName("");
+      setEmail("");
+      setMessage("");
     } catch (err) {
       setStatus("error");
       setError(err instanceof Error ? err.message : "Failed to send message");

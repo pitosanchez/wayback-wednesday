@@ -1,38 +1,30 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
+import { logger } from '../lib/logger.js';
+import { env } from '../lib/env.js';
 
-export class AppError extends Error {
-  constructor(
-    public statusCode: number,
-    public message: string,
-    public isOperational = true
-  ) {
-    super(message);
-    Object.setPrototypeOf(this, AppError.prototype);
-  }
-}
-
-export const errorHandler = (
-  err: Error | AppError,
+export function errorHandler(
+  err: Error,
   _req: Request,
   res: Response,
   _next: NextFunction
-): void => {
-  if (err instanceof AppError) {
-    res.status(err.statusCode).json({
-      error: err.message,
-      status: err.statusCode,
-    });
-    return;
-  }
-
-  // Log unexpected errors
-  console.error("Unexpected error:", err);
+) {
+  logger.error('Unhandled error', err);
 
   // Don't leak error details in production
-  const isDevelopment = process.env.NODE_ENV === "development";
+  const isDevelopment = env.NODE_ENV === 'development';
 
   res.status(500).json({
-    error: isDevelopment ? err.message : "Internal server error",
-    stack: isDevelopment ? err.stack : undefined,
+    ok: false,
+    error: 'INTERNAL_SERVER_ERROR',
+    message: isDevelopment ? err.message : 'An unexpected error occurred',
+    ...(isDevelopment && { stack: err.stack })
   });
-};
+}
+
+export function notFoundHandler(_req: Request, res: Response) {
+  res.status(404).json({
+    ok: false,
+    error: 'NOT_FOUND',
+    message: 'Route not found'
+  });
+}
