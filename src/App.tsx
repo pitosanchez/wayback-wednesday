@@ -24,7 +24,7 @@ import CartDemo from "./components/Cart/CartDemo";
 import StripeDemo from "./components/Stripe/StripeDemo";
 import ProductVariantsDemo from "./pages/ProductVariantsDemo";
 import InventoryDemo from "./pages/InventoryDemo";
-import { UserMenu, ProtectedRoute } from "./components/Auth";
+import { ProtectedRoute } from "./components/Auth";
 import AdminRoute from "./components/Auth/AdminRoute";
 import { AdminAuthProvider, useAdminAuth } from "./context/AdminAuthContext";
 import Dashboard from "./pages/Dashboard";
