@@ -6,7 +6,7 @@ import rateLimit from "express-rate-limit";
 // import bodyParser from "body-parser"; // not needed here; raw used on specific route
 import { stripeRouter } from "./routes/stripe";
 import { ordersRouter } from "./routes/orders";
-import { webhookRouter } from "./routes/webhooks";
+import { webhooksRouter } from "./routes/webhooks";
 import { errorHandler } from "./middleware/errorHandler";
 import { authMiddleware } from "./middleware/auth";
 import Stripe from "stripe";
@@ -62,7 +62,7 @@ app.get("/health", (_req: Request, res: Response) => {
 // API routes
 app.use("/api/stripe", stripeRouter);
 app.use("/api/orders", authMiddleware, ordersRouter);
-app.use("/api/webhooks", webhookRouter);
+app.use("/api/webhooks", webhooksRouter);
 app.use("/api", contactRouter);
 
 // Contact handled in contactRouter
@@ -92,7 +92,7 @@ app.post(
       if (!stripeSecret) {
         return res.status(503).json({ error: "Stripe not configured" });
       }
-      const stripe = new Stripe(stripeSecret, { apiVersion: "2023-10-16" });
+      const stripe = new Stripe(stripeSecret, { apiVersion: "2025-02-24.acacia" });
       const session = await stripe.checkout.sessions.create({
         mode: "payment",
         line_items: [{ price: priceId, quantity }],
