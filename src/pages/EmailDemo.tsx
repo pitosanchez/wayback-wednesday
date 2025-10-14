@@ -1,13 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import { emailService } from "../services/emailService";
 import type { OrderConfirmationEmailData } from "../services/emailService";
+
+// Types for domain management display (local-only; data now handled by backend)
+type DomainStatus = "verified" | "pending" | "unverified" | string;
+interface DNSRecord {
+  type: string;
+  name: string;
+  value: string;
+}
+interface Domain {
+  id: string;
+  name: string;
+  status: DomainStatus;
+  created_at: string;
+  region?: string;
+  records?: DNSRecord[];
+}
 
 const EmailDemo: React.FC = () => {
   const { authState } = useAuth();
   const [sendingEmail, setSendingEmail] = useState<string | null>(null);
   const [domainAction, setDomainAction] = useState<string | null>(null);
-  const [domains, setDomains] = useState<any[]>([]);
+  const [domains, setDomains] = useState<Domain[]>([]);
   const [newDomainName, setNewDomainName] = useState("gbothepro.com");
   const [emailResults, setEmailResults] = useState<
     Array<{
@@ -18,12 +34,15 @@ const EmailDemo: React.FC = () => {
     }>
   >([]);
 
-  const addResult = (type: string, success: boolean, message: string) => {
-    setEmailResults((prev) => [
-      { type, success, message, timestamp: new Date() },
-      ...prev.slice(0, 9), // Keep only last 10 results
-    ]);
-  };
+  const addResult = useCallback(
+    (type: string, success: boolean, message: string) => {
+      setEmailResults((prev) => [
+        { type, success, message, timestamp: new Date() },
+        ...prev.slice(0, 9), // Keep only last 10 results
+      ]);
+    },
+    []
+  );
 
   const sendWelcomeEmail = async () => {
     if (!authState.user) {
@@ -134,7 +153,7 @@ const EmailDemo: React.FC = () => {
   };
 
   // Domain management functions
-  const loadDomains = async () => {
+  const loadDomains = useCallback(async () => {
     setDomainAction("loading");
     try {
       const result = await emailService.listDomains();
@@ -161,7 +180,7 @@ const EmailDemo: React.FC = () => {
     } finally {
       setDomainAction(null);
     }
-  };
+  }, [addResult]);
 
   const createDomain = async () => {
     if (!newDomainName.trim()) {
@@ -202,7 +221,7 @@ const EmailDemo: React.FC = () => {
     if (emailService.isConfigured()) {
       loadDomains();
     }
-  }, []);
+  }, [loadDomains]);
 
   const isConfigured = emailService.isConfigured();
 
@@ -486,7 +505,7 @@ const EmailDemo: React.FC = () => {
                             </p>
                             <div className="space-y-2 text-xs">
                               {domain.records.map(
-                                (record: any, index: number) => (
+                                (record: DNSRecord, index: number) => (
                                   <div
                                     key={index}
                                     className="font-mono bg-white p-2 rounded"

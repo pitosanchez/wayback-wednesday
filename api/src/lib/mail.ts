@@ -1,5 +1,5 @@
-import { Resend } from 'resend';
-import { env } from './env.js';
+import { Resend } from "resend";
+import { env } from "./env.js";
 
 // Initialize Resend client (BACKEND ONLY - NEVER EXPOSE TO FRONTEND)
 export const resend = new Resend(env.RESEND_API_KEY);
@@ -16,7 +16,7 @@ export async function sendContactEmail(params: {
 }) {
   const { name, email, message, testTo } = params;
   const to = resolveRecipient(testTo);
-  
+
   return resend.emails.send({
     from: env.EMAIL_FROM,
     to,
@@ -27,9 +27,9 @@ export async function sendContactEmail(params: {
       <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Message:</strong></p>
-      <p>${message.replace(/\n/g, '<br>')}</p>
+      <p>${message.replace(/\n/g, "<br>")}</p>
     `,
-    text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+    text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
   });
 }
 
@@ -45,9 +45,10 @@ export async function sendBookingEmail(params: {
   notes?: string;
   testTo?: string;
 }) {
-  const { name, email, bookingType, eventDate, eventTime, notes, testTo } = params;
+  const { name, email, bookingType, eventDate, eventTime, notes, testTo } =
+    params;
   const to = resolveRecipient(testTo);
-  
+
   return resend.emails.send({
     from: env.EMAIL_FROM,
     to,
@@ -60,9 +61,15 @@ export async function sendBookingEmail(params: {
       <p><strong>Type:</strong> ${bookingType}</p>
       <p><strong>Date:</strong> ${eventDate}</p>
       <p><strong>Time:</strong> ${eventTime}</p>
-      ${notes ? `<p><strong>Notes:</strong><br>${notes.replace(/\n/g, '<br>')}</p>` : ''}
+      ${
+        notes
+          ? `<p><strong>Notes:</strong><br>${notes.replace(/\n/g, "<br>")}</p>`
+          : ""
+      }
     `,
-    text: `Booking Request\n\nName: ${name}\nEmail: ${email}\nType: ${bookingType}\nDate: ${eventDate}\nTime: ${eventTime}\n${notes ? `\nNotes:\n${notes}` : ''}`
+    text: `Booking Request\n\nName: ${name}\nEmail: ${email}\nType: ${bookingType}\nDate: ${eventDate}\nTime: ${eventTime}\n${
+      notes ? `\nNotes:\n${notes}` : ""
+    }`,
   });
 }
 
@@ -72,17 +79,17 @@ export async function sendBookingEmail(params: {
 export async function sendOrderConfirmation(params: {
   email: string;
   orderNumber: string;
-  items: Array<{name: string; quantity: number; price: number}>;
+  items: Array<{ name: string; quantity: number; price: number }>;
   total: number;
   testTo?: string;
 }) {
   const { email, orderNumber, items, total, testTo } = params;
   const to = resolveRecipient(testTo) || email;
-  
+
   const itemsList = items
-    .map(item => `${item.name} x${item.quantity} - $${item.price.toFixed(2)}`)
-    .join('\n');
-  
+    .map((item) => `${item.name} x${item.quantity} - $${item.price.toFixed(2)}`)
+    .join("\n");
+
   return resend.emails.send({
     from: env.EMAIL_FROM,
     to,
@@ -92,23 +99,34 @@ export async function sendOrderConfirmation(params: {
       <p><strong>Order Number:</strong> ${orderNumber}</p>
       <h3>Items:</h3>
       <ul>
-        ${items.map(item => `<li>${item.name} x${item.quantity} - $${item.price.toFixed(2)}</li>`).join('')}
+        ${items
+          .map(
+            (item) =>
+              `<li>${item.name} x${item.quantity} - $${item.price.toFixed(
+                2
+              )}</li>`
+          )
+          .join("")}
       </ul>
       <p><strong>Total:</strong> $${total.toFixed(2)}</p>
       <p>We'll send you tracking information once your order ships!</p>
     `,
-    text: `Order Confirmation #${orderNumber}\n\nItems:\n${itemsList}\n\nTotal: $${total.toFixed(2)}\n\nWe'll send you tracking information once your order ships!`
+    text: `Order Confirmation #${orderNumber}\n\nItems:\n${itemsList}\n\nTotal: $${total.toFixed(
+      2
+    )}\n\nWe'll send you tracking information once your order ships!`,
   });
 }
 
-console.log('✅ Resend email service initialized');
+console.log("✅ Resend email service initialized");
 
 function resolveRecipient(testTo?: string): string | undefined {
   if (!testTo) return env.CONTACT_TO;
-  const allow = (env.ALLOWED_TEST_EMAILS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  const allow = (env.ALLOWED_TEST_EMAILS || "")
+    .split(",")
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
   if (allow.includes(testTo.trim().toLowerCase())) {
     return testTo.trim();
   }
   return env.CONTACT_TO;
 }
-

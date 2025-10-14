@@ -59,26 +59,29 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
     setSubmitting(true);
     try {
       // SECURE: Send booking request to backend API (Resend API key stays on server)
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/bookings`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          organization: form.organization,
-          bookingType: form.type,
-          eventDate: form.date || todayStr,
-          eventTime: form.time,
-          duration: Number(form.duration || 2),
-          locationType: form.locationType || "In-Person",
-          venueAddress: form.venueAddress,
-          budget: form.budget || "TBD",
-          notes: form.notes,
-          // Optional test recipient override
-          testTo: import.meta.env.VITE_TEST_EMAIL || undefined
-        })
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/bookings`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: form.name,
+            email: form.email,
+            phone: form.phone,
+            organization: form.organization,
+            bookingType: form.type,
+            eventDate: form.date || todayStr,
+            eventTime: form.time,
+            duration: Number(form.duration || 2),
+            locationType: form.locationType || "In-Person",
+            venueAddress: form.venueAddress,
+            budget: form.budget || "TBD",
+            notes: form.notes,
+            // Optional test recipient override
+            testTo: import.meta.env.VITE_TEST_EMAIL || undefined,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -86,7 +89,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
       }
 
       const result = await response.json();
-      
+
       if (result.ok) {
         // Create booking object for local state
         const booking: BookingRequest = {
@@ -99,7 +102,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
           date: form.date || todayStr,
           time: form.time!,
           duration: Number(form.duration || 2),
-          locationType: (form.locationType || "In-Person") as "In-Person" | "Virtual",
+          locationType: (form.locationType || "In-Person") as
+            | "In-Person"
+            | "Virtual",
           venueAddress: form.venueAddress,
           budget: form.budget || "TBD",
           notes: form.notes,

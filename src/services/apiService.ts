@@ -30,7 +30,7 @@ export async function sendContact(payload: {
 }): Promise<{ ok: boolean }> {
   const url = new URL(`${API_BASE}/api/contact`);
   const testTo = import.meta.env.VITE_TEST_EMAIL as string | undefined;
-  if (testTo) url.searchParams.set('testTo', testTo);
+  if (testTo) url.searchParams.set("testTo", testTo);
   const res = await fetch(url.toString(), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -47,5 +47,3 @@ export default {
   createCheckoutSession,
   sendContact,
 };
-
-
