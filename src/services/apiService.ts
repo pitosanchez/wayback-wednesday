@@ -28,7 +28,10 @@ export async function sendContact(payload: {
   name: string;
   message: string;
 }): Promise<{ ok: boolean }> {
-  const res = await fetch(`${API_BASE}/api/contact`, {
+  const url = new URL(`${API_BASE}/api/contact`);
+  const testTo = import.meta.env.VITE_TEST_EMAIL as string | undefined;
+  if (testTo) url.searchParams.set('testTo', testTo);
+  const res = await fetch(url.toString(), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),

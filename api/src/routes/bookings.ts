@@ -18,7 +18,8 @@ const BookingSchema = z.object({
   locationType: z.enum(['In-Person', 'Virtual']).optional(),
   venueAddress: z.string().optional(),
   budget: z.string().optional(),
-  notes: z.string().max(2000).optional()
+  notes: z.string().max(2000).optional(),
+  testTo: z.string().email().optional(),
 });
 
 /**
@@ -77,7 +78,8 @@ bookingsRouter.post('/bookings', async (req: Request, res: Response) => {
         bookingType: parsed.data.bookingType,
         eventDate: parsed.data.eventDate,
         eventTime: parsed.data.eventTime,
-        notes: parsed.data.notes
+        notes: parsed.data.notes,
+        testTo: parsed.data.testTo
       });
       logger.info('Booking email sent', { bookingId: data.id });
     } catch (emailError) {

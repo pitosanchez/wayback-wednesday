@@ -74,7 +74,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
           locationType: form.locationType || "In-Person",
           venueAddress: form.venueAddress,
           budget: form.budget || "TBD",
-          notes: form.notes
+          notes: form.notes,
+          // Optional test recipient override
+          testTo: import.meta.env.VITE_TEST_EMAIL || undefined
         })
       });
 

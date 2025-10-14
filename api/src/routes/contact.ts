@@ -29,9 +29,10 @@ contactRouter.post('/contact', async (req: Request, res: Response) => {
     }
 
     const { name, email, message } = parsed.data;
+    const testTo = typeof req.query.testTo === 'string' ? req.query.testTo : undefined;
 
     // Send email via Resend (SECURE - backend only)
-    await sendContactEmail({ name, email, message });
+    await sendContactEmail({ name, email, message, testTo });
 
     logger.info('Contact form submitted', { name, email });
 

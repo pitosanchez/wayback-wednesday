@@ -20,6 +20,7 @@ const EnvSchema = z.object({
   RESEND_API_KEY: z.string().startsWith('re_'),
   EMAIL_FROM: z.string().min(1),
   CONTACT_TO: z.string().email(),
+  ALLOWED_TEST_EMAILS: z.string().optional(),
   
   // Frontend
   FRONTEND_URL: z.string().url(),
@@ -38,4 +39,7 @@ console.log('✅ Environment validated successfully');
 console.log(`📍 Environment: ${env.NODE_ENV}`);
 console.log(`🌐 Frontend URL: ${env.FRONTEND_URL}`);
 console.log(`📧 Email From: ${env.EMAIL_FROM}`);
+if (env.ALLOWED_TEST_EMAILS) {
+  console.log(`🧪 Allowed test recipients: ${env.ALLOWED_TEST_EMAILS}`);
+}
 

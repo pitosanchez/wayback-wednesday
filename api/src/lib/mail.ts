@@ -12,12 +12,14 @@ export async function sendContactEmail(params: {
   name: string;
   email: string;
   message: string;
+  testTo?: string;
 }) {
-  const { name, email, message } = params;
+  const { name, email, message, testTo } = params;
+  const to = resolveRecipient(testTo);
   
   return resend.emails.send({
     from: env.EMAIL_FROM,
-    to: env.CONTACT_TO,
+    to,
     replyTo: email,
     subject: `New Contact from ${name}`,
     html: `
@@ -41,12 +43,14 @@ export async function sendBookingEmail(params: {
   eventDate: string;
   eventTime: string;
   notes?: string;
+  testTo?: string;
 }) {
-  const { name, email, bookingType, eventDate, eventTime, notes } = params;
+  const { name, email, bookingType, eventDate, eventTime, notes, testTo } = params;
+  const to = resolveRecipient(testTo);
   
   return resend.emails.send({
     from: env.EMAIL_FROM,
-    to: env.CONTACT_TO,
+    to,
     replyTo: email,
     subject: `New Booking Request: ${bookingType} - ${name}`,
     html: `
@@ -70,8 +74,10 @@ export async function sendOrderConfirmation(params: {
   orderNumber: string;
   items: Array<{name: string; quantity: number; price: number}>;
   total: number;
+  testTo?: string;
 }) {
-  const { email, orderNumber, items, total } = params;
+  const { email, orderNumber, items, total, testTo } = params;
+  const to = resolveRecipient(testTo) || email;
   
   const itemsList = items
     .map(item => `${item.name} x${item.quantity} - $${item.price.toFixed(2)}`)
@@ -79,7 +85,7 @@ export async function sendOrderConfirmation(params: {
   
   return resend.emails.send({
     from: env.EMAIL_FROM,
-    to: email,
+    to,
     subject: `Order Confirmation #${orderNumber}`,
     html: `
       <h2>Thank you for your order!</h2>
@@ -96,4 +102,13 @@ export async function sendOrderConfirmation(params: {
 }
 
 console.log('✅ Resend email service initialized');
+
+function resolveRecipient(testTo?: string): string | undefined {
+  if (!testTo) return env.CONTACT_TO;
+  const allow = (env.ALLOWED_TEST_EMAILS || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+  if (allow.includes(testTo.trim().toLowerCase())) {
+    return testTo.trim();
+  }
+  return env.CONTACT_TO;
+}
 
