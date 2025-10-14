@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { User } from "../types/auth";
 
 // SECURITY NOTE: This service no longer handles email sending directly
 // All email operations now go through the secure backend API at /api/*
 // Email templates are in backend: api/src/lib/mail.ts
+//
+// This file maintains API compatibility with stub methods
+// Parameters are intentionally unused as functionality moved to backend
 
 export interface EmailTemplate {
   subject: string;
@@ -46,7 +50,7 @@ class EmailService {
   // Domain management is now handled through backend admin panel
   async createDomain(
     _domainName: string
-  ): Promise<{ success: boolean; data?: any; error?: string }> {
+  ): Promise<{ success: boolean; data?: unknown; error?: string }> {
     return {
       success: false,
       error: "Domain management is handled through backend admin panel",
@@ -55,7 +59,7 @@ class EmailService {
 
   async getDomain(
     _domainId: string
-  ): Promise<{ success: boolean; data?: any; error?: string }> {
+  ): Promise<{ success: boolean; data?: unknown; error?: string }> {
     return {
       success: false,
       error: "Domain management is handled through backend admin panel",
@@ -64,7 +68,7 @@ class EmailService {
 
   async listDomains(): Promise<{
     success: boolean;
-    data?: any;
+    data?: unknown;
     error?: string;
   }> {
     return {
