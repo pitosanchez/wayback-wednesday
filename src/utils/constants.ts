@@ -9,6 +9,7 @@ export const MAIN_NAV_ITEMS = [
   { name: "Shop", path: "/shop" },
   { name: "Events", path: "/events" },
   { name: "Wayback Whensday", path: "/history" },
+  { name: "Contact", path: "/contact" },
   // { name: "Collections", path: "/collections" },
 ] as const;
 
