@@ -28,19 +28,51 @@ export async function sendContact(payload: {
   name: string;
   message: string;
 }): Promise<{ ok: boolean }> {
+  if (!API_BASE) {
+    throw new Error(
+      "API URL is not configured. Please set VITE_API_URL environment variable."
+    );
+  }
+
   const url = new URL(`${API_BASE}/api/contact`);
   const testTo = import.meta.env.VITE_TEST_EMAIL as string | undefined;
   if (testTo) url.searchParams.set("testTo", testTo);
-  const res = await fetch(url.toString(), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Contact submission failed: ${res.status} ${text}`);
+
+  try {
+    const res = await fetch(url.toString(), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      let errorMessage = `Contact submission failed (${res.status})`;
+      try {
+        const errorData = await res.json();
+        if (errorData.message) {
+          errorMessage = errorData.message;
+        } else if (errorData.error) {
+          errorMessage = errorData.error;
+        }
+      } catch {
+        const text = await res.text();
+        if (text) errorMessage = text;
+      }
+      throw new Error(errorMessage);
+    }
+
+    return (await res.json()) as { ok: boolean };
+  } catch (error) {
+    if (
+      error instanceof TypeError &&
+      error.message.includes("Failed to fetch")
+    ) {
+      throw new Error(
+        "Unable to connect to the server. Please check your internet connection and try again."
+      );
+    }
+    throw error;
   }
-  return (await res.json()) as { ok: boolean };
 }
 
 export default {

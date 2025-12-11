@@ -41,7 +41,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
     email: "",
     type: "DJ Set",
     date: todayStr,
-    time: "19:00",
+    time: "7:00 PM",
     duration: 2,
     locationType: "In-Person",
     budget: "TBD",
@@ -58,34 +58,49 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
 
     setSubmitting(true);
     try {
+      const apiUrl = import.meta.env.VITE_API_URL;
+      if (!apiUrl) {
+        throw new Error(
+          "API URL is not configured. Please set VITE_API_URL environment variable."
+        );
+      }
+
       // SECURE: Send booking request to backend API (Resend API key stays on server)
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/bookings`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: form.name,
-            email: form.email,
-            phone: form.phone,
-            organization: form.organization,
-            bookingType: form.type,
-            eventDate: form.date || todayStr,
-            eventTime: form.time,
-            duration: Number(form.duration || 2),
-            locationType: form.locationType || "In-Person",
-            venueAddress: form.venueAddress,
-            budget: form.budget || "TBD",
-            notes: form.notes,
-            // Optional test recipient override
-            testTo: import.meta.env.VITE_TEST_EMAIL || undefined,
-          }),
-        }
-      );
+      const response = await fetch(`${apiUrl}/api/bookings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          organization: form.organization,
+          bookingType: form.type,
+          eventDate: form.date || todayStr,
+          eventTime: form.time,
+          duration: Number(form.duration || 2),
+          locationType: form.locationType || "In-Person",
+          venueAddress: form.venueAddress,
+          budget: form.budget || "TBD",
+          notes: form.notes,
+          // Optional test recipient override
+          testTo: import.meta.env.VITE_TEST_EMAIL || undefined,
+        }),
+      });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to submit booking");
+        let errorMessage = `Booking submission failed (${response.status})`;
+        try {
+          const errorData = await response.json();
+          if (errorData.message) {
+            errorMessage = errorData.message;
+          } else if (errorData.error) {
+            errorMessage = errorData.error;
+          }
+        } catch {
+          const text = await response.text();
+          if (text) errorMessage = text;
+        }
+        throw new Error(errorMessage);
       }
 
       const result = await response.json();
@@ -118,7 +133,20 @@ const BookingForm: React.FC<BookingFormProps> = ({ onBooked }) => {
       }
     } catch (error) {
       console.error("Booking error:", error);
-      setError("Something went wrong. Please try again.");
+      if (
+        error instanceof TypeError &&
+        error.message.includes("Failed to fetch")
+      ) {
+        setError(
+          "Unable to connect to the server. Please check your internet connection and try again."
+        );
+      } else {
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Something went wrong. Please try again."
+        );
+      }
     } finally {
       setSubmitting(false);
     }

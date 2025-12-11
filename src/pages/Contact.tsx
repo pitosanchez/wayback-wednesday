@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../services/apiService";
 
 const Contact: React.FC = () => {
@@ -50,10 +51,26 @@ const Contact: React.FC = () => {
             </div>
             
             {/* Whitespace - Clear description */}
-            <p className="text-base sm:text-lg lg:text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            <p className="text-base sm:text-lg lg:text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-6">
               Send a message and we'll get back to you. This uses our email service
               powered by Resend.
             </p>
+
+            {/* Link to Booking Form */}
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 sm:p-6 max-w-2xl mx-auto lg:mx-0">
+              <p className="text-sm sm:text-base text-blue-900 mb-3">
+                <strong>Need to book an event?</strong> Looking for DJ services, live performances, or event hosting?
+              </p>
+              <Link
+                to="/events"
+                className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold rounded-lg transition-all hover:scale-105 shadow-md"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>Go to Booking Form</span>
+              </Link>
+            </div>
           </header>
 
           {status === "sent" ? (
