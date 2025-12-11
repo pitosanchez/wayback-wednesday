@@ -5,6 +5,8 @@ import waybackSnapbackImage from "../assets/images/blk-wayback-hat.webp?url";
 import waybackTruckerImage from "../assets/images/hat-1.webp?url";
 import spaceInvadersTeeImage from "../assets/images/space-invader-t-blk.webp?url";
 import pandaToteImage from "../assets/images/tote-bag.webp?url";
+import gboRrHoodieImage from "../assets/images/gbo-rr-hoodie.webp?url";
+import gboSweatshirtImage from "../assets/images/gbo-sweatshirt.webp?url";
 import ProductCard from "../components/Product/ProductCard";
 import type { Product } from "../types/product";
 import { useState, useEffect, useMemo } from "react";
@@ -233,6 +235,86 @@ const Shop = () => {
           },
         ],
       },
+      {
+        id: "gbo-rr-hoodie",
+        name: "Gbo and RR Hoodie",
+        basePrice: 75,
+        category: "Apparel",
+        image: gboRrHoodieImage,
+        description:
+          "Premium hoodie featuring Gbo and RR design. Comfortable and stylish for everyday wear.",
+        tags: ["hoodie", "gbo", "rr", "apparel"],
+        variants: [
+          {
+            id: "gbo-rr-hoodie-s",
+            size: "S",
+            color: "Black",
+            stock: 10,
+            sku: "WB-GBO-RR-HOOD-S",
+          },
+          {
+            id: "gbo-rr-hoodie-m",
+            size: "M",
+            color: "Black",
+            stock: 15,
+            sku: "WB-GBO-RR-HOOD-M",
+          },
+          {
+            id: "gbo-rr-hoodie-l",
+            size: "L",
+            color: "Black",
+            stock: 12,
+            sku: "WB-GBO-RR-HOOD-L",
+          },
+          {
+            id: "gbo-rr-hoodie-xl",
+            size: "XL",
+            color: "Black",
+            stock: 8,
+            sku: "WB-GBO-RR-HOOD-XL",
+          },
+        ],
+      },
+      {
+        id: "gbo-sweatshirt",
+        name: "Gbo and RR Sweatshirt",
+        basePrice: 65,
+        category: "Apparel",
+        image: gboSweatshirtImage,
+        description:
+          "Comfortable sweatshirt featuring Gbo and RR design. Perfect for casual wear.",
+        tags: ["sweatshirt", "gbo", "rr", "apparel"],
+        variants: [
+          {
+            id: "gbo-sweatshirt-s",
+            size: "S",
+            color: "Black",
+            stock: 10,
+            sku: "WB-GBO-RR-SWEAT-S",
+          },
+          {
+            id: "gbo-sweatshirt-m",
+            size: "M",
+            color: "Black",
+            stock: 15,
+            sku: "WB-GBO-RR-SWEAT-M",
+          },
+          {
+            id: "gbo-sweatshirt-l",
+            size: "L",
+            color: "Black",
+            stock: 12,
+            sku: "WB-GBO-RR-SWEAT-L",
+          },
+          {
+            id: "gbo-sweatshirt-xl",
+            size: "XL",
+            color: "Black",
+            stock: 8,
+            sku: "WB-GBO-RR-SWEAT-XL",
+          },
+        ],
+      },
     ],
     []
   );
@@ -315,9 +397,9 @@ const Shop = () => {
         </div>
 
         {/* Product Grid - Main Content Area */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8 mb-16 sm:mb-20 lg:mb-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 mb-16 sm:mb-20 lg:mb-24">
           {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} compact={true} />
           ))}
         </div>
 

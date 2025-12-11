@@ -371,6 +371,14 @@
     transform: translateZ(10px);
   }
 
+  .product-card.compact .product-info {
+    @apply p-4;
+  }
+
+  .product-card.compact .product-image {
+    @apply aspect-square;
+  }
+
   /* 3D Perspective Utilities */
   .perspective-1000 {
     perspective: 1000px;

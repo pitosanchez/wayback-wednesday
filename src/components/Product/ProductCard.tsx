@@ -192,14 +192,16 @@ const ProductCard: React.FC<ProductCardProps> = ({
       {/* Product Info */}
       <div className="product-info bg-white/95 backdrop-blur-sm rounded-b-lg transform-gpu transition-all duration-500 group-hover:bg-white group-hover:shadow-inner">
         <span
-          className="text-sm uppercase tracking-wider font-bold"
+          className={`uppercase tracking-wider font-bold ${
+            compact ? "text-xs" : "text-sm"
+          }`}
           style={{ color: "var(--denim-blue)" }}
         >
           {product.category}
         </span>
 
         <h3
-          className={`font-bold mt-2 ${compact ? "text-lg" : "text-xl"}`}
+          className={`font-bold ${compact ? "mt-1 text-base" : "mt-2 text-xl"}`}
           style={{ color: "var(--rich-black)" }}
         >
           {product.name}
@@ -222,9 +224,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Reviews */}
         {reviewSummary && reviewSummary.totalReviews > 0 && (
-          <div className="flex items-center gap-2 mt-2">
+          <div
+            className={`flex items-center gap-2 ${compact ? "mt-1" : "mt-2"}`}
+          >
             <StarRating rating={reviewSummary.averageRating} size="sm" />
-            <span className="text-sm text-gray-600">
+            <span
+              className={`text-gray-600 ${compact ? "text-xs" : "text-sm"}`}
+            >
               {reviewSummary.averageRating.toFixed(1)} (
               {reviewSummary.totalReviews} reviews)
             </span>
@@ -233,7 +239,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Variant Selection */}
         {hasVariants ? (
-          <div className="mt-4">
+          <div className={compact ? "mt-2" : "mt-4"}>
             <VariantSelector
               product={product}
               selectedVariant={selectedVariant}
@@ -243,7 +249,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         ) : (
           // Simple price display when variants are hidden
-          <div className="mt-2">
+          <div className={compact ? "mt-1" : "mt-2"}>
             <div
               className={`${compact ? "text-lg" : "text-xl"} font-bold`}
               style={{ color: "var(--fire-red)" }}
@@ -320,16 +326,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
         )}
 
         {/* Add to Cart Button */}
-        <div className="mt-4">
+        <div className={compact ? "mt-2" : "mt-4"}>
           {canAddToCart ? (
             <AddToCartButton
               product={getCartProduct()}
-              className="btn-primary w-full"
+              className={`btn-primary w-full ${compact ? "py-2 text-sm" : ""}`}
             />
           ) : (
             <button
               onClick={() => setShowVariants(true)}
-              className="w-full px-6 py-3 border border-gray-300 rounded-lg font-semibold transition-colors duration-300 hover:bg-gray-50"
+              className={`w-full border border-gray-300 rounded-lg font-semibold transition-colors duration-300 hover:bg-gray-50 ${
+                compact ? "px-4 py-2 text-sm" : "px-6 py-3"
+              }`}
               style={{ color: "var(--rich-black)" }}
             >
               {hasVariants ? "Select Options" : "View Details"}
@@ -339,7 +347,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Product Tags */}
         {product.tags && product.tags.length > 0 && !compact && (
-          <div className="flex flex-wrap gap-1 mt-3">
+          <div className={`flex flex-wrap gap-1 ${compact ? "mt-2" : "mt-3"}`}>
             {product.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
